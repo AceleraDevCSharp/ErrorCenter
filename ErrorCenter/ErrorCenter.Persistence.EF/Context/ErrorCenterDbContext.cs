@@ -20,6 +20,10 @@ namespace ErrorCenter.Persistence.EF.Context
                 .HasOne<User>(x => x.User)
                 .WithMany(x => x.ErrorLogs)
                 .HasForeignKey(fk => fk.IdUser);
+
+            modelBuilder.Entity<User>()
+                .Property(x => x.Password)
+                .IsRequired();
         }
     }
 }
