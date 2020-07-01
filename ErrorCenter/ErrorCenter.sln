@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.Domain", "Error
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scope", "Scope", "{883FF05C-50AC-4B6B-AE36-0565D568D206}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorCenter.UserScope", "ErrorCenter.UserScope\ErrorCenter.UserScope.csproj", "{5401101C-525B-4976-A68A-B137092A00E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.UserScope", "ErrorCenter.UserScope\ErrorCenter.UserScope.csproj", "{5401101C-525B-4976-A68A-B137092A00E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorCenter.ErrorLogsScope", "ErrorCenter.ErrorLogsScope\ErrorCenter.ErrorLogsScope.csproj", "{432B03C1-1473-422A-9BF7-25779924EC3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.ErrorLogsScope", "ErrorCenter.ErrorLogsScope\ErrorCenter.ErrorLogsScope.csproj", "{432B03C1-1473-422A-9BF7-25779924EC3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
