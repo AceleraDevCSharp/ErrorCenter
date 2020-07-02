@@ -12,8 +12,8 @@ namespace ErrorCenter.Persistence.EF.Repositories.Fakes {
       return user;
     }
 
-    public User FindById(int id) {
-      var user = users.Find(x => x.Id == id);
+    public User FindByEmail(string email) {
+      var user = users.Find(x => x.Email == email);
       return user;
     }
   }

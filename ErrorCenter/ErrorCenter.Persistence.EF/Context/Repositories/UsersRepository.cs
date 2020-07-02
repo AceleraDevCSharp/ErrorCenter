@@ -1,3 +1,5 @@
+using System.Linq;
+
 using ErrorCenter.Domain;
 using ErrorCenter.Persistence.EF.Repositories;
 
@@ -9,8 +11,8 @@ namespace ErrorCenter.Persistence.EF.Context.Repositories {
       Context = context;
     }
 
-    public User FindById(int id) {
-      var user = Context.Users.Find(id);
+    public User FindByEmail(string email) {
+      var user = Context.Users.Where(x => x.Email == email).FirstOrDefault();
       return user;
     }
 
