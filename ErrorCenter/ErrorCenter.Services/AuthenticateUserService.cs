@@ -36,6 +36,7 @@ namespace ErrorCenter.Services {
       var tokenHandler = new JwtSecurityTokenHandler();
 
       var key = Encoding.ASCII.GetBytes(_config["JWTSecret"]);
+      Console.WriteLine(key);
 
       var tokenDescriptor = new SecurityTokenDescriptor {
         Subject = new ClaimsIdentity(new Claim[] {
