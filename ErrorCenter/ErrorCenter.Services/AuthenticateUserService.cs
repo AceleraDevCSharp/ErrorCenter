@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -7,24 +8,30 @@ using Microsoft.Extensions.Configuration;
 
 using ErrorCenter.Services.Models;
 using ErrorCenter.Persistence.EF.Repositories;
+using ErrorCenter.Services.Providers.HashProvider.Models;
 
 namespace ErrorCenter.Services {
   public class AuthenticateUserService {
     private IUsersRepository _repository;
+    private IHashProvider _hash;
     private readonly IConfiguration _config;
 
     public AuthenticateUserService(
       IUsersRepository repository,
+      IHashProvider hash,
       IConfiguration config
     ) {
       _repository = repository;
+      _hash = hash;
       _config = config;
     }
 
-    public Session execute(string email, string password) {
-      var user = _repository.FindByEmail(email);
+    public async Task<Session> Execute(string email, string password) {
+      var user = await _repository.FindByEmail(email);
 
       if (user == null) return null;
+
+      if (!_hash.VerifyHash(password, user.Password)) return null;
 
       var tokenHandler = new JwtSecurityTokenHandler();
 

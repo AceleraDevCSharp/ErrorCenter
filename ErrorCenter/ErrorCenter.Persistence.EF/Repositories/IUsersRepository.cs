@@ -1,9 +1,10 @@
-using System;
+using System.Threading.Tasks;
+
 using ErrorCenter.Domain;
 
 namespace ErrorCenter.Persistence.EF.Repositories {
   public interface IUsersRepository {
-    public User Create(User user);
-    public User FindByEmail(string email);
+    public Task<User> Create(User user);
+    public Task<User> FindByEmail(string email);
   }
 }

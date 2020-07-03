@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 using ErrorCenter.Domain;
 using ErrorCenter.Persistence.EF.Repositories;
@@ -11,14 +13,18 @@ namespace ErrorCenter.Persistence.EF.Context.Repositories {
       Context = context;
     }
 
-    public User FindByEmail(string email) {
-      var user = Context.Users.Where(x => x.Email == email).FirstOrDefault();
+    public async Task<User> FindByEmail(string email) {
+      var user = await Context
+        .Users
+        .Where(x => x.Email == email)
+        .AsNoTracking()
+        .FirstOrDefaultAsync();
       return user;
     }
 
-    public User Create(User user) {
+    public async Task<User> Create(User user) {
       Context.Users.Add(user);
-      Context.SaveChanges();
+      await Context.SaveChangesAsync();
       return user;
     }
   }

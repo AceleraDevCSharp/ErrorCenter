@@ -18,6 +18,8 @@ using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Context.Repositories;
 using ErrorCenter.Services;
+using ErrorCenter.Services.Providers.HashProvider.Models;
+using ErrorCenter.Services.Providers.HashProvider.Implementations;
 
 namespace ErrorCenter.WebAPI
 {
@@ -36,6 +38,7 @@ namespace ErrorCenter.WebAPI
             services.AddCors();
             services.AddControllers();
 
+            services.AddSingleton<IHashProvider, BCryptHashProvider>();
             services.AddScoped<ErrorCenterDbContext, ErrorCenterDbContext>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddTransient<

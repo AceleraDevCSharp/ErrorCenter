@@ -20,11 +20,8 @@ namespace ErrorCenter.WebAPI.Controllers {
     [HttpPost]
     [Route("")]
     [AllowAnonymous]
-    public async Task<ActionResult<Session>> Create(
-      [FromBody] LoginInfo login,
-      [FromServices] AuthenticateUserService service
-    ) {
-      var session = service.execute(login.Email, login.Password);
+    public async Task<ActionResult<Session>> Create([FromBody] LoginInfo login) {
+      var session = await _service.Execute(login.Email, login.Password);
 
       if (session == null) return NotFound(new { 
         message = "Combinação e-mail/senha inválida"

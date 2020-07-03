@@ -1,6 +1,5 @@
 ﻿using ErrorCenter.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace ErrorCenter.Persistence.EF.Context
 {
