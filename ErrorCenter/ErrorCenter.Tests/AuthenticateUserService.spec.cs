@@ -1,6 +1,5 @@
 ﻿using System;
 using Xunit;
-using Moq;
 using Microsoft.Extensions.Configuration;
 
 using ErrorCenter.Domain;

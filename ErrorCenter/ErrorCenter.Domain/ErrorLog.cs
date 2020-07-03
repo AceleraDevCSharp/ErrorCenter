@@ -12,8 +12,8 @@ namespace ErrorCenter.Domain
         public string Title { get; set; }
         public string Details { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime ArquivedAt { get; set; }
-        public DateTime DeletedAt { get; set; }
+        public DateTime? ArquivedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
         public string Origin { get; set; }
         public int IdUser { get; set; }
         public User User { get; set; }

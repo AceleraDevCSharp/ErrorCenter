@@ -36,12 +36,11 @@ namespace ErrorCenter.Services {
       var tokenHandler = new JwtSecurityTokenHandler();
 
       var key = Encoding.ASCII.GetBytes(_config["JWTSecret"]);
-      Console.WriteLine(key);
 
       var tokenDescriptor = new SecurityTokenDescriptor {
         Subject = new ClaimsIdentity(new Claim[] {
-          new Claim(ClaimTypes.Email, user.Email.ToString()),
-          new Claim(ClaimTypes.Role, user.Environment.ToString()),
+          new Claim(ClaimTypes.Email, user.Email),
+          new Claim(ClaimTypes.Role, user.Environment),
         }),
         Expires = DateTime.UtcNow.AddDays(1),
         SigningCredentials = new SigningCredentials(

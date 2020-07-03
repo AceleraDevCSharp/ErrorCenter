@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +22,7 @@ namespace ErrorCenter.WebAPI.Controllers {
     public async Task<ActionResult<Session>> Create([FromBody] LoginInfo login) {
       var session = await _service.Execute(login.Email, login.Password);
 
-      if (session == null) return NotFound(new { 
+      if (session == null) return BadRequest(new { 
         message = "Combinação e-mail/senha inválida"
       });
 
