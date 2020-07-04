@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using ErrorCenter.Domain;
-using ErrorCenter.Services;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Services.Errors;
 
 namespace ErrorCenter.WebAPI.Controllers {
   [ApiController]
   [Route("v1/error-logs")]
   public class ErrorLogsController : ControllerBase {
-    private ArchiveErrorLogSerivce _archiveService;
+    private IArchiveErrorLogService _archiveService;
 
-    public ErrorLogsController(ArchiveErrorLogSerivce archiveSerivce) {
+    public ErrorLogsController(IArchiveErrorLogService archiveSerivce) {
       _archiveService = archiveSerivce;
     }
 

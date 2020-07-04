@@ -7,11 +7,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 
 using ErrorCenter.Services.Models;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Services.Providers.HashProvider.Models;
 
 namespace ErrorCenter.Services {
-  public class AuthenticateUserService {
+  public class AuthenticateUserService : IAuthenticateUserService {
     private IUsersRepository _repository;
     private IHashProvider _hash;
     private readonly IConfiguration _config;

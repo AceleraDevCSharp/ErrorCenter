@@ -3,18 +3,19 @@ using System.Threading.Tasks;
 
 using ErrorCenter.Domain;
 using ErrorCenter.Services.Errors;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Repositories;
 
 namespace ErrorCenter.Services {
-  public class ArchiveErrorLogSerivce {
+  public class ArchiveErrorLogService : IArchiveErrorLogService {
     private IUsersRepository _usersRepository;
     private IErrorLogsRepository _errorLogsRepository;
-    
-    public ArchiveErrorLogSerivce(
+
+    public ArchiveErrorLogService(
       IUsersRepository usersRepository,
       IErrorLogsRepository errorLogsRepository
     ) {
-      _usersRepository = usersRepository;
+        _usersRepository = usersRepository;
       _errorLogsRepository = errorLogsRepository;
     }
 

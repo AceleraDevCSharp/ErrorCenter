@@ -4,15 +4,16 @@ using Microsoft.AspNetCore.Authorization;
 
 using ErrorCenter.WebAPI.Models;
 using ErrorCenter.Services;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Services.Models;
 
 namespace ErrorCenter.WebAPI.Controllers {
   [ApiController]
   [Route("v1/sessions")]
   public class SessionsController : ControllerBase {
-    private AuthenticateUserService _service;
+    private IAuthenticateUserService _service;
 
-    public SessionsController(AuthenticateUserService service) {
+    public SessionsController(IAuthenticateUserService service) {
       _service = service;
     }
 

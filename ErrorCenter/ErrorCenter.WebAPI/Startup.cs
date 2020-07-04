@@ -11,6 +11,7 @@ using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Context.Repositories;
 using ErrorCenter.Services;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Services.Providers.HashProvider.Models;
 using ErrorCenter.Services.Providers.HashProvider.Implementations;
 
@@ -36,12 +37,12 @@ namespace ErrorCenter.WebAPI
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IErrorLogsRepository, ErrorLogsRepository>();
             services.AddTransient<
-                AuthenticateUserService,
+                IAuthenticateUserService,
                 AuthenticateUserService
             >();
             services.AddTransient<
-                ArchiveErrorLogSerivce,
-                ArchiveErrorLogSerivce
+                IArchiveErrorLogService,
+                ArchiveErrorLogService
             >();
             
             var key = Encoding.ASCII.GetBytes(Configuration["JWTSecret"]);

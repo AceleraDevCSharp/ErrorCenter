@@ -4,19 +4,20 @@ using Xunit;
 using ErrorCenter.Domain;
 using ErrorCenter.Services;
 using ErrorCenter.Services.Errors;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Repositories.Fakes;
 
 namespace ErrorCenter.Tests.Services {
-  public class ArchiveErrorLogSerivceTest {
+  public class ArchiveErrorLogServiceTest {
     private IUsersRepository _usersRepository;
     private IErrorLogsRepository _errorLogsRepository;
-    private ArchiveErrorLogSerivce _serivce;
-    public ArchiveErrorLogSerivceTest() {
+    private IArchiveErrorLogService _service;
+    public ArchiveErrorLogServiceTest() {
       _usersRepository = new FakeUsersRepository();
       _errorLogsRepository = new FakeErrorLogsRepository();
 
-      _serivce = new ArchiveErrorLogSerivce(
+      _service = new ArchiveErrorLogService(
         _usersRepository,
         _errorLogsRepository
       );
@@ -40,7 +41,7 @@ namespace ErrorCenter.Tests.Services {
       await _usersRepository.Create(user);
       await _errorLogsRepository.Create(errorLog);
 
-      var archived = await _serivce.Execute(1, user.Email);
+      var archived = await _service.Execute(1, user.Email);
 
       Assert.NotNull(archived.ArquivedAt);
     }
@@ -48,7 +49,7 @@ namespace ErrorCenter.Tests.Services {
     [Fact]
     public async void Should_Not_Be_Able_To_Archive_Error_If_User_Does_Not_Exist() {
       await Assert.ThrowsAsync<UserNotFoundException>(
-        () => _serivce.Execute(1, "non.existing@example.com")
+        () => _service.Execute(1, "non.existing@example.com")
       );
     }
 
@@ -64,7 +65,7 @@ namespace ErrorCenter.Tests.Services {
       await _usersRepository.Create(user);
 
       await Assert.ThrowsAsync<ErrorLogNotFoundException>(
-        () => _serivce.Execute(1, user.Email)
+        () => _service.Execute(1, user.Email)
       );
     }
 
@@ -87,7 +88,7 @@ namespace ErrorCenter.Tests.Services {
       await _errorLogsRepository.Create(errorLog);
 
       await Assert.ThrowsAsync<DifferentEnvironmentException>(
-        () => _serivce.Execute(1, user.Email)
+        () => _service.Execute(1, user.Email)
       );
     }
 
@@ -111,7 +112,7 @@ namespace ErrorCenter.Tests.Services {
       await _errorLogsRepository.Create(errorLog);
 
       await Assert.ThrowsAsync<ErrorLogArchivedException>(
-        () => _serivce.Execute(1, user.Email)
+        () => _service.Execute(1, user.Email)
       );
     }
   }

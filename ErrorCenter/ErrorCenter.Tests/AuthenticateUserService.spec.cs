@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 using ErrorCenter.Domain;
 using ErrorCenter.Services;
+using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Repositories.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Fakes;
@@ -15,7 +16,7 @@ namespace ErrorCenter.Tests.Services {
     private IUsersRepository _usersRepository;
     private IHashProvider _hashProvider;
     private IConfiguration _config;
-    private AuthenticateUserService _service;
+    private IAuthenticateUserService _service;
 
     public AuthenticateUserServiceTest() {
       _usersRepository = new FakeUsersRepository();
