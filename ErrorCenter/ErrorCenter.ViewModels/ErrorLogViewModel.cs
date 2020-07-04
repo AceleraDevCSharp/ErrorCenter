@@ -18,6 +18,13 @@ namespace ErrorCenter.ViewModels
         public string Origin { get; set; }
         public int IdUser { get; set; }
         public User User { get; set; }
-        public int Quantity { get; set; }
+
+        private int quantity;
+        public int Quantity
+        {
+            get { return quantity; }
+            set { quantity = 0; }
+        }
+
     }
 }

@@ -3,15 +3,19 @@ using ErrorCenter.IServices;
 using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ErrorCenter.Services
 {
-    public class ErrorListingFilters : IErrorListingFilters<ErrorLogViewModel, string, string, string, string>
+    public class ErrorListingFilters : IErrorListingFilters<ErrorLogViewModel>
     {
         protected DbContext _context;
-        private List<ErrorLogViewModel> _errorsWithQuantityNonDuplicated = new List<ErrorLogViewModel>();
+        private List<ErrorLogViewModel> _errorsWithQuantityNotDuplicated = new List<ErrorLogViewModel>();
         private List<ErrorLogViewModel> _errorsWithQuantity = new List<ErrorLogViewModel>();
 
         public ErrorListingFilters(ErrorCenterDbContext context)
@@ -21,67 +25,165 @@ namespace ErrorCenter.Services
             QuantityErrorsByTitle();
         }
 
-        public List<ErrorLogViewModel> SelectAll()
+        public List<ErrorLogViewModel> SelectAllWithoutFilter()
         {
             return _errorsWithQuantity;
         }
-
-        public List<ErrorLogViewModel> SelectAllOrderedBy(string order)
+        public List<ErrorLogViewModel> SelectAllWithoutDuplicated()
         {
-            switch (order)
+            return _errorsWithQuantityNotDuplicated;
+        }
+        public List<ErrorLogViewModel> SelectByEnvironmentOrderedBySearchby(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null)
+        {
+            if (whereEnvironment != null && orderby == null && whereSearch == null && searchText == null)
             {
-                case "Level":
-                    return _errorsWithQuantity
-                        .OrderBy(x => x.Level)
-                        .ToList();
-                case "Frequencia":
-                    return _errorsWithQuantityNonDuplicated
-                        .OrderBy(x => x.Quantity)
-                        .ToList();
-                default:
-                    return _errorsWithQuantity;
+                return _errorsWithQuantity.Where(x => x.Environment.Equals(whereEnvironment)).ToList();
+            }
+            else if (whereEnvironment != null && orderby != null && whereSearch == null && searchText == null)
+            {
+                switch (orderby)
+                {
+                    case "Level":
+                        return _errorsWithQuantity.Where(x => x.Environment.Equals(orderby)).OrderBy(x => x.Level).ToList();
+                    case "Frequência":
+                        return _errorsWithQuantityNotDuplicated.Where(x => x.Environment.Equals(orderby)).OrderBy(x => x.Quantity).ToList();
+                    default:
+                        return _errorsWithQuantity;
+                }
+            }
+            else if (whereEnvironment != null && orderby != null && whereSearch != null && searchText != null)
+            {
+                switch (orderby)
+                {
+                    case "Level":
+                        if (whereSearch.Equals("Level"))
+                        {
+                            return _errorsWithQuantity.Where(x => x.Environment.Equals(orderby) && x.Level.Contains(searchText)).OrderBy(x => x.Level).ToList();
+                        }
+                        else if (whereSearch.Equals("Descrição"))
+                        {
+                            return _errorsWithQuantity.Where(x => x.Environment.Equals(orderby) && x.Details.Contains(searchText)).OrderBy(x => x.Level).ToList();
+                        }
+                        else if (whereSearch.Equals("Origem"))
+                        {
+                            return _errorsWithQuantity.Where(x => x.Environment.Equals(orderby) && x.Origin.Contains(searchText)).OrderBy(x => x.Level).ToList();
+                        }
+                        else
+                        {
+                            return _errorsWithQuantity;
+                        }
+                    case "Frequência":
+                        if (whereSearch.Equals("Level"))
+                        {
+                            return _errorsWithQuantityNotDuplicated.Where(x => x.Environment.Equals(orderby) && x.Level.Contains(searchText)).OrderBy(x => x.Quantity).ToList();
+                        }
+                        else if (whereSearch.Equals("Descrição"))
+                        {
+                            return _errorsWithQuantityNotDuplicated.Where(x => x.Environment.Equals(orderby) && x.Details.Contains(searchText)).OrderBy(x => x.Quantity).ToList();
+                        }
+                        else if (whereSearch.Equals("Origem"))
+                        {
+                            return _errorsWithQuantityNotDuplicated.Where(x => x.Environment.Equals(orderby) && x.Origin.Contains(searchText)).OrderBy(x => x.Quantity).ToList();
+                        }
+                        else
+                        {
+                            return _errorsWithQuantity;
+                        }
+                    default:
+                        return _errorsWithQuantity;
+                }
+            }
+            else if (whereEnvironment == null && orderby != null && whereSearch == null && searchText == null)
+            {
+                switch (orderby)
+                {
+                    case "Level":
+                        return _errorsWithQuantity.OrderBy(x => x.Level).ToList();
+                    case "Frequência":
+                        return _errorsWithQuantityNotDuplicated.OrderBy(x => x.Quantity).ToList();
+                    default:
+                        return _errorsWithQuantity;
+                }
+            }
+            else if (whereEnvironment == null && orderby != null && whereSearch != null && searchText != null)
+            {
+                switch (orderby)
+                {
+                    case "Level":
+                        if (whereSearch.Equals("Level"))
+                        {
+                            return _errorsWithQuantity.Where(x => x.Level.Contains(searchText)).OrderBy(x => x.Level).ToList();
+                        }
+                        else if (whereSearch.Equals("Descrição"))
+                        {
+                            return _errorsWithQuantity.Where(x => x.Details.Contains(searchText)).OrderBy(x => x.Level).ToList();
+                        }
+                        else if (whereSearch.Equals("Origem"))
+                        {
+                            return _errorsWithQuantity.Where(x => x.Origin.Contains(searchText)).OrderBy(x => x.Level).ToList();
+                        }
+                        else
+                        {
+                            return _errorsWithQuantity;
+                        }
+                    case "Frequência":
+                        if (whereSearch.Equals("Level"))
+                        {
+                            return _errorsWithQuantityNotDuplicated.Where(x => x.Level.Contains(searchText)).OrderBy(x => x.Quantity).ToList();
+                        }
+                        else if (whereSearch.Equals("Descrição"))
+                        {
+                            return _errorsWithQuantityNotDuplicated.Where(x => x.Details.Contains(searchText)).OrderBy(x => x.Quantity).ToList();
+                        }
+                        else if (whereSearch.Equals("Origem"))
+                        {
+                            return _errorsWithQuantityNotDuplicated.Where(x => x.Origin.Contains(searchText)).OrderBy(x => x.Quantity).ToList();
+                        }
+                        else
+                        {
+                            return _errorsWithQuantity;
+                        }
+                    default:
+                        return _errorsWithQuantity;
+                }
+            }
+            else if (whereEnvironment == null && orderby == null && whereSearch != null && searchText != null)
+            {
+                switch (whereSearch)
+                {
+                    case "Level":
+                        return _errorsWithQuantity.Where(x => x.Level.Contains(searchText)).ToList();
+                    case "Descrição":
+                        return _errorsWithQuantity.Where(x => x.Details.Contains(searchText)).ToList();
+                    case "Origem":
+                        return _errorsWithQuantity.Where(x => x.Origin.Contains(searchText)).ToList();
+                    default:
+                        return _errorsWithQuantity;
+                }
+                
+            }
+            else if (whereEnvironment != null && orderby == null && whereSearch != null && searchText != null)
+            {
+                switch (whereSearch)
+                {
+                    case "Level":
+                        return _errorsWithQuantity.Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText)).ToList();
+                    case "Descrição":
+                        return _errorsWithQuantity.Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText)).ToList();
+                    case "Origem":
+                        return _errorsWithQuantity.Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText)).ToList();
+                    default:
+                        return _errorsWithQuantity;
+                }
+
+            }
+            else
+            {
+                return _errorsWithQuantity;
             }
         }
-
-        public List<ErrorLogViewModel> SelectByEnvironment(string environment)
-        {
-            return _errorsWithQuantity
-                .Select(x => x)
-                .Where(x => x.Environment.Equals(environment))
-                .ToList();
-        }
-
-        public List<ErrorLogViewModel> SelectByEnvironmentOrderedBy(string environment, string order)
-        {
-            switch (order)
-            {
-                case "Level":
-                    return _errorsWithQuantity
-                        .Select(x => x)
-                        .Where(x => x.Environment.Equals(environment))
-                        .OrderBy(x => x.Level)
-                        .ToList();
-                case "Frequencia":
-                    return _errorsWithQuantityNonDuplicated
-                        .Where(x => x.Environment.Equals(environment))
-                        .OrderBy(x => x.Quantity)
-                        .ToList();
-                default:
-                    return _errorsWithQuantity;
-            }
-        }
-
-        public List<ErrorLogViewModel> SelectSearchBy(string typeSearch, string search)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public List<ErrorLogViewModel> SelectSearchByOrderBy(string typeSearch, string search, string order)
-        {
-            throw new System.NotImplementedException();
-        }
-
-
+        
+        
         
         private List<ErrorLogViewModel> QuantityErrorsByTitleNonDuplicated()
         {
@@ -114,7 +216,7 @@ namespace ErrorCenter.Services
                 }
             }
 
-            return _errorsWithQuantityNonDuplicated;
+            return _errorsWithQuantityNotDuplicated;
         }
         private List<ErrorLogViewModel> QuantityErrorsByTitle()
         {
@@ -152,6 +254,7 @@ namespace ErrorCenter.Services
 
             return _errorsWithQuantity;
         }
+
 
     }
 }
