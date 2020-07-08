@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ErrorCenter.Domain\ErrorCenter.Domain.csproj" />
+    <ProjectReference Include="..\ErrorCenter.Services\ErrorCenter.Services.csproj" />
   </ItemGroup>
 
 </Project>

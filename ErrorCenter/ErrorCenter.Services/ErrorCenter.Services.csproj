@@ -15,9 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ErrorCenter.Domain\ErrorCenter.Domain.csproj" />
-    <ProjectReference Include="..\ErrorCenter.IServices\ErrorCenter.IServices.csproj" />
-    <ProjectReference Include="..\ErrorCenter.Persistence.EF\ErrorCenter.Persistence.EF.csproj" />
-    <ProjectReference Include="..\ErrorCenter.ViewModels\ErrorCenter.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

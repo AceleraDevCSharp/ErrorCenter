@@ -9,9 +9,9 @@ namespace ErrorCenter.Persistence.EF.Context
         public DbSet<User> Users { get; set; }
         public DbSet<ErrorLog> ErrorLogs { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ErrorCenterDbContext(DbContextOptions<ErrorCenterDbContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=ErrorCenter;Trusted_Connection=True;");
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
