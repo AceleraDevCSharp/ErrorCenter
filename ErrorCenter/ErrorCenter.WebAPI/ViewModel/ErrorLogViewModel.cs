@@ -1,5 +1,4 @@
-﻿using ErrorCenter.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,7 +22,7 @@ namespace ErrorCenter.WebAPI.ViewModel
         public DateTime? ArquivedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string Origin { get; set; }
-        public int IdUser { get; set; }
+        public int UserName { get; set; }
         public int Quantity { get; set; }
     }
 }

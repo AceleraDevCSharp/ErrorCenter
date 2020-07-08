@@ -1,7 +1,5 @@
-﻿
-using AutoMapper;
-using ErrorCenter.Domain;
-using ErrorCenter.Persistence.EF.Repository.Model;
+﻿using AutoMapper;
+using ErrorCenter.Services.Models;
 using ErrorCenter.WebAPI.ViewModel;
 
 namespace ErrorCenter.WebAPI.Configuration
@@ -10,7 +8,7 @@ namespace ErrorCenter.WebAPI.Configuration
     {
         public AutoMapperConfig()
         {
-            CreateMap<ErrorLogModel, ErrorLogViewModel>().ReverseMap();
+            CreateMap<ErrorLog, ErrorLogViewModel>().ReverseMap();
         }
     }
 }

@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200630185138_AdjustmentTableErrorLogs.cs" />
     <Compile Remove="Migrations\20200630185138_AdjustmentTableErrorLogs.Designer.cs" />
+    <Compile Remove="Migrations\20200708173120_IncludeQuantityAtributte.cs" />
+    <Compile Remove="Migrations\20200708173120_IncludeQuantityAtributte.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErrorCenter.Domain\ErrorCenter.Domain.csproj" />
     <ProjectReference Include="..\ErrorCenter.Services\ErrorCenter.Services.csproj" />
   </ItemGroup>
 

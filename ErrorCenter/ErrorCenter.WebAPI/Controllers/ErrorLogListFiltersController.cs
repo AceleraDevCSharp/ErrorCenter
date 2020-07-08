@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorCenter.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     public class ErrorLogListFiltersController : MainController
     {
         private readonly IErrorLogRepository<ErrorLogViewModel> _errorLogRepository;
@@ -23,11 +23,11 @@ namespace ErrorCenter.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ErrorLogViewModel>> GetAll()
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetAll()
         {
-            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>( _errorLogRepository.SelectAllWithoutDuplicated());
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectAll());
 
-            return errors;
+            return Ok(errors);
         }
     }
 }

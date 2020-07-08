@@ -1,9 +1,9 @@
 ﻿using ErrorCenter.Persistence.EF.Context;
 using Microsoft.Extensions.DependencyInjection;
-using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Repository;
+using ErrorCenter.Services.Interfaces;
+using ErrorCenter.Services.Models;
 using ErrorCenter.WebAPI.ViewModel;
-using ErrorCenter.Persistence.EF.Repository.Model;
 
 namespace ErrorCenter.WebAPI.Configuration
 {
@@ -13,7 +13,7 @@ namespace ErrorCenter.WebAPI.Configuration
         {
             services.AddScoped<ErrorCenterDbContext>();
 
-            services.AddScoped<IErrorLogRepository<ErrorLogModel>, ErrorLogRepository>();
+            services.AddTransient<IErrorLogRepository<ErrorLog>, ErrorLogRepository>();
 
             return services;
         }

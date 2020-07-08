@@ -1,6 +1,5 @@
-﻿using ErrorCenter.Domain;
+﻿using ErrorCenter.Services.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace ErrorCenter.Persistence.EF.Context
 {
@@ -10,62 +9,14 @@ namespace ErrorCenter.Persistence.EF.Context
         public DbSet<ErrorLog> ErrorLogs { get; set; }
 
         public ErrorCenterDbContext(DbContextOptions<ErrorCenterDbContext> options) : base(options)
-        {
-
+        { 
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ConfigTableUser(modelBuilder);
-            ConfigTableErrorLogs(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ErrorCenterDbContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
         }
-
-        protected void ConfigTableUser(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ErrorLog>()
-                .HasOne<User>(x => x.User)
-                .WithMany(x => x.ErrorLogs)
-                .HasForeignKey(fk => fk.IdUser);
-
-            modelBuilder.Entity<User>()
-                .Property(x => x.Password)
-                .IsRequired();
-
-            modelBuilder.Entity<User>()
-                .Property(x => x.Email)
-                .IsRequired();
-
-            modelBuilder.Entity<User>()
-                .Property(x => x.Environment)
-                .IsRequired();
-        }
-
-        protected void ConfigTableErrorLogs(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ErrorLog>()
-                .Property(x => x.Environment)
-                .IsRequired();
-
-            modelBuilder.Entity<ErrorLog>()
-                .Property(x => x.Environment)
-                .IsRequired();
-
-            modelBuilder.Entity<ErrorLog>()
-                .Property(x => x.Title)
-                .IsRequired();
-
-            modelBuilder.Entity<ErrorLog>()
-                .Property(x => x.Details)
-                .IsRequired();
-
-            modelBuilder.Entity<ErrorLog>()
-                .Property(x => x.Origin)
-                .IsRequired();
-
-            modelBuilder.Entity<ErrorLog>()
-                .Property(x => x.Level)
-                .IsRequired();
-        }
-
     }
 }

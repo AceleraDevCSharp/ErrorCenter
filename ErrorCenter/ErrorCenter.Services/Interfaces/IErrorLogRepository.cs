@@ -4,22 +4,21 @@ using System.Threading.Tasks;
 
 namespace ErrorCenter.Services.Interfaces
 {
-    public interface IErrorLogRepository<ErrorLogModel>
+    public interface IErrorLogRepository<TDomain>
     {
-        IEnumerable<ErrorLogModel> SelectAllWithoutFilter();
-        List<ErrorLogModel> SelectAllWithoutDuplicated();
+        Task<IEnumerable<TDomain>> SelectAll();
 
-        List<ErrorLogModel> SelectByEnvironment(string whereEnvironment = null);
-        List<ErrorLogModel> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null);
-        List<ErrorLogModel> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null);
-
-
-        List<ErrorLogModel> SelectOrderedBy(string orderby = null);
-        List<ErrorLogModel> SelectOrderedBySearchBy(string orderby = null, string whereSearch = null, string searchText = null);
+        Task<IEnumerable<TDomain>> SelectByEnvironment(string whereEnvironment = null);
+        Task<IEnumerable<TDomain>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null);
+        Task<IEnumerable<TDomain>> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null);
 
 
-        List<ErrorLogModel> SelectSearchBy(string whereSearch = null, string searchText = null);
-        List<ErrorLogModel> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null);
+        Task<IEnumerable<TDomain>> SelectOrderedBy(string orderby = null);
+        Task<IEnumerable<TDomain>> SelectOrderedBySearchBy(string orderby = null, string whereSearch = null, string searchText = null);
+
+
+        Task<IEnumerable<TDomain>> SelectSearchBy(string whereSearch = null, string searchText = null);
+        Task<IEnumerable<TDomain>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null);
         
 
     }
