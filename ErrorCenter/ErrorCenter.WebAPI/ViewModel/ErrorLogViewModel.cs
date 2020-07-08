@@ -22,7 +22,7 @@ namespace ErrorCenter.WebAPI.ViewModel
         public DateTime? ArquivedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string Origin { get; set; }
-        public int UserName { get; set; }
+        public string UserEmail { get; set; }
         public int Quantity { get; set; }
     }
 }

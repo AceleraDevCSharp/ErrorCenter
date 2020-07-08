@@ -170,10 +170,11 @@ namespace ErrorCenter.Persistence.EF.Repository
 
         private void UpdateQuantityEventsErrorLogs()
         {
-            foreach (var error in _context.ErrorLogs.ToList().OrderByDescending(x => x.CreatedAt))
+            foreach (var error in _context.ErrorLogs.ToList())
             {
                 int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title));
                 error.Quantity = aux;
+                aux = 0;
             }
 
             _context.SaveChanges();
