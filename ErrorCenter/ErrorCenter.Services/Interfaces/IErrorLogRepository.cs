@@ -19,7 +19,9 @@ namespace ErrorCenter.Services.Interfaces
 
         Task<IEnumerable<TDomain>> SelectSearchBy(string whereSearch = null, string searchText = null);
         Task<IEnumerable<TDomain>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null);
-        
 
+        Task<IEnumerable<TDomain>> SelectArquived();
+
+        Task<IEnumerable<TDomain>> SelectDeleted();
     }
 }

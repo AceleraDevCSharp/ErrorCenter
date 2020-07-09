@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorCenter.WebAPI.Controllers
 {
-    [Route("errors")]
+    [Route("logs")]
     public class ErrorLogListFiltersController : MainController
     {
         private readonly IErrorLogRepository<ErrorLog> _errorLogRepository;
@@ -23,7 +23,7 @@ namespace ErrorCenter.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetAll()
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectAll());
@@ -31,7 +31,23 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("environment/{environment}")]
+        [HttpGet("arquived")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetLogsArquived()
+        {
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectArquived());
+
+            return Ok(errors);
+        }
+
+        [HttpGet("deleted")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetLogsDeleted()
+        {
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectDeleted());
+
+            return Ok(errors);
+        }
+
+        [HttpGet("environment={environment}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetByEnvironment(string environment)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectByEnvironment(environment));
@@ -39,7 +55,7 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("environment/{environment}/{orderby}")]
+        [HttpGet("environment={environment}/orderby={orderby}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetByEnvironmentOrderBy(string environment, string orderby)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectByEnvironmentOrderedBy(environment, orderby));
@@ -47,12 +63,45 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("environment/{environment}/{orderby}/{typeSearch}/{textSearch}")]
+        [HttpGet("environment={environment}/orderby={orderby}/typeSearch={typeSearch}/textSearch={textSearch}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetByEnvironmentOrderBySearchBy(string environment, string orderby, string typeSearch, string textSearch)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectByEnvironmentOrderedBySearchBy(environment, orderby, typeSearch, textSearch));
 
             return Ok(errors);
         }
+
+        [HttpGet("environment={environment}/typeSearch={typeSearch}/textSearch={textSearch}")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetByEnvironmentSearchBy(string environment, string typeSearch, string textSearch)
+        {
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectByEnvironmentSearchBy(environment, typeSearch, textSearch));
+
+            return Ok(errors);
+        }
+
+        [HttpGet("orderby={orderby}")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetOrderedBy(string orderby)
+        {
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectOrderedBy(orderby));
+
+            return Ok(errors);
+        }
+
+        [HttpGet("orderby={orderby}/typeSearch={typeSearch}/textSearch={textSearch}")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetOrderedBySearchBy(string orderby, string typeSearch, string textSearch)
+        {
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectOrderedBySearchBy(orderby, typeSearch, textSearch));
+
+            return Ok(errors);
+        }
+
+        [HttpGet("typeSearch={typeSearch}/textSearch={textSearch}")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetSearchBy(string typeSearch, string textSearch)
+        {
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectSearchBy(typeSearch, textSearch));
+
+            return Ok(errors);
+        }
+
     }
 }
