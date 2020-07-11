@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20200630185138_AdjustmentTableErrorLogs.Designer.cs" />
     <Compile Remove="Migrations\20200708173120_IncludeQuantityAtributte.cs" />
     <Compile Remove="Migrations\20200708173120_IncludeQuantityAtributte.Designer.cs" />
+    <Compile Remove="Migrations\20200711003652_UpdateRelations.cs" />
+    <Compile Remove="Migrations\20200711003652_UpdateRelations.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

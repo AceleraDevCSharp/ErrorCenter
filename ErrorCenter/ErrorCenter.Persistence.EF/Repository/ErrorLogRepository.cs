@@ -22,33 +22,57 @@ namespace ErrorCenter.Persistence.EF.Repository
 
         public async Task<IEnumerable<ErrorLog>> SelectAll()
         {
-            return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+            return await _context.ErrorLogs
+                .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                .Include(x => x.User)
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync();
         }
-
         public async Task<IEnumerable<ErrorLog>> SelectArquived()
         {
-            return await _context.ErrorLogs.Where(x => x.ArquivedAt != null).ToListAsync();
+            return await _context.ErrorLogs
+                .Where(x => x.ArquivedAt != null)
+                .Include(x => x.User)
+                .ToListAsync();
         }
         public async Task<IEnumerable<ErrorLog>> SelectDeleted()
         {
-            return await _context.ErrorLogs.Where(x => x.DeletedAt != null).ToListAsync();
+            return await _context.ErrorLogs
+                .Where(x => x.DeletedAt != null)
+                .Include(x => x.User)
+                .ToListAsync();
         }
 
 
         public async Task<IEnumerable<ErrorLog>> SelectByEnvironment(string whereEnvironment)
         {
-            return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+            return await _context.ErrorLogs
+                .Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null)
+                .Include(x => x.User)
+                .ToListAsync();
         }
         public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)
         {
             switch (orderby)
             {
                 case "Level":
-                    return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.Level).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.Level)
+                        .ToListAsync();
                 case "Frequencia":
-                    return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.Quantity).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.Quantity)
+                        .ToListAsync();
                 default:
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.DeletedAt).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.DeletedAt)
+                        .ToListAsync();
             }
         }
         public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null)
@@ -58,39 +82,75 @@ namespace ErrorCenter.Persistence.EF.Repository
                 case "Level":
                     if (whereSearch.Equals("Level"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Level)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Descricao"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Level)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Origem"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Level)
+                            .ToListAsync();
                     }
                     else
                     {
-                        return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderByDescending(x => x.CreatedAt)
+                            .ToListAsync();
                     }
                 case "Frequencia":
                     if (whereSearch.Equals("Level"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Quantity)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Descricao"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Quantity)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Origem"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Quantity)
+                            .ToListAsync();
                     }
                     else
                     {
-                        return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderByDescending(x => x.CreatedAt)
+                            .ToListAsync();
                     }
                 default:
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .ToListAsync();
             }
         }
         public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null)
@@ -98,13 +158,26 @@ namespace ErrorCenter.Persistence.EF.Repository
             switch (whereSearch)
             {
                 case "Level":
-                    return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .ToListAsync();
                 case "Descricao":
-                    return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .ToListAsync();
                 case "Origem":
-                    return await _context.ErrorLogs.Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .ToListAsync();
                 default:
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .ToListAsync();
             }
         }
 
@@ -114,11 +187,23 @@ namespace ErrorCenter.Persistence.EF.Repository
             switch (orderby)
             {
                 case "Level":
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderBy(x => x.Level)
+                        .ToListAsync();
                 case "Frequencia":
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderBy(x => x.Quantity)
+                        .ToListAsync();
                 default:
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .ToListAsync();
             }
         }
         public async Task<IEnumerable<ErrorLog>> SelectOrderedBySearchBy(string orderby = null, string whereSearch = null, string searchText = null)
@@ -128,39 +213,75 @@ namespace ErrorCenter.Persistence.EF.Repository
                 case "Level":
                     if (whereSearch.Equals("Level"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Level)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Descricao"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Level)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Origem"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Level).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Level)
+                            .ToListAsync();
                     }
                     else
                     {
-                        return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                            .OrderByDescending(x => x.CreatedAt)
+                            .Include(x => x.User)
+                            .ToListAsync();
                     }
                 case "Frequencia":
                     if (whereSearch.Equals("Level"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Quantity)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Descricao"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Quantity)
+                            .ToListAsync();
                     }
                     else if (whereSearch.Equals("Origem"))
                     {
-                        return await _context.ErrorLogs.Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).OrderBy(x => x.Quantity).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderBy(x => x.Quantity)
+                            .ToListAsync();
                     }
                     else
                     {
-                        return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                        return await _context.ErrorLogs
+                            .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                            .Include(x => x.User)
+                            .OrderByDescending(x => x.CreatedAt)
+                            .ToListAsync();
                     }
                 default:
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .ToListAsync();
             }
         }
 
@@ -171,13 +292,26 @@ namespace ErrorCenter.Persistence.EF.Repository
             switch (whereSearch)
             {
                 case "Level":
-                    return await _context.ErrorLogs.Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .ToListAsync();
                 case "Descricao":
-                    return await _context.ErrorLogs.Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .ToListAsync();
                 case "Origem":
-                    return await _context.ErrorLogs.Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.User)
+                        .ToListAsync();
                 default:
-                    return await _context.ErrorLogs.Where(x => x.ArquivedAt == null && x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                    return await _context.ErrorLogs
+                        .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .Include(x => x.User)
+                        .ToListAsync();
             }
         }
 

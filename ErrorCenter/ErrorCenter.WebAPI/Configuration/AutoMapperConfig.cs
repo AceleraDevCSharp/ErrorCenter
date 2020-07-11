@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ErrorCenter.Services.Models;
 using ErrorCenter.WebAPI.ViewModel;
+using System.Linq;
 
 namespace ErrorCenter.WebAPI.Configuration
 {
@@ -8,7 +9,9 @@ namespace ErrorCenter.WebAPI.Configuration
     {
         public AutoMapperConfig()
         {
-            CreateMap<ErrorLog, ErrorLogViewModel>().ReverseMap();
+            CreateMap<ErrorLogViewModel, ErrorLog>();
+            CreateMap<ErrorLog, ErrorLogViewModel>()
+                .ForMember(x => x.UserEmail, x => x.MapFrom( x => x.User.Email));
         }
     }
 }

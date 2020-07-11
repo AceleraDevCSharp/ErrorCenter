@@ -11,6 +11,7 @@ namespace ErrorCenter.Services.Models
         public string Password { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Environment { get; set; }
-        public List<ErrorLog> ErrorLogs { get; set; }
+
+        public IEnumerable<ErrorLog> ErrorLogs { get; set; }
     }
 }

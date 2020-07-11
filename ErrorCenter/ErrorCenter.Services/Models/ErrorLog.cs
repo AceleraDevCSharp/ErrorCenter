@@ -14,6 +14,7 @@ namespace ErrorCenter.Services.Models
         public DateTime? ArquivedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string Origin { get; set; }
+
         public int IdUser { get; set; }
         public User User { get; set; }
     }
