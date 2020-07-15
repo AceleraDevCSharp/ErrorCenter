@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ErrorCenter.Services.Interfaces
+namespace ErrorCenter.Persistence.EF.Repositories
 {
     public interface IErrorLogRepository<TDomain>
     {

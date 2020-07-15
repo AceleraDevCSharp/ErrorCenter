@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ErrorCenter.Services.Models
-{
+namespace ErrorCenter.Persistence.EF.Models {
     public class User
     {
         public int Id { get; set; }

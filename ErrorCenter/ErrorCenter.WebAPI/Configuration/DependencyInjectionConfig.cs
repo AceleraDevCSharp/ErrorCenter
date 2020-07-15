@@ -1,9 +1,9 @@
-﻿using ErrorCenter.Persistence.EF.Context;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.Persistence.EF.Repository;
-using ErrorCenter.Services.Interfaces;
-using ErrorCenter.Services.Models;
-using ErrorCenter.WebAPI.ViewModel;
+using ErrorCenter.Persistence.EF.Repositories;
 
 namespace ErrorCenter.WebAPI.Configuration
 {
