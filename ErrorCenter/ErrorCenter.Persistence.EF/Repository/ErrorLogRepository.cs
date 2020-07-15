@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Persistence.EF.Repositories;
+using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Persistence.EF.Repository
 {
@@ -19,6 +19,7 @@ namespace ErrorCenter.Persistence.EF.Repository
             UpdateQuantityEventsErrorLogs();
         }
 
+        /* Alessandro */
         public async Task<IEnumerable<ErrorLog>> SelectAll()
         {
             return await _context.ErrorLogs
@@ -27,7 +28,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<ErrorLog>> SelectArquived()
+        public async Task<IEnumerable<ErrorLog>> SelectArchived()
         {
             return await _context.ErrorLogs
                 .Where(x => x.ArquivedAt != null)
@@ -41,8 +42,6 @@ namespace ErrorCenter.Persistence.EF.Repository
                 .Include(x => x.User)
                 .ToListAsync();
         }
-
-
         public async Task<IEnumerable<ErrorLog>> SelectByEnvironment(string whereEnvironment)
         {
             return await _context.ErrorLogs
@@ -50,7 +49,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                 .Include(x => x.User)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)
+        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)    
         {
             switch (orderby)
             {
@@ -179,8 +178,6 @@ namespace ErrorCenter.Persistence.EF.Repository
                         .ToListAsync();
             }
         }
-
-
         public async Task<IEnumerable<ErrorLog>> SelectOrderedBy(string orderby = null)
         {
             switch (orderby)
@@ -283,9 +280,6 @@ namespace ErrorCenter.Persistence.EF.Repository
                         .ToListAsync();
             }
         }
-
-
-
         public async Task<IEnumerable<ErrorLog>> SelectSearchBy(string whereSearch = null, string searchText = null)
         {
             switch (whereSearch)
@@ -314,18 +308,35 @@ namespace ErrorCenter.Persistence.EF.Repository
             }
         }
 
-
-
         private void UpdateQuantityEventsErrorLogs()
         {
             foreach (var error in _context.ErrorLogs.ToList())
             {
-                int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title));
+                int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title) && x.Environment.Equals(error.Environment) && x.Level.Equals(error.Level));
                 error.Quantity = aux;
                 aux = 0;
             }
 
             _context.SaveChanges();
+        }
+
+        /* Bernardo */
+        public async Task<ErrorLog> Create(ErrorLog errorLog)
+        {
+            _context.ErrorLogs.Add(errorLog);
+            await _context.SaveChangesAsync();
+            return errorLog;
+        }
+        public async Task<ErrorLog> FindById(int id)
+        {
+            var errorLog = await _context.ErrorLogs.FindAsync(id);
+            return errorLog;
+        }
+        public async Task<ErrorLog> UpdateErrorLog(ErrorLog errorLog)
+        {
+            _context.Update(errorLog);
+            await _context.SaveChangesAsync();
+            return errorLog;
         }
     }
 }

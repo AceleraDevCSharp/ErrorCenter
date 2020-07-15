@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.Repositories;
+using ErrorCenter.Persistence.EF.IRepository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ErrorCenter.WebAPI.Controllers
 {
-    [Route("logs")]
+    [Authorize]
+    [Route("v1/error-logs")]
     public class ErrorLogListFiltersController : MainController
     {
         private readonly IErrorLogRepository<ErrorLog> _errorLogRepository;
@@ -29,10 +31,10 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("arquived")]
-        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetLogsArquived()
+        [HttpGet("archived")]
+        public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetLogsArchived()
         {
-            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectArquived());
+            var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectArchived());
 
             return Ok(errors);
         }

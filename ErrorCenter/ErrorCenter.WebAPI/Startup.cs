@@ -8,16 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-
-using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Persistence.EF.Repository;
-using ErrorCenter.Persistence.EF.Repositories;
-using ErrorCenter.Persistence.EF.Context.Repositories;
-using ErrorCenter.Services;
-using ErrorCenter.Services.Interfaces;
-using ErrorCenter.Services.Providers.HashProvider.Models;
-using ErrorCenter.Services.Providers.HashProvider.Implementations;
 using ErrorCenter.WebAPI.Configuration;
 
 namespace ErrorCenter.WebAPI
@@ -40,38 +31,16 @@ namespace ErrorCenter.WebAPI
             });
 
             services.AddCors();
+
             services.AddControllers();
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddSingleton<IHashProvider, BCryptHashProvider>();
-            services.AddScoped<ErrorCenterDbContext, ErrorCenterDbContext>();
-            services.AddScoped<IUsersRepository, UsersRepository>();
-            services.AddScoped<IErrorLogsRepository, ErrorLogsRepository>();
-            services.AddScoped<IErrorLogRepository<ErrorLog>, ErrorLogRepository>();
-            services.AddTransient<
-                IAuthenticateUserService,
-                AuthenticateUserService
-            >();
-            services.AddTransient<
-                IArchiveErrorLogService,
-                ArchiveErrorLogService
-            >();
-            
-            var key = Encoding.ASCII.GetBytes(Configuration["JWTSecret"]);
-            services.AddAuthentication(x => {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x => {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            services.ResolveDependencies();
+
+            services.AddSwaggerConfig();
+
+            services.AddAuthenticationConfig(Configuration);
 
             services.ResolveDependencies();
         }
@@ -96,6 +65,8 @@ namespace ErrorCenter.WebAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwaggerConfig();
 
             app.UseEndpoints(endpoints =>
             {

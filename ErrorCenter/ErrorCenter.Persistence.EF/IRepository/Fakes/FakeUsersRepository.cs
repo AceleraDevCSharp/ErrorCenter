@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Persistence.EF.IRepository;
 
-namespace ErrorCenter.Persistence.EF.Repositories.Fakes {
-  public class FakeUsersRepository : IUsersRepository {
+namespace ErrorCenter.Persistence.EF.Repositories.Fakes
+{
+    public class FakeUsersRepository : IUsersRepository {
     private List<User> users = new List<User>();
 
     public async Task<User> Create(User user) {
