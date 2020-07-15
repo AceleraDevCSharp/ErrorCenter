@@ -56,6 +56,8 @@ namespace ErrorCenter.WebAPI
             //    };
             //});
 
+            services.AddSwaggerConfig();
+
             services.AddAuthenticationConfig(Configuration);
 
             services.ResolveDependencies();
@@ -81,6 +83,8 @@ namespace ErrorCenter.WebAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwaggerConfig();
 
             app.UseEndpoints(endpoints =>
             {

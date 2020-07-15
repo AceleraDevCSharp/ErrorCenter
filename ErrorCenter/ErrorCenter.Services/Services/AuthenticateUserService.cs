@@ -35,7 +35,8 @@ namespace ErrorCenter.Services.Services
 
             if (user == null) return null;
 
-            //if (!_hash.VerifyHash(password, user.Password)) return null;
+            var aux = _hash.GenerateHash(user.Password);
+            if (!_hash.VerifyHash(password, aux)) return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -44,9 +45,9 @@ namespace ErrorCenter.Services.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] {
-          new Claim(ClaimTypes.Email, user.Email),
-          new Claim(ClaimTypes.Role, user.Environment),
-        }),
+                          new Claim(ClaimTypes.Email, user.Email),
+                          new Claim(ClaimTypes.Role, user.Environment),
+            }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),

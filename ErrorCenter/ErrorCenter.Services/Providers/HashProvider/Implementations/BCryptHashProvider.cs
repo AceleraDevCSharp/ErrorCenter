@@ -1,9 +1,10 @@
+
 using ErrorCenter.Services.Providers.HashProvider.Models;
 
 namespace ErrorCenter.Services.Providers.HashProvider.Implementations {
   public class BCryptHashProvider : IHashProvider {
     public string GenerateHash(string input) {
-      string hashedPassword = BCrypt.Net.BCrypt.HashPassword(input);
+      string hashedPassword = BCrypt.Net.BCrypt.HashPassword(input, 10);
       return hashedPassword;
     }
 
