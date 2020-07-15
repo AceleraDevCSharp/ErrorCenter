@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ErrorCenter.Domain
+namespace ErrorCenter.Services.Models
 {
     public class ErrorLog
     {
@@ -11,10 +9,12 @@ namespace ErrorCenter.Domain
         public string Level { get; set; }
         public string Title { get; set; }
         public string Details { get; set; }
+        public int Quantity { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ArquivedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string Origin { get; set; }
+
         public int IdUser { get; set; }
         public User User { get; set; }
     }

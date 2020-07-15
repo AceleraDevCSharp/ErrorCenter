@@ -5,21 +5,15 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.WebAPI", "ErrorCenter.WebAPI\ErrorCenter.WebAPI.csproj", "{3C0EC913-27FE-4C6F-B557-881C65A6E854}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{7FB21B78-8747-4F7E-A53F-C0C2BDB1F542}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAcess", "DataAcess", "{4D614D46-A239-48BB-B86C-895B478724A9}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{8E589BF2-77E2-4E8A-98CD-0A06235F7BE9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{4D614D46-A239-48BB-B86C-895B478724A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.Persistence.EF", "ErrorCenter.Persistence.EF\ErrorCenter.Persistence.EF.csproj", "{97B5A3CF-BF74-4361-846D-22CD942350CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.Domain", "ErrorCenter.Domain\ErrorCenter.Domain.csproj", "{044AE5FB-E2B1-44C2-8171-F2083BDEED55}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C9BF314D-9A22-4DC1-B24C-7531D9178245}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{C9BF314D-9A22-4DC1-B24C-7531D9178245}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.Services", "ErrorCenter.Services\ErrorCenter.Services.csproj", "{34A6E4AB-9C7F-4A23-BBD4-899691E7A4E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorCenter.Tests", "ErrorCenter.Tests\ErrorCenter.Tests.csproj", "{643927A8-89A5-4EBA-98DB-73D3B12BFC28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCenter.Tests", "ErrorCenter.Tests\ErrorCenter.Tests.csproj", "{643927A8-89A5-4EBA-98DB-73D3B12BFC28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +29,6 @@ Global
 		{97B5A3CF-BF74-4361-846D-22CD942350CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97B5A3CF-BF74-4361-846D-22CD942350CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97B5A3CF-BF74-4361-846D-22CD942350CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{044AE5FB-E2B1-44C2-8171-F2083BDEED55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{044AE5FB-E2B1-44C2-8171-F2083BDEED55}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{044AE5FB-E2B1-44C2-8171-F2083BDEED55}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{044AE5FB-E2B1-44C2-8171-F2083BDEED55}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34A6E4AB-9C7F-4A23-BBD4-899691E7A4E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34A6E4AB-9C7F-4A23-BBD4-899691E7A4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34A6E4AB-9C7F-4A23-BBD4-899691E7A4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,9 +42,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8E589BF2-77E2-4E8A-98CD-0A06235F7BE9} = {4D614D46-A239-48BB-B86C-895B478724A9}
-		{97B5A3CF-BF74-4361-846D-22CD942350CE} = {8E589BF2-77E2-4E8A-98CD-0A06235F7BE9}
-		{044AE5FB-E2B1-44C2-8171-F2083BDEED55} = {7FB21B78-8747-4F7E-A53F-C0C2BDB1F542}
+		{97B5A3CF-BF74-4361-846D-22CD942350CE} = {4D614D46-A239-48BB-B86C-895B478724A9}
 		{34A6E4AB-9C7F-4A23-BBD4-899691E7A4E3} = {C9BF314D-9A22-4DC1-B24C-7531D9178245}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
