@@ -1,10 +1,10 @@
 using System;
 using Xunit;
 
-using ErrorCenter.Domain;
 using ErrorCenter.Services;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Interfaces;
+using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Repositories.Fakes;
 

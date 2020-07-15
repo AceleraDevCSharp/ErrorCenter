@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using ErrorCenter.Services.Models;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Services.Interfaces {
   public interface IAuthenticateUserService {

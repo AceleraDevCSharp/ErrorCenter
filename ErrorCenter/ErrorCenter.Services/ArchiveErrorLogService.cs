@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
 
-using ErrorCenter.Services.Models;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Interfaces;
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Persistence.EF.Repositories;
 
 namespace ErrorCenter.Services {
   public class ArchiveErrorLogService : IArchiveErrorLogService {

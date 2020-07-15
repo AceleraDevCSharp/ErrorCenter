@@ -1,5 +1,6 @@
-﻿using ErrorCenter.Services.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Persistence.EF.Context
 {

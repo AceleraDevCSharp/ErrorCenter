@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using ErrorCenter.Services.Models;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Persistence.EF.Repositories.Fakes {
   public class FakeUsersRepository : IUsersRepository {

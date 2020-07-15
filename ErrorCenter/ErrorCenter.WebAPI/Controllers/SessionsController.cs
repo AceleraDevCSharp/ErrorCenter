@@ -2,10 +2,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using ErrorCenter.WebAPI.Models;
-using ErrorCenter.Services;
+using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Services.Interfaces;
-using ErrorCenter.Services.Models;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.WebAPI.Controllers {
   [ApiController]

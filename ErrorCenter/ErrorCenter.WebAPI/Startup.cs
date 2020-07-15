@@ -6,16 +6,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
+using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
+using ErrorCenter.Persistence.EF.Repository;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Context.Repositories;
 using ErrorCenter.Services;
 using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Services.Providers.HashProvider.Models;
 using ErrorCenter.Services.Providers.HashProvider.Implementations;
-using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.WebAPI.Configuration;
 
 namespace ErrorCenter.WebAPI
@@ -46,6 +48,7 @@ namespace ErrorCenter.WebAPI
             services.AddScoped<ErrorCenterDbContext, ErrorCenterDbContext>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IErrorLogsRepository, ErrorLogsRepository>();
+            services.AddScoped<IErrorLogRepository<ErrorLog>, ErrorLogRepository>();
             services.AddTransient<
                 IAuthenticateUserService,
                 AuthenticateUserService

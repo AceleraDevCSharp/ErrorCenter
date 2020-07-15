@@ -1,4 +1,4 @@
-namespace ErrorCenter.Services.Models {
+namespace ErrorCenter.Persistence.EF.Models {
   public class Session {
     public string Email { get; set; }
     public string Environment { get; set; }

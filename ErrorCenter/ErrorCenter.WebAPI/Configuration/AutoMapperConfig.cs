@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using ErrorCenter.Services.Models;
-using ErrorCenter.WebAPI.ViewModel;
 using System.Linq;
+
+using ErrorCenter.WebAPI.ViewModel;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.WebAPI.Configuration
 {

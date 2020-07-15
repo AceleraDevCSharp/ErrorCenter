@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using ErrorCenter.Services.Models;
+using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Repositories;
 
 namespace ErrorCenter.Persistence.EF.Context.Repositories {

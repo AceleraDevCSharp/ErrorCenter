@@ -2,8 +2,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-using ErrorCenter.Services.Models;
 using ErrorCenter.Persistence.EF.Repositories;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Persistence.EF.Context.Repositories {
   public class UsersRepository : IUsersRepository {

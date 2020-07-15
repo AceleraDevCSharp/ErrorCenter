@@ -1,12 +1,11 @@
-﻿using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Services.Interfaces;
-using ErrorCenter.Services.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Persistence.EF.Context;
+using ErrorCenter.Persistence.EF.Repositories;
 
 namespace ErrorCenter.Persistence.EF.Repository
 {

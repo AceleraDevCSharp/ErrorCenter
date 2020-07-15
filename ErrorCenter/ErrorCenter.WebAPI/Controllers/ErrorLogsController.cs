@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using ErrorCenter.Services.Models;
 using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Services.Errors;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.WebAPI.Controllers {
   [ApiController]

@@ -1,15 +1,15 @@
 ﻿using System;
+using System.IO;
 using Xunit;
 using Microsoft.Extensions.Configuration;
 
-using ErrorCenter.Domain;
 using ErrorCenter.Services;
 using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Repositories.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Models;
-using System.IO;
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Tests.Services {
   public class AuthenticateUserServiceTest {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ErrorCenter.Services.Models
+namespace ErrorCenter.Persistence.EF.Models
 {
     public class ErrorLog
     {

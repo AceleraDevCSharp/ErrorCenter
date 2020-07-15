@@ -6,8 +6,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 
-using ErrorCenter.Services.Models;
 using ErrorCenter.Services.Interfaces;
+using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Services.Providers.HashProvider.Models;
 

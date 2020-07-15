@@ -1,13 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using ErrorCenter.Persistence.EF.Repository;
-using ErrorCenter.Services.Interfaces;
-using ErrorCenter.Services.Models;
-using ErrorCenter.WebAPI.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+
+using ErrorCenter.WebAPI.ViewModel;
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Persistence.EF.Repositories;
 
 namespace ErrorCenter.WebAPI.Controllers
 {
