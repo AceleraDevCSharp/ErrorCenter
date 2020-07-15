@@ -51,7 +51,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                 .Include(x => x.User)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)
+        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)    
         {
             switch (orderby)
             {
@@ -321,7 +321,7 @@ namespace ErrorCenter.Persistence.EF.Repository
         {
             foreach (var error in _context.ErrorLogs.ToList())
             {
-                int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title));
+                int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title) && x.Environment.Equals(error.Environment) && x.Level.Equals(error.Level));
                 error.Quantity = aux;
                 aux = 0;
             }
