@@ -1,11 +1,20 @@
-
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AutoMapper;
+
+using ErrorCenter.Persistence.EF.Context;
+using ErrorCenter.Persistence.EF.Repositories;
+using ErrorCenter.Persistence.EF.Context.Repositories;
+using ErrorCenter.Services;
+using ErrorCenter.Services.Interfaces;
+using ErrorCenter.Services.Providers.HashProvider.Models;
+using ErrorCenter.Services.Providers.HashProvider.Implementations;
 using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.WebAPI.Configuration;
 
@@ -28,9 +37,38 @@ namespace ErrorCenter.WebAPI
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddCors();
             services.AddControllers();
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddSingleton<IHashProvider, BCryptHashProvider>();
+            services.AddScoped<ErrorCenterDbContext, ErrorCenterDbContext>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IErrorLogsRepository, ErrorLogsRepository>();
+            services.AddTransient<
+                IAuthenticateUserService,
+                AuthenticateUserService
+            >();
+            services.AddTransient<
+                IArchiveErrorLogService,
+                ArchiveErrorLogService
+            >();
+            
+            var key = Encoding.ASCII.GetBytes(Configuration["JWTSecret"]);
+            services.AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x => {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             services.ResolveDependencies();
         }
@@ -47,6 +85,13 @@ namespace ErrorCenter.WebAPI
 
             app.UseRouting();
 
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
