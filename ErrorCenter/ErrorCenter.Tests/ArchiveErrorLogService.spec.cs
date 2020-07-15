@@ -1,17 +1,17 @@
 using System;
 using Xunit;
-
-using ErrorCenter.Services;
 using ErrorCenter.Services.Errors;
-using ErrorCenter.Services.Interfaces;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Repositories.Fakes;
+using ErrorCenter.Services.Services;
+using ErrorCenter.Persistence.EF.IRepository;
+using ErrorCenter.Services.IServices;
 
-namespace ErrorCenter.Tests.Services {
-  public class ArchiveErrorLogServiceTest {
+namespace ErrorCenter.Tests.Services
+{
+    public class ArchiveErrorLogServiceTest {
     private IUsersRepository _usersRepository;
-    private IErrorLogsRepository _errorLogsRepository;
+    private IErrorLogRepository<ErrorLog> _errorLogsRepository;
     private IArchiveErrorLogService _service;
     public ArchiveErrorLogServiceTest() {
       _usersRepository = new FakeUsersRepository();

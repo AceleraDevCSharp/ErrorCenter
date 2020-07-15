@@ -2,17 +2,17 @@
 using System.IO;
 using Xunit;
 using Microsoft.Extensions.Configuration;
-
-using ErrorCenter.Services;
-using ErrorCenter.Services.Interfaces;
-using ErrorCenter.Persistence.EF.Repositories;
 using ErrorCenter.Persistence.EF.Repositories.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Models;
 using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Services.Services;
+using ErrorCenter.Persistence.EF.IRepository;
+using ErrorCenter.Services.IServices;
 
-namespace ErrorCenter.Tests.Services {
-  public class AuthenticateUserServiceTest {
+namespace ErrorCenter.Tests.Services
+{
+    public class AuthenticateUserServiceTest {
     private IUsersRepository _usersRepository;
     private IHashProvider _hashProvider;
     private IConfiguration _config;

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ErrorCenter.Persistence.EF.Repositories
+namespace ErrorCenter.Persistence.EF.IRepository
 {
     public interface IErrorLogRepository<TDomain>
     {
+        /* alessandro */
         Task<IEnumerable<TDomain>> SelectAll();
 
         Task<IEnumerable<TDomain>> SelectByEnvironment(string whereEnvironment = null);
@@ -20,8 +21,13 @@ namespace ErrorCenter.Persistence.EF.Repositories
         Task<IEnumerable<TDomain>> SelectSearchBy(string whereSearch = null, string searchText = null);
         Task<IEnumerable<TDomain>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null);
 
-        Task<IEnumerable<TDomain>> SelectArquived();
+        Task<IEnumerable<TDomain>> SelectArchived();
 
         Task<IEnumerable<TDomain>> SelectDeleted();
+
+        /* bernardo */
+        public Task<TDomain> Create(TDomain errorLog);
+        public Task<TDomain> FindById(int id);
+        public Task<TDomain> UpdateErrorLog(TDomain errorLog);
     }
 }
