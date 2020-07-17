@@ -12,10 +12,12 @@ namespace ErrorCenter.WebAPI.Controllers
     public class SessionsController : MainController
     {
         private IAuthenticateUserService _service;
+        private IMailToUserService _mail;
 
-        public SessionsController(IAuthenticateUserService service)
+        public SessionsController(IAuthenticateUserService service, IMailToUserService mail)
         {
             _service = service;
+            _mail = mail;
         }
 
         [HttpPost]
@@ -30,6 +32,13 @@ namespace ErrorCenter.WebAPI.Controllers
             });
 
             return session;
+        }
+
+        [HttpPost("mail")]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> ForgottenPassword(string user_mail)
+        {
+            return await _mail.MailToUser(user_mail);
         }
     }
 }
