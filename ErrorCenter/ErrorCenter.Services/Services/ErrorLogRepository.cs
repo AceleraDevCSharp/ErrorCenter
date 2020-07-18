@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Persistence.EF.IRepository;
+using ErrorCenter.Services.IServices;
 
-namespace ErrorCenter.Persistence.EF.Repository
+namespace ErrorCenter.Services.Services
 {
     public class ErrorLogRepository : IErrorLogRepository<ErrorLog>
     {
@@ -19,7 +19,6 @@ namespace ErrorCenter.Persistence.EF.Repository
             UpdateQuantityEventsErrorLogs();
         }
 
-        /* Alessandro */
         public async Task<IEnumerable<string>> Environments()
         {
             return await _context
@@ -59,7 +58,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                 .Include(x => x.User)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)    
+        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)
         {
             switch (orderby)
             {
@@ -330,18 +329,12 @@ namespace ErrorCenter.Persistence.EF.Repository
             _context.SaveChanges();
         }
 
-        /* Bernardo */
-        public async Task<ErrorLog> Create(ErrorLog errorLog)
-        {
-            _context.ErrorLogs.Add(errorLog);
-            await _context.SaveChangesAsync();
-            return errorLog;
-        }
         public async Task<ErrorLog> FindById(int id)
         {
             var errorLog = await _context.ErrorLogs.FindAsync(id);
             return errorLog;
         }
+
         public async Task<ErrorLog> UpdateErrorLog(ErrorLog errorLog)
         {
             _context.Update(errorLog);

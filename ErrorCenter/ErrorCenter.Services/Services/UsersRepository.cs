@@ -2,10 +2,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 using ErrorCenter.Persistence.EF.Context;
+using ErrorCenter.Services.IServices;
 
-namespace ErrorCenter.Persistence.EF.Repository
+namespace ErrorCenter.Services.Services
 {
     public class UsersRepository : IUsersRepository
     {
@@ -23,13 +23,6 @@ namespace ErrorCenter.Persistence.EF.Repository
               .Where(x => x.Email == email)
               .AsNoTracking()
               .FirstOrDefaultAsync();
-            return user;
-        }
-
-        public async Task<User> Create(User user)
-        {
-            Context.Users.Add(user);
-            await Context.SaveChangesAsync();
             return user;
         }
     }

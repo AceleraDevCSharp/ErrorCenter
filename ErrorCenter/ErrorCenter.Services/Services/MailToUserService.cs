@@ -5,7 +5,6 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services
 {

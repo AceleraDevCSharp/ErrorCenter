@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ErrorCenter.Persistence.EF.IRepository
+namespace ErrorCenter.Services.IServices
 {
     public interface IErrorLogRepository<TDomain>
     {
@@ -26,8 +26,6 @@ namespace ErrorCenter.Persistence.EF.IRepository
 
         Task<IEnumerable<TDomain>> SelectDeleted();
 
-        /* bernardo */
-        public Task<TDomain> Create(TDomain errorLog);
         public Task<TDomain> FindById(int id);
         public Task<TDomain> UpdateErrorLog(TDomain errorLog);
     }

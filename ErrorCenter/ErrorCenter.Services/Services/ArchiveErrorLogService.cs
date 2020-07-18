@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 using ErrorCenter.Services.IServices;
 
 namespace ErrorCenter.Services.Services
