@@ -22,6 +22,11 @@ namespace ErrorCenter.Persistence.EF.Repositories.Fakes
             return errorLog;
         }
 
+        public Task<IEnumerable<string>> Environments()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<ErrorLog> FindById(int id)
         {
             var errorLog = errorLogs.Find(x => x.Id == id);

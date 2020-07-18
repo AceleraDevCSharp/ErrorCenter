@@ -7,6 +7,7 @@ namespace ErrorCenter.Persistence.EF.IRepository
     public interface IErrorLogRepository<TDomain>
     {
         /* alessandro */
+        Task<IEnumerable<string>> Environments();
         Task<IEnumerable<TDomain>> SelectAll();
 
         Task<IEnumerable<TDomain>> SelectByEnvironment(string whereEnvironment = null);

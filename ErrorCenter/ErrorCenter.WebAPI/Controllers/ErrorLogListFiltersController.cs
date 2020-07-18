@@ -7,6 +7,7 @@ using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace ErrorCenter.WebAPI.Controllers
 {
@@ -29,6 +30,13 @@ namespace ErrorCenter.WebAPI.Controllers
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectAll());
 
             return Ok(errors);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("environments")]
+        public async Task<ActionResult<string>> GetEnvironments()
+        {
+            return Ok(await _errorLogRepository.Environments());
         }
 
         [HttpGet("archived")]

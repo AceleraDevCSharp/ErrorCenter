@@ -20,6 +20,16 @@ namespace ErrorCenter.Persistence.EF.Repository
         }
 
         /* Alessandro */
+        public async Task<IEnumerable<string>> Environments()
+        {
+            return await _context
+                    .ErrorLogs
+                    .Select(x => x.Environment.ToLower())
+                    .Distinct()
+                    .AsNoTracking()
+                    .ToListAsync();
+
+        }
         public async Task<IEnumerable<ErrorLog>> SelectAll()
         {
             return await _context.ErrorLogs
@@ -45,7 +55,7 @@ namespace ErrorCenter.Persistence.EF.Repository
         public async Task<IEnumerable<ErrorLog>> SelectByEnvironment(string whereEnvironment)
         {
             return await _context.ErrorLogs
-                .Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null)
+                .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.ArquivedAt == null && x.DeletedAt == null)
                 .Include(x => x.User)
                 .ToListAsync();
         }
@@ -55,13 +65,13 @@ namespace ErrorCenter.Persistence.EF.Repository
             {
                 case "Level":
                     return await _context.ErrorLogs
-                        .Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
                         .OrderByDescending(x => x.Level)
                         .ToListAsync();
                 case "Frequencia":
                     return await _context.ErrorLogs
-                        .Where(x => x.Environment.Equals(whereEnvironment) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
                         .OrderByDescending(x => x.Quantity)
                         .ToListAsync();
@@ -81,7 +91,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                     if (whereSearch.Equals("Level"))
                     {
                         return await _context.ErrorLogs
-                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
@@ -89,7 +99,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                     else if (whereSearch.Equals("Descricao"))
                     {
                         return await _context.ErrorLogs
-                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
@@ -97,7 +107,7 @@ namespace ErrorCenter.Persistence.EF.Repository
                     else if (whereSearch.Equals("Origem"))
                     {
                         return await _context.ErrorLogs
-                            .Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                            .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
@@ -157,17 +167,17 @@ namespace ErrorCenter.Persistence.EF.Repository
             {
                 case "Level":
                     return await _context.ErrorLogs
-                        .Where(x => x.Environment.Equals(whereEnvironment) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
                         .ToListAsync();
                 case "Descricao":
                     return await _context.ErrorLogs
-                        .Where(x => x.Environment.Equals(whereEnvironment) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
                         .ToListAsync();
                 case "Origem":
                     return await _context.ErrorLogs
-                        .Where(x => x.Environment.Equals(whereEnvironment) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
+                        .Where(x => x.Environment.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
                         .ToListAsync();
                 default:

@@ -20,7 +20,7 @@ namespace ErrorCenter.Services.Services
         public async Task<String> MailToUser(string user_mail)
         {
             var message = new MimeMessage();
-            var user = _usersRepository.FindByEmail(user_mail);
+            var user = _usersRepository.FindByEmail(user_mail).Result;
 
             message.From.Add(new MailboxAddress("Grupo 1 - Wiz soluções", "groupone.wiz@gmail.com"));
 
@@ -41,7 +41,7 @@ namespace ErrorCenter.Services.Services
             {
                 builder.HtmlBody = string.Format(@"<p>Olá!</p>
                                                    <p>Para o Email {0}</p>
-                                                   <p>Senha: {1}</p>", user_mail, user.Result.Password);
+                                                   <p>Senha: {1}</p>", user_mail, user.Password);
             }
 
             message.Body = builder.ToMessageBody();
