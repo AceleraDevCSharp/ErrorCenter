@@ -9,21 +9,24 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services
 {
     public class MailToUserService : IMailToUserService
     {
         private readonly ErrorCenterDbContext _context;
-        public MailToUserService(ErrorCenterDbContext context)
+        private readonly IUsersRepository _usersRepository;
+        public MailToUserService(ErrorCenterDbContext context, IUsersRepository usersRepository)
         {
             _context = context;
+            _usersRepository = usersRepository;
         }
 
         public async Task<String> MailToUser(string user_mail)
         {
             var message = new MimeMessage();
-            var user = FindUserByMail(user_mail);
+            var user = _usersRepository.FindByEmail(user_mail);
 
             message.From.Add(new MailboxAddress("Grupo 1 - Wiz soluções", "groupone.wiz@gmail.com"));
 
@@ -59,17 +62,6 @@ namespace ErrorCenter.Services.Services
             }
 
             return await Task.FromResult("Mail sended!");
-        }
-
-        private async Task<User> FindUserByMail(string user_mail)
-        {
-            var user = await _context
-                .Users
-                .Where(x => x.Email.Equals(user_mail))
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-
-            return user;
         }
 
         private static bool IsValidEmail(string email)
