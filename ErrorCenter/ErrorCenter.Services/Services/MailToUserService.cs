@@ -1,12 +1,8 @@
-﻿using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Services.IServices;
+﻿using ErrorCenter.Services.IServices;
 using System;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using ErrorCenter.Persistence.EF.IRepository;
@@ -15,11 +11,9 @@ namespace ErrorCenter.Services.Services
 {
     public class MailToUserService : IMailToUserService
     {
-        private readonly ErrorCenterDbContext _context;
         private readonly IUsersRepository _usersRepository;
-        public MailToUserService(ErrorCenterDbContext context, IUsersRepository usersRepository)
+        public MailToUserService(IUsersRepository usersRepository)
         {
-            _context = context;
             _usersRepository = usersRepository;
         }
 
