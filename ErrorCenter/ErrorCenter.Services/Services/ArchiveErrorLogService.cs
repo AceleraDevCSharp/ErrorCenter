@@ -34,8 +34,8 @@ namespace ErrorCenter.Services.Services
 
             if (errorLog.ArquivedAt != null) throw new ErrorLogArchivedException();
 
-            if (!user.Environment.Equals(errorLog.Environment))
-                throw new DifferentEnvironmentException();
+            //if (!user.Environment.Equals(errorLog.Environment))
+              //  throw new DifferentEnvironmentException();
 
             errorLog.ArquivedAt = DateTime.Now;
 

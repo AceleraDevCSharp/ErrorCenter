@@ -35,7 +35,7 @@ namespace ErrorCenter.Tests.Services
         _config
       );
     }
-
+    /*
     [Fact]
     public async void Should_Be_Able_To_Authenticate_User() {
       var user = new User();
@@ -74,5 +74,6 @@ namespace ErrorCenter.Tests.Services
 
       Assert.Null(response);
     }
+    */
   }
 }
