@@ -16,25 +16,22 @@ using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services {
   public class AuthenticateUserService : IAuthenticateUserService {
-    private IUsersRepository _repository;
-    private UserManager<User> _userManager;
-    private PasswordValidator<User> _passwordValidator;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly IConfiguration _config;
 
     public AuthenticateUserService(
-      IUsersRepository repository,
       UserManager<User> userManager,
-      PasswordValidator<User> passwordValidator,
+      SignInManager<User> signInManager,
       IConfiguration config
     ) {
-      _repository = repository;
       _userManager = userManager;
-      _passwordValidator = passwordValidator;
+      _signInManager = signInManager;
       _config = config;
     }
 
     public async Task<Session> Authenticate(string email, string password) {
-      var user = await _repository.FindByEmail(email);
+      var user = await _userManager.FindByEmailAsync(email);
 
       if (user == null) {
         throw new AuthenticationException(
@@ -43,7 +40,8 @@ namespace ErrorCenter.Services.Services {
         );
       }
 
-      var valid = await _passwordValidator.ValidateAsync(_userManager, user, password);
+      var valid = await _signInManager
+        .PasswordSignInAsync(user.UserName, password, false, true);
 
       if (!valid.Succeeded) {
         throw new AuthenticationException(
@@ -57,8 +55,9 @@ namespace ErrorCenter.Services.Services {
       var key = Encoding.ASCII.GetBytes(_config["JWTSecret"]);
 
       var tokenDescriptor = new SecurityTokenDescriptor {
-        Subject = new ClaimsIdentity(new Claim[] {
-                          new Claim(ClaimTypes.Email, user.Email),
+        Subject = new ClaimsIdentity(
+          new Claim[] {
+            new Claim(ClaimTypes.Email, user.Email),
           }),
         Expires = DateTime.UtcNow.AddDays(1),
         SigningCredentials = new SigningCredentials(

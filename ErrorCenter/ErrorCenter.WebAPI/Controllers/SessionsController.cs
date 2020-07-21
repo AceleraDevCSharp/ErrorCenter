@@ -14,7 +14,7 @@ namespace ErrorCenter.WebAPI.Controllers {
   public class SessionsController : MainController {
     private IAuthenticateUserService _service;
 
-    public SessionsController(IAuthenticateUserService service, UserManager<User> manager) {
+    public SessionsController(IAuthenticateUserService service) {
       _service = service;
     }
 

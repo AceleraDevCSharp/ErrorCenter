@@ -21,6 +21,8 @@ namespace ErrorCenter.WebAPI.Middlewares.ExceptionHandler {
         await next(context);
       } catch (ViewModelException vme) {
         await HandleViewModelExceptionAsync(context, vme);
+      } catch (ErrorCenterException ac) {
+        await HandleErrorCenterExceptionsAsync(context, ac);
       } catch (Exception ex) {
         await HandleUnknownExceptionAsync(context, ex);
       }
@@ -36,6 +38,25 @@ namespace ErrorCenter.WebAPI.Middlewares.ExceptionHandler {
         statusCode,
         message = exception.Message,
         details = exception.Details,
+      }, new JsonSerializerSettings() {
+        NullValueHandling = NullValueHandling.Ignore
+      });
+
+      context.Response.StatusCode = statusCode;
+      context.Response.ContentType = "application/json";
+
+      return context.Response.WriteAsync(json);
+    }
+
+    private Task HandleErrorCenterExceptionsAsync(
+      HttpContext context,
+      ErrorCenterException exception
+    ) {
+      int statusCode = exception.StatusCode;
+
+      var json = JsonConvert.SerializeObject(new {
+        statusCode,
+        message = exception.Message,
       }, new JsonSerializerSettings() {
         NullValueHandling = NullValueHandling.Ignore
       });
