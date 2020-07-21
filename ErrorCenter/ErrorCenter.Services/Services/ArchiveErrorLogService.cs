@@ -1,27 +1,34 @@
 using System;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+
 using ErrorCenter.Services.Errors;
+using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.IRepository;
-using ErrorCenter.Services.IServices;
-using Microsoft.AspNetCore.Http;
 
 namespace ErrorCenter.Services.Services {
-  public class ArchiveErrorLogService : IArchiveErrorLogService {
-    private IUsersRepository _usersRepository;
-    private IErrorLogRepository<ErrorLog> _errorLogRepository;
+  public class ArchiveErrorLogService : IErrorLogService {
+    private UserManager<User> userManager;
+    private IErrorLogRepository<ErrorLog> errorLogRepository;
 
     public ArchiveErrorLogService(
-      IUsersRepository usersRepository,
-      IErrorLogRepository<ErrorLog> errorLogsRepository
+      UserManager<User> userManager,
+      IErrorLogRepository<ErrorLog> errorLogRepository
     ) {
-      _usersRepository = usersRepository;
-      _errorLogRepository = errorLogsRepository;
+      this.userManager = userManager;
+      this.errorLogRepository = errorLogRepository;
     }
 
-    public async Task<ErrorLog> Execute(int id, string user_email) {
-      var user = await _usersRepository.FindByEmail(user_email);
+    public async Task<ErrorLog> ArchiveErrorLog(
+      int id,
+      string user_email,
+      string user_role
+    ) {
+      var user = await userManager
+        .FindByEmailAsync(user_email);
 
       if (user == null) {
         throw new UserException(
@@ -30,12 +37,19 @@ namespace ErrorCenter.Services.Services {
         );
       }
 
-      var errorLog = await _errorLogRepository.FindById(id);
+      var errorLog = await errorLogRepository.FindById(id);
 
       if (errorLog == null) {
         throw new ErrorLogException(
           "Error Log not found",
           StatusCodes.Status404NotFound
+        );
+      }
+
+      if (!user_role.Equals(errorLog.Environment.Name)) {
+        throw new UserException(
+          "User can't archive an Error Log of a different environment",
+          StatusCodes.Status403Forbidden
         );
       }
 
@@ -46,18 +60,9 @@ namespace ErrorCenter.Services.Services {
         );
       }
 
-      /*
-      if (!user.Environment.Equals(errorLog.Environment)) {
-        throw new UserException(
-          "User can't archive an Error Log of a different environment",
-          StatusCodes.Status403Forbidden
-        );
-      }
-      */
-
       errorLog.ArquivedAt = DateTime.Now;
 
-      var archivedError = await _errorLogRepository.UpdateErrorLog(errorLog);
+      var archivedError = await errorLogRepository.UpdateErrorLog(errorLog);
 
       return archivedError;
     }

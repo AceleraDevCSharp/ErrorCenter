@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Services.DTOs;
 
 namespace ErrorCenter.Services.IServices
 {

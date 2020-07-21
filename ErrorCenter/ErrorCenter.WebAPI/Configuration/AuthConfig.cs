@@ -18,7 +18,7 @@ namespace ErrorCenter.WebAPI.Configuration {
         options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
       });
 
-      services.AddIdentity<User, IdentityRole>()
+      services.AddIdentity<User, Environment>()
         .AddEntityFrameworkStores<ErrorCenterDbContext>()
         .AddDefaultTokenProviders();
 

@@ -10,9 +10,10 @@ using ErrorCenter.Services.IServices;
 namespace ErrorCenter.Tests.Services
 {
     public class ArchiveErrorLogServiceTest {
+    /*
     private IUsersRepository _usersRepository;
     private IErrorLogRepository<ErrorLog> _errorLogsRepository;
-    private IArchiveErrorLogService _service;
+    private IErrorLogService _service;
     public ArchiveErrorLogServiceTest() {
       _usersRepository = new FakeUsersRepository();
       _errorLogsRepository = new FakeErrorLogsRepository();

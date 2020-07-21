@@ -9,29 +9,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 
+using ErrorCenter.Services.DTOs;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services {
   public class AuthenticateUserService : IAuthenticateUserService {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IConfiguration _config;
+    private readonly UserManager<User> userManager;
+    private readonly SignInManager<User> signInManager;
+    private readonly IConfiguration config;
 
     public AuthenticateUserService(
       UserManager<User> userManager,
       SignInManager<User> signInManager,
       IConfiguration config
     ) {
-      _userManager = userManager;
-      _signInManager = signInManager;
-      _config = config;
+      this.userManager = userManager;
+      this.signInManager = signInManager;
+      this.config = config;
     }
 
     public async Task<Session> Authenticate(string email, string password) {
-      var user = await _userManager.FindByEmailAsync(email);
+      var user = await userManager.FindByEmailAsync(email);
 
       if (user == null) {
         throw new AuthenticationException(
@@ -40,7 +40,7 @@ namespace ErrorCenter.Services.Services {
         );
       }
 
-      var valid = await _signInManager
+      var valid = await signInManager
         .PasswordSignInAsync(user.UserName, password, false, true);
 
       if (!valid.Succeeded) {
@@ -52,7 +52,7 @@ namespace ErrorCenter.Services.Services {
 
       var tokenHandler = new JwtSecurityTokenHandler();
 
-      var key = Encoding.ASCII.GetBytes(_config["JWTSecret"]);
+      var key = Encoding.ASCII.GetBytes(config["JWTSecret"]);
 
       var tokenDescriptor = new SecurityTokenDescriptor {
         Subject = new ClaimsIdentity(
@@ -66,11 +66,17 @@ namespace ErrorCenter.Services.Services {
         )
       };
 
+      var roles = await userManager.GetRolesAsync(user);
+      foreach (var role in roles) {
+        tokenDescriptor.Subject.AddClaim(
+          new Claim(ClaimTypes.Role, role)
+        );
+      }
+
       var token = tokenHandler.CreateToken(tokenDescriptor);
 
       return new Session(
         user.Email,
-        null, // Role do usuário
         tokenHandler.WriteToken(token)
       );
     }
