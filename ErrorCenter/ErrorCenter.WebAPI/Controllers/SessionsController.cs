@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
+using ErrorCenter.Services.Errors;
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Services.IServices;
-using ErrorCenter.Services.Errors;
 using ErrorCenter.Persistence.EF.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 
 namespace ErrorCenter.WebAPI.Controllers {
   [Route("v1/sessions")]
