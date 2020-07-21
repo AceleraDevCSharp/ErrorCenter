@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ErrorCenter.Persistence.EF.Models {
-    public class User
-    {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Environment { get; set; }
+  public class User : IdentityUser {
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
-        public IEnumerable<ErrorLog> ErrorLogs { get; set; }
-    }
+    public IEnumerable<ErrorLog> ErrorLogs { get; set; }
+  }
 }

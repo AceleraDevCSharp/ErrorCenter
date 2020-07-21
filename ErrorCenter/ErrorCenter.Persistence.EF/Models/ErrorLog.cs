@@ -15,7 +15,7 @@ namespace ErrorCenter.Persistence.EF.Models
         public DateTime? DeletedAt { get; set; }
         public string Origin { get; set; }
 
-        public int IdUser { get; set; }
+        public string IdUser { get; set; }
         public User User { get; set; }
     }
 }

@@ -23,7 +23,8 @@ namespace ErrorCenter.Persistence.EF.Repository
               .Where(x => x.Email == email)
               .AsNoTracking()
               .FirstOrDefaultAsync();
-            return user;
+
+            return (User)user;
         }
 
         public async Task<User> Create(User user)
