@@ -13,11 +13,9 @@ namespace ErrorCenter.WebAPI.Controllers {
   [Route("v1/sessions")]
   public class SessionsController : MainController {
     private IAuthenticateUserService _service;
-    private UserManager<User> _manager;
 
     public SessionsController(IAuthenticateUserService service, UserManager<User> manager) {
       _service = service;
-      _manager = manager;
     }
 
     [HttpPost]
@@ -33,7 +31,7 @@ namespace ErrorCenter.WebAPI.Controllers {
         );
       }
 
-      var session = await _service.Execute(login.Email, login.Password);
+      var session = await _service.Authenticate(login.Email, login.Password);
 
       return session;
     }
