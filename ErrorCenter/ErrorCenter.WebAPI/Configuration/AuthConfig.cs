@@ -22,6 +22,8 @@ namespace ErrorCenter.WebAPI.Configuration {
         .AddEntityFrameworkStores<ErrorCenterDbContext>()
         .AddDefaultTokenProviders();
 
+      services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
       var key = Encoding.ASCII.GetBytes(configuration["JWTSecret"]);
       services.AddAuthentication(x => {
         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

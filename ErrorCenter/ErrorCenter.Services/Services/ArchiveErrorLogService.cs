@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
@@ -11,14 +10,14 @@ using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services {
   public class ArchiveErrorLogService : IErrorLogService {
-    private UserManager<User> userManager;
+    private IUsersRepository usersRepository;
     private IErrorLogRepository<ErrorLog> errorLogRepository;
 
     public ArchiveErrorLogService(
-      UserManager<User> userManager,
+      IUsersRepository usersRepository,
       IErrorLogRepository<ErrorLog> errorLogRepository
     ) {
-      this.userManager = userManager;
+      this.usersRepository = usersRepository;
       this.errorLogRepository = errorLogRepository;
     }
 
@@ -27,8 +26,8 @@ namespace ErrorCenter.Services.Services {
       string user_email,
       string user_role
     ) {
-      var user = await userManager
-        .FindByEmailAsync(user_email);
+      var user = await usersRepository
+        .FindByEmail(user_email);
 
       if (user == null) {
         throw new UserException(

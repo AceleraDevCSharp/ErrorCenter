@@ -13,25 +13,26 @@ using ErrorCenter.Services.DTOs;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services {
   public class AuthenticateUserService : IAuthenticateUserService {
-    private readonly UserManager<User> userManager;
-    private readonly SignInManager<User> signInManager;
+    private readonly IUsersRepository usersRepository;
+    private readonly IPasswordHasher<User> passwordHasher;
     private readonly IConfiguration config;
 
     public AuthenticateUserService(
-      UserManager<User> userManager,
-      SignInManager<User> signInManager,
+      IUsersRepository usersRepository,
+      IPasswordHasher<User> passwordHasher,
       IConfiguration config
     ) {
-      this.userManager = userManager;
-      this.signInManager = signInManager;
+      this.usersRepository = usersRepository;
+      this.passwordHasher = passwordHasher;
       this.config = config;
     }
 
     public async Task<Session> Authenticate(string email, string password) {
-      var user = await userManager.FindByEmailAsync(email);
+      var user = await usersRepository.FindByEmail(email);
 
       if (user == null) {
         throw new AuthenticationException(
@@ -40,10 +41,10 @@ namespace ErrorCenter.Services.Services {
         );
       }
 
-      var valid = await signInManager
-        .PasswordSignInAsync(user.UserName, password, false, true);
+      var valid = passwordHasher
+        .VerifyHashedPassword(user, user.PasswordHash, password);
 
-      if (!valid.Succeeded) {
+      if (valid != PasswordVerificationResult.Success) {
         throw new AuthenticationException(
           "Invalid e-mail/password combination",
           StatusCodes.Status401Unauthorized
@@ -66,7 +67,7 @@ namespace ErrorCenter.Services.Services {
         )
       };
 
-      var roles = await userManager.GetRolesAsync(user);
+      var roles = await usersRepository.GetRoles(user);
       foreach (var role in roles) {
         tokenDescriptor.Subject.AddClaim(
           new Claim(ClaimTypes.Role, role)
