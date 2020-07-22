@@ -67,7 +67,7 @@ namespace ErrorCenter.Services.Services {
         )
       };
 
-      var roles = await usersRepository.GetRoles(user);
+      var roles = await usersRepository.GetUserRoles(user);
       foreach (var role in roles) {
         tokenDescriptor.Subject.AddClaim(
           new Claim(ClaimTypes.Role, role)

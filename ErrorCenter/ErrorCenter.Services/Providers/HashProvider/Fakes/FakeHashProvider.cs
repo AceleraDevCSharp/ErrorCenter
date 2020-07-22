@@ -2,7 +2,7 @@
 
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.Providers.Fakes {
+namespace ErrorCenter.Services.Providers.HashProvider.Fakes {
   public class FakeHashProvider : IPasswordHasher<User> {
     public string HashPassword(User user, string password) {
       return password;

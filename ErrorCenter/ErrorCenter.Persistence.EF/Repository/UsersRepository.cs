@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.Persistence.EF.IRepository;
+using System;
 
 namespace ErrorCenter.Persistence.EF.Repository {
   public class UsersRepository : IUsersRepository {
@@ -29,7 +30,7 @@ namespace ErrorCenter.Persistence.EF.Repository {
         .AsNoTracking()
         .FirstOrDefaultAsync();
 
-      return (User)user;
+      return user;
     }
 
     public async Task<IList<string>> GetRoles(User user) {
@@ -38,9 +39,13 @@ namespace ErrorCenter.Persistence.EF.Repository {
     }
 
     public async Task<User> Create(User user) {
-      Context.Users.Add(user);
-      await Context.SaveChangesAsync();
-      return user;
+      throw new NotImplementedException();
+    }
+
+    public async Task<IList<string>> GetUserRoles(User user) {
+      var userRoles = await Manager.GetRolesAsync(user);
+
+      return userRoles;
     }
   }
 }

@@ -284,11 +284,6 @@ namespace ErrorCenter.Persistence.EF.Repository {
         .Where(x => x.Id == id)
         .FirstOrDefaultAsync();
 
-      //var environment = await _context.Roles
-        //.FindAsync("a9575ce0-d458-4cd1-aaa2-19e965e6c8d0");
-
-      //errorLog.Environment = environment;
-
       return errorLog;
     }
     public async Task<ErrorLog> UpdateErrorLog(ErrorLog errorLog) {

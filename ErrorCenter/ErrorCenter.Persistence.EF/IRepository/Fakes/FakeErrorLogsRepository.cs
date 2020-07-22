@@ -2,89 +2,76 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 
-namespace ErrorCenter.Persistence.EF.Repositories.Fakes
-{
-    public class FakeErrorLogsRepository : IErrorLogRepository<ErrorLog>
-    {
-        private List<ErrorLog> errorLogs = new List<ErrorLog>();
+namespace ErrorCenter.Persistence.EF.IRepository.Fakes {
+  public class FakeErrorLogsRepository : IErrorLogRepository<ErrorLog> {
+    private List<ErrorLog> errorLogs = new List<ErrorLog>();
 
-        public FakeErrorLogsRepository()
-        {
-            errorLogs = new List<ErrorLog>();
-        }
-
-        public async Task<ErrorLog> Create(ErrorLog errorLog)
-        {
-            errorLogs.Add(errorLog);
-            await Task.Delay(10);
-            return errorLog;
-        }
-
-        public async Task<ErrorLog> FindById(int id)
-        {
-            var errorLog = errorLogs.Find(x => x.Id == id);
-            await Task.Delay(10);
-            return errorLog;
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectAll()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectArchived()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectByEnvironment(string whereEnvironment = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectDeleted()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectOrderedBy(string orderby = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectOrderedBySearchBy(string orderby = null, string whereSearch = null, string searchText = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<ErrorLog>> SelectSearchBy(string whereSearch = null, string searchText = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<ErrorLog> UpdateErrorLog(ErrorLog errorLog)
-        {
-            var idx = errorLogs.FindIndex(x => x.Id == errorLog.Id);
-            errorLogs[idx] = errorLog;
-            await Task.Delay(10);
-            return errorLog;
-        }
+    public FakeErrorLogsRepository() {
+      errorLogs = new List<ErrorLog>();
     }
+
+    public async Task<ErrorLog> Create(ErrorLog errorLog) {
+      errorLogs.Add(errorLog);
+      
+      await Task.Delay(1);
+      
+      return errorLog;
+    }
+
+    public async Task<ErrorLog> FindById(int id) {
+      var errorLog = errorLogs.Find(x => x.Id == id);
+
+      await Task.Delay(1);
+      
+      return errorLog;
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectAll() {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectArchived() {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectByEnvironment(string whereEnvironment = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectDeleted() {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectOrderedBy(string orderby = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectOrderedBySearchBy(string orderby = null, string whereSearch = null, string searchText = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<IEnumerable<ErrorLog>> SelectSearchBy(string whereSearch = null, string searchText = null) {
+      throw new System.NotImplementedException();
+    }
+
+    public async Task<ErrorLog> UpdateErrorLog(ErrorLog errorLog) {
+      var idx = errorLogs.FindIndex(x => x.Id == errorLog.Id);
+      errorLogs[idx] = errorLog;
+      await Task.Delay(10);
+      return errorLog;
+    }
+  }
 }

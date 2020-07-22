@@ -1,17 +1,13 @@
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 using Microsoft.AspNetCore.Identity;
 
-namespace ErrorCenter.Persistence.EF.Repositories.Fakes {
+namespace ErrorCenter.Persistence.EF.IRepository.Fakes {
   public class FakeUsersRepository : IUsersRepository {
     private List<User> users = new List<User>();
-    private List<Environment> environments = new List<Environment>();
-    private List<IdentityUserRole<string>> userRoles =
-      new List<IdentityUserRole<string>>();
 
     public async Task<User> Create(User user) {
       users.Add(user);
@@ -25,21 +21,15 @@ namespace ErrorCenter.Persistence.EF.Repositories.Fakes {
       return user;
     }
 
-    public async Task<IList<string>> GetRoles(User user) {
-      var roleId = userRoles
-        .Where(x => x.UserId == user.Id)
-        .FirstOrDefault();
+    public async Task<IList<string>> GetUserRoles(User user) {
+      var roles = new List<string>() { "Development", "Homologation", "Production" };
 
-      var roles = environments
-        .Where(x => x.Id.Equals(roleId));
-
-      IList<string> rolesNames = new List<string>();
-      foreach (var role in roles)
-        rolesNames.Add(role.Name);
+      var rnd = new Random();
+      var userRoles = new List<string>() { roles[rnd.Next(3)] };
 
       await Task.Delay(1);
 
-      return rolesNames;
+      return userRoles;
     }
   }
 }
