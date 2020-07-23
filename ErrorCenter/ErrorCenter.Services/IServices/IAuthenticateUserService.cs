@@ -6,6 +6,6 @@ namespace ErrorCenter.Services.IServices
 {
     public interface IAuthenticateUserService
     {
-        public Task<Session> Authenticate(string email, string password);
+        public Task<SessionDTO> Authenticate(string email, string password);
     }
 }

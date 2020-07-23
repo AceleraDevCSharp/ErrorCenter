@@ -1,5 +1,3 @@
-using System.Text;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -8,8 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using AutoMapper;
-using ErrorCenter.Persistence.EF.Context;
+
 using ErrorCenter.WebAPI.Configuration;
+using ErrorCenter.Persistence.EF.Context;
 
 namespace ErrorCenter.WebAPI {
   public class Startup {

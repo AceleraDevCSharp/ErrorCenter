@@ -6,22 +6,24 @@ using ErrorCenter.Persistence.EF.Repository;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Persistence.EF.IRepository;
 using ErrorCenter.Services.IServices;
+using ErrorCenter.Services.Providers.StorageProvider.Model;
+using ErrorCenter.Services.Providers.StorageProvider.Implementations;
 
-namespace ErrorCenter.WebAPI.Configuration
-{
-    public static class DependencyInjectionConfig
-    {
-        public static IServiceCollection ResolveDependencies(this IServiceCollection services)
-        {
-            services.AddScoped<ErrorCenterDbContext>();
+namespace ErrorCenter.WebAPI.Configuration {
+  public static class DependencyInjectionConfig {
+    public static IServiceCollection ResolveDependencies(this IServiceCollection services) {
+      services.AddScoped<ErrorCenterDbContext>();
 
-            services.AddTransient<IErrorLogRepository<ErrorLog>, ErrorLogRepository>();
+      services.AddScoped<IErrorLogRepository<ErrorLog>, ErrorLogRepository>();
+      services.AddScoped<IUsersRepository, UsersRepository>();
+      services.AddScoped<IStorageProvider, DiskStorageProvider>();
 
-            services.AddScoped<IUsersRepository, UsersRepository>();
-            services.AddTransient<IAuthenticateUserService, AuthenticateUserService>();
-            services.AddTransient<IErrorLogService, ArchiveErrorLogService>();
+      services.AddTransient<IAuthenticateUserService, AuthenticateUserService>();
+      services.AddTransient<IErrorLogService, ArchiveErrorLogService>();
 
-            return services;
-        }
+      services.AddTransient<IUserAvatarUploadService, UserAvatarUploadService>();
+
+      return services;
     }
+  }
 }

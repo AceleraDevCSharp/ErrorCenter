@@ -33,6 +33,15 @@ namespace ErrorCenter.Persistence.EF.Repository {
       return user;
     }
 
+    public async Task<User> FindByEmailTracking(string email) {
+      var user = await Context
+      .Users
+      .Where(x => x.Email == email)
+      .FirstOrDefaultAsync();
+
+      return user;
+    }
+
     public async Task<IList<string>> GetRoles(User user) {
       var roles = await Manager.GetRolesAsync(user);
       return roles;
@@ -40,6 +49,12 @@ namespace ErrorCenter.Persistence.EF.Repository {
 
     public async Task<User> Create(User user) {
       throw new NotImplementedException();
+    }
+
+    public async Task<User> Save(User user) {
+      await Manager.UpdateAsync(user);
+
+      return user;
     }
 
     public async Task<IList<string>> GetUserRoles(User user) {

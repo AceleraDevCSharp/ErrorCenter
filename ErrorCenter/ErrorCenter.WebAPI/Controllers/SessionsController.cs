@@ -22,7 +22,7 @@ namespace ErrorCenter.WebAPI.Controllers {
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<ActionResult<Session>> Create([FromBody] LoginInfo login) {
+    public async Task<ActionResult<SessionDTO>> Create([FromBody] LoginInfoViewModel login) {
       login.Validate();
 
       if (login.Invalid) {

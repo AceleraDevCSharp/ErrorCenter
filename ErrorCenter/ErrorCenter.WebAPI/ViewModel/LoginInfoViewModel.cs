@@ -2,7 +2,7 @@ using Flunt.Validations;
 using Flunt.Notifications;
 
 namespace ErrorCenter.WebAPI.ViewModel {
-  public class LoginInfo : Notifiable, IValidatable {
+  public class LoginInfoViewModel : Notifiable, IValidatable {
     public string Email { get; set; }
     public string Password { get; set; }
 

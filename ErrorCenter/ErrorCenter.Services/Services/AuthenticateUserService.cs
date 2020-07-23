@@ -31,7 +31,7 @@ namespace ErrorCenter.Services.Services {
       this.config = config;
     }
 
-    public async Task<Session> Authenticate(string email, string password) {
+    public async Task<SessionDTO> Authenticate(string email, string password) {
       var user = await usersRepository.FindByEmail(email);
 
       if (user == null) {
@@ -76,7 +76,7 @@ namespace ErrorCenter.Services.Services {
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
 
-      return new Session(
+      return new SessionDTO(
         user.Email,
         tokenHandler.WriteToken(token)
       );

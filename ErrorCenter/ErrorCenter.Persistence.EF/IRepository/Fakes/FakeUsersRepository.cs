@@ -15,10 +15,18 @@ namespace ErrorCenter.Persistence.EF.IRepository.Fakes {
       return user;
     }
 
+    public async Task<User> Save(User user) {
+      throw new NotImplementedException();
+    }
+
     public async Task<User> FindByEmail(string email) {
       var user = users.Find(x => x.Email == email);
-      await Task.Delay(10);
+      await Task.Delay(1);
       return user;
+    }
+
+    public async Task<User> FindByEmailTracking(string email) {
+      return await FindByEmail(email);
     }
 
     public async Task<IList<string>> GetUserRoles(User user) {
