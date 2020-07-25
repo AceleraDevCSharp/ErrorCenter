@@ -361,3 +361,7 @@ FodyWeavers.xsd
 
 # .vscode Debug Folder
 .vscode
+
+# Files Upload
+ErrorCenter/ErrorCenter.WebAPI/UsersAvatars/*.*
+!ErrorCenter/ErrorCenter.WebAPI/UsersAvatars/.gitkeep
