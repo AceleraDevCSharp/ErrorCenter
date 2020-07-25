@@ -8,13 +8,13 @@ using ErrorCenter.Services.Providers.StorageProvider.Model;
 
 namespace ErrorCenter.Services.Providers.StorageProvider.Implementations {
   public class DiskStorageProvider : IStorageProvider {
-    private IHostEnvironment hostEnvironment;
-    private string UsersAvatarsFolder;
+    private readonly IHostEnvironment hostEnvironment;
+    private readonly string UsersAvatarsFolder;
 
     public DiskStorageProvider(IHostEnvironment hostEnvironment) {
       this.hostEnvironment = hostEnvironment;
       UsersAvatarsFolder = Path.Combine(
-        hostEnvironment.ContentRootPath,
+        this.hostEnvironment.ContentRootPath,
         "UsersAvatars"
       );
     }
@@ -25,18 +25,17 @@ namespace ErrorCenter.Services.Providers.StorageProvider.Implementations {
       if (!Directory.Exists(UsersAvatarsFolder))
         Directory.CreateDirectory(UsersAvatarsFolder);
 
-      using (FileStream uploadedFile = File.Create(
+      using FileStream uploadedFile = File.Create(
         Path.Combine(
           UsersAvatarsFolder,
           Guid.NewGuid().ToString()
           + Path.GetExtension(file.FileName)
         )
-      )) {
-        file.CopyTo(uploadedFile);
-        uploadedFile.Flush();
+      );
+      file.CopyTo(uploadedFile);
+      uploadedFile.Flush();
 
-        return uploadedFile.Name;
-      }
+      return uploadedFile.Name;
     }
 
     public void DeleteFile(string fileName) {
