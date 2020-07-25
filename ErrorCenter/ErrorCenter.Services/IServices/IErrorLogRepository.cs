@@ -6,7 +6,6 @@ namespace ErrorCenter.Services.IServices
 {
     public interface IErrorLogRepository<TDomain>
     {
-        /* alessandro */
         Task<IEnumerable<string>> Environments();
         Task<IEnumerable<TDomain>> SelectAll();
 
@@ -26,7 +25,7 @@ namespace ErrorCenter.Services.IServices
 
         Task<IEnumerable<TDomain>> SelectDeleted();
 
-        public Task<TDomain> FindById(int id);
-        public Task<TDomain> UpdateErrorLog(TDomain errorLog);
+        Task<TDomain> FindById(int id);
+        Task<TDomain> UpdateErrorLog(TDomain errorLog);
     }
 }

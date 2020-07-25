@@ -58,7 +58,7 @@ namespace ErrorCenter.Services.Services
                 .Include(x => x.User)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment = null, string orderby = null)
+        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBy(string whereEnvironment, string orderby)
         {
             switch (orderby)
             {
@@ -82,7 +82,7 @@ namespace ErrorCenter.Services.Services
                         .ToListAsync();
             }
         }
-        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment = null, string orderby = null, string whereSearch = null, string searchText = null)
+        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentOrderedBySearchBy(string whereEnvironment, string orderby, string whereSearch, string searchText)
         {
             switch (orderby)
             {
@@ -160,7 +160,7 @@ namespace ErrorCenter.Services.Services
                         .ToListAsync();
             }
         }
-        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentSearchBy(string whereEnvironment = null, string whereSearch = null, string searchText = null)
+        public async Task<IEnumerable<ErrorLog>> SelectByEnvironmentSearchBy(string whereEnvironment, string whereSearch, string searchText)
         {
             switch (whereSearch)
             {
@@ -187,7 +187,7 @@ namespace ErrorCenter.Services.Services
                         .ToListAsync();
             }
         }
-        public async Task<IEnumerable<ErrorLog>> SelectOrderedBy(string orderby = null)
+        public async Task<IEnumerable<ErrorLog>> SelectOrderedBy(string orderby)
         {
             switch (orderby)
             {
@@ -211,7 +211,7 @@ namespace ErrorCenter.Services.Services
                         .ToListAsync();
             }
         }
-        public async Task<IEnumerable<ErrorLog>> SelectOrderedBySearchBy(string orderby = null, string whereSearch = null, string searchText = null)
+        public async Task<IEnumerable<ErrorLog>> SelectOrderedBySearchBy(string orderby, string whereSearch, string searchText)
         {
             switch (orderby)
             {
@@ -289,7 +289,7 @@ namespace ErrorCenter.Services.Services
                         .ToListAsync();
             }
         }
-        public async Task<IEnumerable<ErrorLog>> SelectSearchBy(string whereSearch = null, string searchText = null)
+        public async Task<IEnumerable<ErrorLog>> SelectSearchBy(string whereSearch, string searchText)
         {
             switch (whereSearch)
             {

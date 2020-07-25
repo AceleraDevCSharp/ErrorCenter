@@ -16,9 +16,10 @@ namespace ErrorCenter.Services.Services
             _usersRepository = usersRepository;
         }
 
-        public async Task<String> MailToUser(string user_mail)
+        public async Task<string> MailToUser(string user_mail)
         {
             var message = new MimeMessage();
+
             var user = _usersRepository.FindByEmail(user_mail).Result;
 
             message.From.Add(new MailboxAddress("Grupo 1 - Wiz soluções", "groupone.wiz@gmail.com"));

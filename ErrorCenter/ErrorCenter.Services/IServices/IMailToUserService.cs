@@ -8,6 +8,6 @@ namespace ErrorCenter.Services.IServices
 {
     public interface IMailToUserService
     {
-        Task<String> MailToUser(string mail);
+        Task<string> MailToUser(string mail);
     }
 }
