@@ -1,15 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
 
 using ErrorCenter.Services.DTOs;
-using ErrorCenter.Services.IServices;
-using ErrorCenter.Persistence.EF.IRepository;
-using ErrorCenter.Services.Providers.StorageProvider.Model;
 using ErrorCenter.Services.Errors;
-using Microsoft.AspNetCore.Http;
+using ErrorCenter.Services.IServices;
+using ErrorCenter.Services.Providers.StorageProvider.Model;
 
 namespace ErrorCenter.Services.Services {
   public class UserAvatarUploadService : IUserAvatarUploadService {

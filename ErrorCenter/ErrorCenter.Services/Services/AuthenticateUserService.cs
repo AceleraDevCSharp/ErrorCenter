@@ -13,7 +13,6 @@ using ErrorCenter.Services.DTOs;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 
 namespace ErrorCenter.Services.Services {
   public class AuthenticateUserService : IAuthenticateUserService {

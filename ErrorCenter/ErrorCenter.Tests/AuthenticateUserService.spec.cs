@@ -11,8 +11,7 @@ using Microsoft.Extensions.Configuration;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
-using ErrorCenter.Persistence.EF.IRepository.Fakes;
+using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Fakes;
 using ErrorCenter.Services.Errors;
 

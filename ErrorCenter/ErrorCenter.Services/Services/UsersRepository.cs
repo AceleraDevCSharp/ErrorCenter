@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -5,12 +6,11 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
+using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Persistence.EF.IRepository;
-using System;
 
-namespace ErrorCenter.Persistence.EF.Repository {
+namespace ErrorCenter.Services.Services {
   public class UsersRepository : IUsersRepository {
     private ErrorCenterDbContext Context;
     private UserManager<User> Manager;

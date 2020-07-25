@@ -6,8 +6,7 @@ using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
-using ErrorCenter.Persistence.EF.IRepository.Fakes;
+using ErrorCenter.Services.Services.Fakes;
 
 namespace ErrorCenter.Tests.Services {
   public class ArchiveErrorLogServiceTest {

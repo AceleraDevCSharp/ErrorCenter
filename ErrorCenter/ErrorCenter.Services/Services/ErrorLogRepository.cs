@@ -1,20 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
+using Microsoft.EntityFrameworkCore;
+
+using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
-using ErrorCenter.Persistence.EF.IRepository;
-using System;
 
-namespace ErrorCenter.Persistence.EF.Repository {
+namespace ErrorCenter.Services.Services {
   public class ErrorLogRepository : IErrorLogRepository<ErrorLog> {
     protected ErrorCenterDbContext _context;
 
     public ErrorLogRepository(ErrorCenterDbContext context) {
       _context = context;
       UpdateQuantityEventsErrorLogs();
+    }
+
+    public async Task<IEnumerable<Environment>> Environments() {
+      var environments = await _context.Roles.AsNoTracking().ToListAsync();
+      return environments;
     }
 
     /* Alessandro */

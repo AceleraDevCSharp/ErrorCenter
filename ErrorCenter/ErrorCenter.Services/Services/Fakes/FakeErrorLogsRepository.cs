@@ -1,9 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Persistence.EF.IRepository.Fakes {
+namespace ErrorCenter.Services.Services.Fakes {
   public class FakeErrorLogsRepository : IErrorLogRepository<ErrorLog> {
     private List<ErrorLog> errorLogs = new List<ErrorLog>();
 
@@ -25,6 +27,10 @@ namespace ErrorCenter.Persistence.EF.IRepository.Fakes {
       await Task.Delay(1);
       
       return errorLog;
+    }
+
+    public async Task<IEnumerable<Persistence.EF.Models.Environment>> Environments() {
+      throw new NotImplementedException();
     }
 
     public Task<IEnumerable<ErrorLog>> SelectAll() {

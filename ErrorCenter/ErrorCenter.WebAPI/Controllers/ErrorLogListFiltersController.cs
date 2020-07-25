@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Persistence.EF.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using ErrorCenter.Services.IServices;
 
 namespace ErrorCenter.WebAPI.Controllers
 {
@@ -29,6 +30,13 @@ namespace ErrorCenter.WebAPI.Controllers
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectAll());
 
             return Ok(errors);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("environments")]
+        public async Task<ActionResult<string>> GetEnvironments()
+        {
+            return Ok(await _errorLogRepository.Environments());
         }
 
         [HttpGet("archived")]
@@ -63,7 +71,7 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("environment={environment}/orderby={orderby}/typeSearch={typeSearch}/textSearch={textSearch}")]
+        [HttpGet("environment={environment}/orderby={orderby}/typeSearch={typeSearch}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetByEnvironmentOrderBySearchBy(string environment, string orderby, string typeSearch, string textSearch)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectByEnvironmentOrderedBySearchBy(environment, orderby, typeSearch, textSearch));
@@ -71,7 +79,7 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("environment={environment}/typeSearch={typeSearch}/textSearch={textSearch}")]
+        [HttpGet("environment={environment}/typeSearch={typeSearch}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetByEnvironmentSearchBy(string environment, string typeSearch, string textSearch)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectByEnvironmentSearchBy(environment, typeSearch, textSearch));
@@ -87,7 +95,7 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("orderby={orderby}/typeSearch={typeSearch}/textSearch={textSearch}")]
+        [HttpGet("orderby={orderby}/typeSearch={typeSearch}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetOrderedBySearchBy(string orderby, string typeSearch, string textSearch)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectOrderedBySearchBy(orderby, typeSearch, textSearch));
@@ -95,7 +103,7 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [HttpGet("typeSearch={typeSearch}/textSearch={textSearch}")]
+        [HttpGet("typeSearch={typeSearch}")]
         public async Task<ActionResult<IEnumerable<ErrorLogViewModel>>> GetSearchBy(string typeSearch, string textSearch)
         {
             var errors = _mapper.Map<IEnumerable<ErrorLogViewModel>>(await _errorLogRepository.SelectSearchBy(typeSearch, textSearch));

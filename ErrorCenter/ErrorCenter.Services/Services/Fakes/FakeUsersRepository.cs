@@ -2,10 +2,10 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using Microsoft.AspNetCore.Identity;
 
-namespace ErrorCenter.Persistence.EF.IRepository.Fakes {
+namespace ErrorCenter.Services.Services.Fakes {
   public class FakeUsersRepository : IUsersRepository {
     private List<User> users = new List<User>();
 
