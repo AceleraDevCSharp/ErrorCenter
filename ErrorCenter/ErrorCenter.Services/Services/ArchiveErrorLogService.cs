@@ -1,46 +1,68 @@
 using System;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Http;
+
 using ErrorCenter.Services.Errors;
-using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.IServices;
+using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.Services
-{
-    public class ArchiveErrorLogService : IArchiveErrorLogService
-    {
-        private IUsersRepository _usersRepository;
-        private IErrorLogRepository<ErrorLog> _errorLogRepository;
+namespace ErrorCenter.Services.Services {
+  public class ArchiveErrorLogService : IErrorLogService {
+    private IUsersRepository usersRepository;
+    private IErrorLogRepository<ErrorLog> errorLogRepository;
 
-        public ArchiveErrorLogService(
-          IUsersRepository usersRepository,
-          IErrorLogRepository<ErrorLog> errorLogsRepository
-        )
-        {
-            _usersRepository = usersRepository;
-            _errorLogRepository = errorLogsRepository;
-        }
-
-        public async Task<ErrorLog> Execute(int id, string user_email)
-        {
-            var user = await _usersRepository.FindByEmail(user_email);
-
-            if (user == null) throw new UserNotFoundException();
-
-            var errorLog = await _errorLogRepository.FindById(id);
-
-            if (errorLog == null) throw new ErrorLogNotFoundException();
-
-            if (errorLog.ArquivedAt != null) throw new ErrorLogArchivedException();
-
-            if (!user.Environment.Equals(errorLog.Environment))
-                throw new DifferentEnvironmentException();
-
-            errorLog.ArquivedAt = DateTime.Now;
-
-            var archivedError = await _errorLogRepository.UpdateErrorLog(errorLog);
-
-            return archivedError;
-        }
+    public ArchiveErrorLogService(
+      IUsersRepository usersRepository,
+      IErrorLogRepository<ErrorLog> errorLogRepository
+    ) {
+      this.usersRepository = usersRepository;
+      this.errorLogRepository = errorLogRepository;
     }
+
+    public async Task<ErrorLog> ArchiveErrorLog(
+      int id,
+      string user_email,
+      string user_role
+    ) {
+      var user = await usersRepository
+        .FindByEmail(user_email);
+
+      if (user == null) {
+        throw new UserException(
+          "Requesting user is no longer valid",
+          StatusCodes.Status401Unauthorized
+        );
+      }
+
+      var errorLog = await errorLogRepository.FindById(id);
+
+      if (errorLog == null) {
+        throw new ErrorLogException(
+          "Error Log not found",
+          StatusCodes.Status404NotFound
+        );
+      }
+
+      if (!user_role.Equals(errorLog.Environment.Name)) {
+        throw new UserException(
+          "User can't archive an Error Log of a different environment",
+          StatusCodes.Status403Forbidden
+        );
+      }
+
+      if (errorLog.ArquivedAt != null) {
+        throw new ErrorLogException(
+          "Requested Error Log is already archived",
+          StatusCodes.Status400BadRequest
+        );
+      }
+
+      errorLog.ArquivedAt = DateTime.Now;
+
+      var archivedError = await errorLogRepository.UpdateErrorLog(errorLog);
+
+      return archivedError;
+    }
+  }
 }

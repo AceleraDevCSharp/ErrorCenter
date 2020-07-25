@@ -1,75 +1,115 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+
 using Xunit;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using ErrorCenter.Services.Providers.HashProvider.Models;
-using ErrorCenter.Persistence.EF.Models;
+
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Services.Services.Fakes;
+using ErrorCenter.Services.Providers.HashProvider.Fakes;
+using ErrorCenter.Services.Errors;
 
-namespace ErrorCenter.Tests.Services
-{
-  //  public class AuthenticateUserServiceTest {
-  //  private IUsersRepository _usersRepository;
-  //  private IHashProvider _hashProvider;
-  //  private IConfiguration _config;
-  //  private IAuthenticateUserService _service;
+namespace ErrorCenter.Tests.Services {
+  public class AuthenticateUserServiceTest {
+    private readonly IUsersRepository usersRepository;
+    private readonly IPasswordHasher<User> passwordHasher;
+    private readonly IConfiguration configuration;
+    private readonly IAuthenticateUserService authenticateUserService;
 
-  //  public AuthenticateUserServiceTest() {
-  //    _usersRepository = new FakeUsersRepository();
-  //    _hashProvider = new FakeHashProvider();
+    public AuthenticateUserServiceTest() {
+      usersRepository = new FakeUsersRepository();
+      passwordHasher = new FakeHashProvider();
 
-  //    var builder = new ConfigurationBuilder()
-  //      .SetBasePath(Directory.GetCurrentDirectory())
-  //      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-  //      .AddEnvironmentVariables();
+      var builder = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables();
 
-  //    _config = builder.Build();
+      configuration = builder.Build();
 
-  //    _service = new AuthenticateUserService(
-  //      _usersRepository,
-  //      _hashProvider,
-  //      _config
-  //    );
-  //  }
+      authenticateUserService = new AuthenticateUserService(
+        usersRepository,
+        passwordHasher,
+        configuration
+      );
+    }
 
-  //  [Fact]
-  //  public async void Should_Be_Able_To_Authenticate_User() {
-  //    var user = new User();
-  //    user.Id = 1;
-  //    user.Email = "johndoe@example.com";
-  //    user.Password = "123456";
-  //    user.Environment = "dev";
-  //    user.CreatedAt = DateTime.Now;
+    [Fact]
+    public async void Should_Be_Able_To_Authenticate_User() {
+      // Arrange
+      var user = new User() {
+        Email = "johndoe@example.com",
+        UserName = "johndoe@example.com",
+        EmailConfirmed = true,
+        PasswordHash = "password-123"
+      };
+      await usersRepository.Create(user);
 
-  //    await _usersRepository.Create(user);
+      var handler = new JwtSecurityTokenHandler();
+      var validationParameters = new TokenValidationParameters() {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+          Encoding.ASCII.GetBytes(configuration["JWTSecret"])
+        ),
+        ValidateIssuer = false,
+        ValidateAudience = false
+      };
 
-  //    var response = await _service.Execute("johndoe@example.com", "123456");
+      // Act
+      var session = await authenticateUserService.Authenticate(
+        "johndoe@example.com",
+        "password-123"
+      );
+      
+      handler.ValidateToken(session.Token, validationParameters, out var validToken);
 
-  //    Assert.Equal("johndoe@example.com", response.Email);
-  //    Assert.Equal("dev", response.Environment);
-  //  }
+      // Assert
+      Assert.Equal("johndoe@example.com", session.Email);
+      Assert.Equal(DateTime.Today, validToken.ValidFrom.Date);
+      Assert.Equal(DateTime.Today.AddDays(1), validToken.ValidTo.Date);
+    }
 
-  //  [Fact]
-  //  public async void Should_Not_Be_Able_To_Authenticate_Non_Existing_User() {
-  //    var response = await _service.Execute("johndoe@example.com", "123456");
-  //    Assert.Null(response);
-  //  }
+    [Fact]
+    public async void Should_Not_Be_Able_To_Authenticate_Non_Existing_User() {
+      // Arrange
+      var user = new User() {
+        Email = "johndoe@example.com",
+        UserName = "johndoe@example.com",
+        EmailConfirmed = true,
+        PasswordHash = "password-123"
+      };
+      await usersRepository.Create(user);
 
-  //  [Fact]
-  //  public async void Should_Not_Be_Able_To_Authenticate_User_With_Incorrect_Password() {
-  //    var user = new User();
-  //    user.Id = 1;
-  //    user.Email = "johndoe@example.com";
-  //    user.Password = "123456";
-  //    user.Environment = "dev";
-  //    user.CreatedAt = DateTime.Now;
+      // Act
 
-  //    await _usersRepository.Create(user);
+      // Assert
+      await Assert.ThrowsAsync<AuthenticationException>(
+        () => authenticateUserService.Authenticate(
+          "invalid.user@example.com",
+          "password-123"
+        )
+      );
+    }
 
-  //    var response = await _service.Execute("johndoe@example.com", "incorrect-password");
+    [Fact]
+    public async void Should_Not_Be_Able_To_Authenticate_User_With_Incorrect_Password() {
+      // Arrange
 
-  //    Assert.Null(response);
-  //  }
-  //}
+      // Act
+
+      // Assert
+      await Assert.ThrowsAsync<AuthenticationException>(
+        () => authenticateUserService.Authenticate(
+          "johndoe@example.com",
+          "wrong-password"
+        )
+      );
+    }
+  }
 }

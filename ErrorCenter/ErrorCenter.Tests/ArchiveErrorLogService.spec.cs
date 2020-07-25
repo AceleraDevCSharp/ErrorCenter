@@ -1,117 +1,147 @@
 using System;
+
 using Xunit;
+
 using ErrorCenter.Services.Errors;
-using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Services.Services.Fakes;
 
-namespace ErrorCenter.Tests.Services
-{
-  //  public class ArchiveErrorLogServiceTest {
-  //  private IUsersRepository _usersRepository;
-  //  private IErrorLogRepository<ErrorLog> _errorLogsRepository;
-  //  private IArchiveErrorLogService _service;
-  //  public ArchiveErrorLogServiceTest() {
-  //    _usersRepository = new FakeUsersRepository();
-  //    _errorLogsRepository = new FakeErrorLogsRepository();
+namespace ErrorCenter.Tests.Services {
+  public class ArchiveErrorLogServiceTest {
+    private IUsersRepository usersRepository;
+    private IErrorLogRepository<ErrorLog> errorLogsRepository;
+    private IErrorLogService service;
+    public ArchiveErrorLogServiceTest() {
+      usersRepository = new FakeUsersRepository();
+      errorLogsRepository = new FakeErrorLogsRepository();
 
-  //    _service = new ArchiveErrorLogService(
-  //      _usersRepository,
-  //      _errorLogsRepository
-  //    );
-  //  }
+      service = new ArchiveErrorLogService(
+        usersRepository,
+        errorLogsRepository
+      );
+    }
 
-  //  [Fact]
-  //  public async void Should_Be_Able_To_Archive_An_Error_Log() {
-  //    var user = new User();
-  //    user.Id = 1;
-  //    user.Email = "johndoe@example.com";
-  //    user.Password = "123456";
-  //    user.Environment = "dev";
-  //    user.CreatedAt = DateTime.Now;
+    [Fact]
+    public async void Should_Be_Able_To_Archive_An_Error_Log() {
+      // Arrange
+      var user = new User() {
+        Email = "johndoe@example.com",
+        UserName = "johndoe@example.com",
+        EmailConfirmed = true,
+      };
 
-  //    var errorLog = new ErrorLog();
-  //    errorLog.Id = 1;
-  //    errorLog.IdUser = 1;
-  //    errorLog.Environment = "dev";
-  //    errorLog.CreatedAt = DateTime.Now;
+      var errorLog = new ErrorLog() {
+        Id = 1,
+        Environment = new Persistence.EF.Models.Environment() {
+          Name = "Development",
+          NormalizedName = "DEVELOPMENT"
+        },
+        CreatedAt = DateTime.Now,
+        ArquivedAt = null,
+      };
 
-  //    await _usersRepository.Create(user);
-  //    await _errorLogsRepository.Create(errorLog);
+      // Act
+      await usersRepository.Create(user);
+      await errorLogsRepository.Create(errorLog);
 
-  //    var archived = await _service.Execute(1, user.Email);
+      var archived = await service.ArchiveErrorLog(1, user.Email, "Development");
 
-  //    Assert.NotNull(archived.ArquivedAt);
-  //  }
+      // Assert
+      Assert.NotNull(archived.ArquivedAt);
+    }
 
-  //  [Fact]
-  //  public async void Should_Not_Be_Able_To_Archive_Error_If_User_Does_Not_Exist() {
-  //    await Assert.ThrowsAsync<UserNotFoundException>(
-  //      () => _service.Execute(1, "non.existing@example.com")
-  //    );
-  //  }
+    [Fact]
+    public async void Should_Not_Be_Able_To_Archive_Error_If_User_Does_Not_Exist() {
+      // Arrange
 
-  //  [Fact]
-  //  public async void Should_Not_Be_Able_To_Archive_Error_If_Does_Not_Exist() {
-  //    var user = new User();
-  //    user.Id = 1;
-  //    user.Email = "johndoe@example.com";
-  //    user.Password = "123456";
-  //    user.Environment = "dev";
-  //    user.CreatedAt = DateTime.Now;
+      // Act
 
-  //    await _usersRepository.Create(user);
+      // Assert
+      await Assert.ThrowsAsync<UserException>(
+        () => service.ArchiveErrorLog(
+          1,
+          "non.existing@example.com",
+          "AnyEnvironment"
+        )
+      );
+    }
+    
+    [Fact]
+    public async void Should_Not_Be_Able_To_Archive_Error_If_Does_Not_Exist() {
+      // Arrange
+      var user = new User() {
+        Email = "johndoe@example.com",
+        UserName = "johndoe@example.com",
+        EmailConfirmed = true,
+      };
 
-  //    await Assert.ThrowsAsync<ErrorLogNotFoundException>(
-  //      () => _service.Execute(1, user.Email)
-  //    );
-  //  }
+      // Act
+      await usersRepository.Create(user);
 
-  //  [Fact]
-  //  public async void Should_Not_Able_To_Archive_Error_If_Not_Same_Environment() {
-  //    var user = new User();
-  //    user.Id = 1;
-  //    user.Email = "johndoe@example.com";
-  //    user.Password = "123456";
-  //    user.Environment = "dev";
-  //    user.CreatedAt = DateTime.Now;
+      // Assert
+      await Assert.ThrowsAsync<ErrorLogException>(
+        () => service.ArchiveErrorLog(1, user.Email, "AnyRole")
+      );
+    }
 
-  //    var errorLog = new ErrorLog();
-  //    errorLog.Id = 1;
-  //    errorLog.IdUser = 1;
-  //    errorLog.Environment = "prod";
-  //    errorLog.CreatedAt = DateTime.Now;
+    [Fact]
+    public async void Should_Not_Able_To_Archive_Error_If_Not_Same_Environment() {
+      // Arrange
+      var user = new User() {
+        Email = "johndoe@example.com",
+        UserName = "johndoe@example.com",
+        EmailConfirmed = true,
+      };
 
-  //    await _usersRepository.Create(user);
-  //    await _errorLogsRepository.Create(errorLog);
+      var errorLog = new ErrorLog() {
+        Id = 1,
+        Environment = new Persistence.EF.Models.Environment() {
+          Name = "Development",
+          NormalizedName = "DEVELOPMENT"
+        },
+        CreatedAt = DateTime.Now,
+        ArquivedAt = null,
+      };
 
-  //    await Assert.ThrowsAsync<DifferentEnvironmentException>(
-  //      () => _service.Execute(1, user.Email)
-  //    );
-  //  }
+      // Act
+      await usersRepository.Create(user);
+      await errorLogsRepository.Create(errorLog);
 
-  //  [Fact]
-  //  public async void Should_Not_Be_Able_To_Archive_Archived_Error() {
-  //    var user = new User();
-  //    user.Id = 1;
-  //    user.Email = "johndoe@example.com";
-  //    user.Password = "123456";
-  //    user.Environment = "dev";
-  //    user.CreatedAt = DateTime.Now;
+      // Assert
+      await Assert.ThrowsAsync<UserException>(
+        () => service.ArchiveErrorLog(1, user.Email, "DifferentEnvironment")
+      );
+    }
+    
+    [Fact]
+    public async void Should_Not_Be_Able_To_Archive_Archived_Error() {
+      // Arrange
+      var user = new User() {
+        Email = "johndoe@example.com",
+        UserName = "johndoe@example.com",
+        EmailConfirmed = true,
+      };
 
-  //    var errorLog = new ErrorLog();
-  //    errorLog.Id = 1;
-  //    errorLog.IdUser = 1;
-  //    errorLog.Environment = "dev";
-  //    errorLog.CreatedAt = DateTime.Now;
-  //    errorLog.ArquivedAt = DateTime.Now;
+      var errorLog = new ErrorLog() {
+        Id = 1,
+        Environment = new Persistence.EF.Models.Environment() {
+          Name = "Development",
+          NormalizedName = "DEVELOPMENT"
+        },
+        CreatedAt = DateTime.Now,
+        ArquivedAt = DateTime.Now,
+      };
 
-  //    await _usersRepository.Create(user);
-  //    await _errorLogsRepository.Create(errorLog);
+      // Act
+      await usersRepository.Create(user);
+      await errorLogsRepository.Create(errorLog);
 
-  //    await Assert.ThrowsAsync<ErrorLogArchivedException>(
-  //      () => _service.Execute(1, user.Email)
-  //    );
-  //  }
-  //}
+      // Assert
+      await Assert.ThrowsAsync<ErrorLogException>(
+        () => service.ArchiveErrorLog(1, user.Email, "Development")
+      );
+    }
+  }
 }

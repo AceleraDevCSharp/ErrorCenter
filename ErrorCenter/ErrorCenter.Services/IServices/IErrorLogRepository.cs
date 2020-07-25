@@ -1,12 +1,13 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Services.IServices
 {
     public interface IErrorLogRepository<TDomain>
     {
-        Task<IEnumerable<string>> Environments();
+        Task<IEnumerable<Environment>> Environments();
         Task<IEnumerable<TDomain>> SelectAll();
 
         Task<IEnumerable<TDomain>> SelectByEnvironment(string whereEnvironment = null);
@@ -27,5 +28,7 @@ namespace ErrorCenter.Services.IServices
 
         Task<TDomain> FindById(int id);
         Task<TDomain> UpdateErrorLog(TDomain errorLog);
+
+        Task<TDomain> Create(TDomain errorLog);
     }
 }

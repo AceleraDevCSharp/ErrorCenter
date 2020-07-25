@@ -41,7 +41,7 @@ namespace ErrorCenter.Services.Services
             {
                 builder.HtmlBody = string.Format(@"<p>Olá!</p>
                                                    <p>Para o Email {0}</p>
-                                                   <p>Senha: {1}</p>", user_mail, user.Password);
+                                                   <p>Senha: {1}</p>", user_mail, "user.Password");
             }
 
             message.Body = builder.ToMessageBody();

@@ -1,66 +1,84 @@
 using System;
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Services.Providers.HashProvider.Models;
+
+using ErrorCenter.Services.DTOs;
+using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
+using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.Services
-{
-    public class AuthenticateUserService : IAuthenticateUserService
-    {
-        private IUsersRepository _repository;
-        private IHashProvider _hash;
-        private readonly IConfiguration _config;
+namespace ErrorCenter.Services.Services {
+  public class AuthenticateUserService : IAuthenticateUserService {
+    private readonly IUsersRepository usersRepository;
+    private readonly IPasswordHasher<User> passwordHasher;
+    private readonly IConfiguration config;
 
-        public AuthenticateUserService(
-          IUsersRepository repository,
-          IHashProvider hash,
-          IConfiguration config
-        )
-        {
-            _repository = repository;
-            _hash = hash;
-            _config = config;
-        }
-
-        public async Task<Session> Execute(string email, string password)
-        {
-            var user = await _repository.FindByEmail(email);
-
-            if (user == null) return null;
-
-            var aux = _hash.GenerateHash(user.Password);
-            if (!_hash.VerifyHash(password, aux)) return null;
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var key = Encoding.ASCII.GetBytes(_config["JWTSecret"]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[] {
-                          new Claim(ClaimTypes.Email, user.Email),
-                          new Claim(ClaimTypes.Role, user.Environment),
-            }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature
-              )
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return new Session(
-              user.Email,
-              user.Environment,
-              tokenHandler.WriteToken(token)
-            );
-        }
+    public AuthenticateUserService(
+      IUsersRepository usersRepository,
+      IPasswordHasher<User> passwordHasher,
+      IConfiguration config
+    ) {
+      this.usersRepository = usersRepository;
+      this.passwordHasher = passwordHasher;
+      this.config = config;
     }
+
+    public async Task<SessionDTO> Authenticate(string email, string password) {
+      var user = await usersRepository.FindByEmail(email);
+
+      if (user == null) {
+        throw new AuthenticationException(
+          "Invalid e-mail/password combination",
+          StatusCodes.Status401Unauthorized
+        );
+      }
+
+      var valid = passwordHasher
+        .VerifyHashedPassword(user, user.PasswordHash, password);
+
+      if (valid != PasswordVerificationResult.Success) {
+        throw new AuthenticationException(
+          "Invalid e-mail/password combination",
+          StatusCodes.Status401Unauthorized
+        );
+      }
+
+      var tokenHandler = new JwtSecurityTokenHandler();
+
+      var key = Encoding.ASCII.GetBytes(config["JWTSecret"]);
+
+      var tokenDescriptor = new SecurityTokenDescriptor {
+        Subject = new ClaimsIdentity(
+          new Claim[] {
+            new Claim(ClaimTypes.Email, user.Email),
+          }),
+        Expires = DateTime.UtcNow.AddDays(1),
+        SigningCredentials = new SigningCredentials(
+          new SymmetricSecurityKey(key),
+          SecurityAlgorithms.HmacSha256Signature
+        )
+      };
+
+      var roles = await usersRepository.GetUserRoles(user);
+      foreach (var role in roles) {
+        tokenDescriptor.Subject.AddClaim(
+          new Claim(ClaimTypes.Role, role)
+        );
+      }
+
+      var token = tokenHandler.CreateToken(tokenDescriptor);
+
+      return new SessionDTO(
+        user.Email,
+        tokenHandler.WriteToken(token)
+      );
+    }
+  }
 }
