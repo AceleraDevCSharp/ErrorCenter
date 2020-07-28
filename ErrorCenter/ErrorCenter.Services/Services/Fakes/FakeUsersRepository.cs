@@ -11,12 +11,17 @@ namespace ErrorCenter.Services.Services.Fakes {
 
     public async Task<User> Create(User user) {
       users.Add(user);
-      await Task.Delay(10);
+      await Task.Delay(1);
+
       return user;
     }
 
     public async Task<User> Save(User user) {
-      throw new NotImplementedException();
+      var userIdx = users.FindIndex(savedUser => user.Id == user.Id);
+      users[userIdx] = user;
+      await Task.Delay(1);
+
+      return user;
     }
 
     public async Task<User> FindByEmail(string email) {

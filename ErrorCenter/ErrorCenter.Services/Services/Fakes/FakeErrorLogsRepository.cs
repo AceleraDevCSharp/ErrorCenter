@@ -29,7 +29,7 @@ namespace ErrorCenter.Services.Services.Fakes {
       return errorLog;
     }
 
-    public async Task<IEnumerable<Persistence.EF.Models.Environment>> Environments() {
+    public Task<IEnumerable<Persistence.EF.Models.Environment>> Environments() {
       throw new NotImplementedException();
     }
 

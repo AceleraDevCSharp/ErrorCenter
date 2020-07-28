@@ -34,14 +34,7 @@ namespace ErrorCenter.Services.Services {
         );
       }
 
-      if (file.avatar == null) {
-        throw new FileUploadException(
-          "No file was uploaded",
-          StatusCodes.Status400BadRequest
-        );
-      }
-
-      if (user.Avatar != null)
+      if (!user.Avatar.Equals("default.png"))
         storageProvider.DeleteFile(user.Avatar);
 
       string avatarFileName = storageProvider.SaveFile(file.avatar);
