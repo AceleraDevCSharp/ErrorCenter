@@ -11,7 +11,7 @@ namespace ErrorCenter.Persistence.EF.Mappings {
           .WithOne(x => x.User)
           .HasForeignKey(x => x.IdUser);
 
-      builder.Property(x => x.Avatar).IsRequired(false);
+      builder.Property(x => x.Avatar).IsRequired(false).HasDefaultValue("default.png");
       builder.Property(x => x.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
       builder.Property(x => x.UpdatedAt).IsRequired().HasDefaultValue(DateTime.Now);
       builder.Property(x => x.DeletedAt).IsRequired(false);

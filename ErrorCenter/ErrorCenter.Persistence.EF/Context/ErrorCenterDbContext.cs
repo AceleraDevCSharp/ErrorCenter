@@ -18,16 +18,16 @@ namespace ErrorCenter.Persistence.EF.Context {
 
       base.OnModelCreating(modelBuilder);
 
-      modelBuilder.Entity<IdentityRole>().HasData(
-        new IdentityRole {
+      modelBuilder.Entity<Environment>().HasData(
+        new Environment {
           Name = "Development",
           NormalizedName = "DEVELOPMENT"
         },
-        new IdentityRole {
+        new Environment {
           Name = "Homologation",
           NormalizedName = "HOMOLOGATION"
         },
-        new IdentityRole {
+        new Environment {
           Name = "Production",
           NormalizedName = "PRODUCTION"
         }
