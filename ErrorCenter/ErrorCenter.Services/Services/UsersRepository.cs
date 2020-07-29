@@ -12,13 +12,10 @@ using ErrorCenter.Persistence.EF.Context;
 
 namespace ErrorCenter.Services.Services {
   public class UsersRepository : IUsersRepository {
-    private ErrorCenterDbContext Context;
-    private UserManager<User> Manager;
+    private readonly ErrorCenterDbContext Context;
+    private readonly UserManager<User> Manager;
 
-    public UsersRepository(
-      ErrorCenterDbContext context,
-      UserManager<User> manager
-    ) {
+    public UsersRepository(ErrorCenterDbContext context,UserManager<User> manager) {
       Context = context;
       Manager = manager;
     }

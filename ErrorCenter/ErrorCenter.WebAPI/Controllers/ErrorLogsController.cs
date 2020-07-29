@@ -14,25 +14,27 @@ namespace ErrorCenter.WebAPI.Controllers {
   [Authorize]
   [Route("v1/error-logs")]
   public class ErrorLogsController : MainController {
-    private IErrorLogService _archiveService;
+        private readonly IEditErrorLogService _archiveService;
 
-    public ErrorLogsController(IErrorLogService archiveSerivce) {
-      _archiveService = archiveSerivce;
-    }
+        public ErrorLogsController(IEditErrorLogService archiveSerivce) 
+        {
+            _archiveService = archiveSerivce;
+        }
 
-    [HttpPatch("archive/{id:int}")]
-    public async Task<ActionResult<ErrorLog>> Archive(int id) {
-      var identity = User.Identity as ClaimsIdentity;
-      List<Claim> claims = identity.Claims.ToList();
+        [HttpPatch("archive/{id:int}")]
+        public async Task<ActionResult<ErrorLog>> Archive(int id) 
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            List<Claim> claims = identity.Claims.ToList();
 
-      var email = claims
-        .Find(claim => claim.Type == ClaimTypes.Email).Value;
+            var email = claims
+            .Find(claim => claim.Type == ClaimTypes.Email).Value;
 
-      var role = claims
-        .Find(claim => claim.Type == ClaimTypes.Role).Value;
+            var role = claims
+            .Find(claim => claim.Type == ClaimTypes.Role).Value;
 
-      var errorLog = await _archiveService.ArchiveErrorLog(id, email, role);
-      return errorLog;
-    }
+            var errorLog = await _archiveService.ArchiveErrorLog(id, email, role);
+            return errorLog;
+        }
   }
 }

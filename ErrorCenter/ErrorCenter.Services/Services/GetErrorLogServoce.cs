@@ -9,10 +9,10 @@ using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
 
 namespace ErrorCenter.Services.Services {
-  public class ErrorLogRepository : IErrorLogRepository<ErrorLog> {
+  public class GetErrorLogServoce : IGetErrorLogService<ErrorLog> {
     protected ErrorCenterDbContext _context;
 
-    public ErrorLogRepository(ErrorCenterDbContext context) {
+    public GetErrorLogServoce(ErrorCenterDbContext context) {
       _context = context;
       UpdateQuantityEventsErrorLogs();
     }

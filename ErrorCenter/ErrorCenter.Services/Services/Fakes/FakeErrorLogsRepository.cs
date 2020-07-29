@@ -6,7 +6,7 @@ using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Services.Services.Fakes {
-  public class FakeErrorLogsRepository : IErrorLogRepository<ErrorLog> {
+  public class FakeErrorLogsRepository : IGetErrorLogService<ErrorLog> {
     private List<ErrorLog> errorLogs = new List<ErrorLog>();
 
     public FakeErrorLogsRepository() {

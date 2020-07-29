@@ -14,12 +14,12 @@ namespace ErrorCenter.WebAPI.Configuration {
     ) {
       services.AddScoped<ErrorCenterDbContext>();
 
-      services.AddScoped<IErrorLogRepository<ErrorLog>, ErrorLogRepository>();
+      services.AddScoped<IGetErrorLogService<ErrorLog>, GetErrorLogServoce>();
       services.AddScoped<IUsersRepository, UsersRepository>();
       services.AddScoped<IStorageProvider, DiskStorageProvider>();
 
       services.AddTransient<IAuthenticateUserService, AuthenticateUserService>();
-      services.AddTransient<IErrorLogService, ArchiveErrorLogService>();
+      services.AddTransient<IEditErrorLogService, EditErrorLogService>();
       services.AddTransient<IMailToUserService, MailToUserService>();
 
       services.AddTransient<IUserAvatarUploadService, UserAvatarUploadService>();

@@ -11,13 +11,13 @@ using ErrorCenter.Services.Services.Fakes;
 namespace ErrorCenter.Tests.Services {
   public class ArchiveErrorLogServiceTest {
     private IUsersRepository usersRepository;
-    private IErrorLogRepository<ErrorLog> errorLogsRepository;
-    private IErrorLogService service;
+    private IGetErrorLogService<ErrorLog> errorLogsRepository;
+    private IEditErrorLogService service;
     public ArchiveErrorLogServiceTest() {
       usersRepository = new FakeUsersRepository();
       errorLogsRepository = new FakeErrorLogsRepository();
 
-      service = new ArchiveErrorLogService(
+      service = new EditErrorLogService(
         usersRepository,
         errorLogsRepository
       );

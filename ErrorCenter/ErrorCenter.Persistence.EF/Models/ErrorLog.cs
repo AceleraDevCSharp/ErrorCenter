@@ -12,7 +12,6 @@ namespace ErrorCenter.Persistence.EF.Models {
     public DateTime? ArquivedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
     public string Origin { get; set; }
-
     public string IdUser { get; set; }
     public User User { get; set; }
     public string EnvironmentID { get; set; }

@@ -1,11 +1,11 @@
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
-using ErrorCenter.Persistence.EF.Models;
+//using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.IServices
-{
-    public interface IArchiveErrorLogService
-    {
-        public Task<ErrorLog> Execute(int id, string user_email);
-    }
-}
+//namespace ErrorCenter.Services.IServices
+//{
+//    public interface IArchiveErrorLogService
+//    {
+//        public Task<ErrorLog> Execute(int id, string user_email);
+//    }
+//}
