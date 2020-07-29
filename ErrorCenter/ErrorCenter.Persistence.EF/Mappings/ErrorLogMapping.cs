@@ -13,10 +13,6 @@ namespace ErrorCenter.Persistence.EF.Mappings
 
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.Environment)
-                   .HasColumnType("varchar(30)")
-                   .IsRequired();
-
             builder.HasOne(x => x.Environment)
             .WithMany("ErrorLogs")
             .HasForeignKey(x => x.EnvironmentID);

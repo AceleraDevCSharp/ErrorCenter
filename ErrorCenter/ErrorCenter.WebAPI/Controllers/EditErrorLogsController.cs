@@ -13,10 +13,10 @@ using System;
 namespace ErrorCenter.WebAPI.Controllers {
   [Authorize]
   [Route("v1/error-logs")]
-  public class ErrorLogsController : MainController {
+  public class EditErrorLogsController : MainController {
         private readonly IEditErrorLogService _archiveService;
 
-        public ErrorLogsController(IEditErrorLogService archiveSerivce) 
+        public EditErrorLogsController(IEditErrorLogService archiveSerivce) 
         {
             _archiveService = archiveSerivce;
         }
@@ -27,14 +27,26 @@ namespace ErrorCenter.WebAPI.Controllers {
             var identity = User.Identity as ClaimsIdentity;
             List<Claim> claims = identity.Claims.ToList();
 
-            var email = claims
-            .Find(claim => claim.Type == ClaimTypes.Email).Value;
+            var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
 
-            var role = claims
-            .Find(claim => claim.Type == ClaimTypes.Role).Value;
+            var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
 
             var errorLog = await _archiveService.ArchiveErrorLog(id, email, role);
             return errorLog;
         }
-  }
+
+        [HttpPatch("delete/{id:int}")]
+        public async Task<ActionResult<ErrorLog>> Delete(int id)
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            List<Claim> claims = identity.Claims.ToList();
+
+            var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
+
+            var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
+
+            var errorLog = await _archiveService.DeleteErrorLog(id, email, role);
+            return errorLog;
+        }
+    }
 }

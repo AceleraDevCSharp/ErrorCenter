@@ -13,12 +13,12 @@ namespace ErrorCenter.WebAPI.Controllers
 {
     [Authorize]
     [Route("v1/error-logs")]
-    public class ErrorLogListFiltersController : MainController
+    public class FindErrorLogsController : MainController
     {
         private readonly IGetErrorLogService<ErrorLog> _errorLogRepository;
         private readonly IMapper _mapper;
 
-        public ErrorLogListFiltersController(IGetErrorLogService<ErrorLog> errorLogRepository, IMapper mapper)
+        public FindErrorLogsController(IGetErrorLogService<ErrorLog> errorLogRepository, IMapper mapper)
         {
             _errorLogRepository = errorLogRepository;
             _mapper = mapper;
