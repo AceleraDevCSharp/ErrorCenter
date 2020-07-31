@@ -9,7 +9,7 @@ namespace ErrorCenter.Services.Services.Fakes {
   public class FakeUsersRepository : IUsersRepository {
     private List<User> users = new List<User>();
 
-    public async Task<User> Create(User user) {
+    public async Task<User> Create(User user, string role) {
       users.Add(user);
       await Task.Delay(1);
 

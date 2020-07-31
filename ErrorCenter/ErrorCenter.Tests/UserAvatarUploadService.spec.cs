@@ -38,7 +38,7 @@ namespace ErrorCenter.Tests.Services {
         PasswordHash = "password-123",
         Avatar = "default.png"
       };
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "some-role");
 
       FormFile file;
       using (var stream = File.OpenRead("avatar-placeholder.png")) {
@@ -76,7 +76,7 @@ namespace ErrorCenter.Tests.Services {
         PasswordHash = "password-123",
         Avatar = "default.png"
       };
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "some-role");
 
       FormFile oldFile;
       using (var stream = File.OpenRead("avatar-placeholder.png")) {
