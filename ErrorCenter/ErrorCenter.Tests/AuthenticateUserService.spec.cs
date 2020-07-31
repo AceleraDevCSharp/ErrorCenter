@@ -49,7 +49,7 @@ namespace ErrorCenter.Tests.Services {
         EmailConfirmed = true,
         PasswordHash = "password-123"
       };
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "user-role");
 
       var handler = new JwtSecurityTokenHandler();
       var validationParameters = new TokenValidationParameters() {
@@ -71,8 +71,8 @@ namespace ErrorCenter.Tests.Services {
 
       // Assert
       Assert.Equal("johndoe@example.com", session.Email);
-      Assert.Equal(DateTime.Today, validToken.ValidFrom.Date);
-      Assert.Equal(DateTime.Today.AddDays(1), validToken.ValidTo.Date);
+      Assert.Equal(DateTime.Today, validToken.ValidFrom.Date.ToLocalTime().Date);
+      Assert.Equal(DateTime.Today.AddDays(1), validToken.ValidTo.Date.ToLocalTime().Date);
     }
 
     [Fact]
@@ -84,7 +84,7 @@ namespace ErrorCenter.Tests.Services {
         EmailConfirmed = true,
         PasswordHash = "password-123"
       };
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "user-role");
 
       // Act
 

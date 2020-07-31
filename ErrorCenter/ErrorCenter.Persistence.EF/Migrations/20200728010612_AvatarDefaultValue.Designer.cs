@@ -4,14 +4,16 @@ using ErrorCenter.Persistence.EF.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ErrorCenter.Persistence.EF.Migrations
 {
     [DbContext(typeof(ErrorCenterDbContext))]
-    partial class ErrorCenterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200728010612_AvatarDefaultValue")]
+    partial class AvatarDefaultValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,29 +46,6 @@ namespace ErrorCenter.Persistence.EF.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "cf0c2f88-838b-4e6e-b74a-9507adfe0cff",
-                            ConcurrencyStamp = "b2952e00-5551-4f1c-93e5-d68749677fc1",
-                            Name = "Development",
-                            NormalizedName = "DEVELOPMENT"
-                        },
-                        new
-                        {
-                            Id = "ca31608a-20e2-4a7e-8d1a-b1fcc72da758",
-                            ConcurrencyStamp = "de813532-c636-4ea0-bb9a-fdf97a244bd1",
-                            Name = "Homologation",
-                            NormalizedName = "HOMOLOGATION"
-                        },
-                        new
-                        {
-                            Id = "065928a7-eae2-4b21-88c7-734432b049af",
-                            ConcurrencyStamp = "ff4863d9-a2d1-486d-8c37-efa191c63cc1",
-                            Name = "Production",
-                            NormalizedName = "PRODUCTION"
-                        });
                 });
 
             modelBuilder.Entity("ErrorCenter.Persistence.EF.Models.ErrorLog", b =>
@@ -140,7 +119,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9303));
+                        .HasDefaultValue(new DateTime(2020, 7, 27, 22, 6, 12, 193, DateTimeKind.Local).AddTicks(3658));
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -184,7 +163,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9549));
+                        .HasDefaultValue(new DateTime(2020, 7, 27, 22, 6, 12, 193, DateTimeKind.Local).AddTicks(3894));
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
@@ -201,6 +180,48 @@ namespace ErrorCenter.Persistence.EF.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "7388448b-a556-4232-ac46-5ca46b65c89f",
+                            ConcurrencyStamp = "5db80712-09a8-43bf-919a-c34a2742656e",
+                            Name = "Development",
+                            NormalizedName = "DEVELOPMENT"
+                        },
+                        new
+                        {
+                            Id = "ac7b87ba-6157-46ac-a3f6-e468f05f120f",
+                            ConcurrencyStamp = "65a663f2-10de-4259-8930-d661a9dfe33c",
+                            Name = "Homologation",
+                            NormalizedName = "HOMOLOGATION"
+                        },
+                        new
+                        {
+                            Id = "9554d635-ee07-4eea-862d-b660f6c0c328",
+                            ConcurrencyStamp = "2668d80d-9621-4487-946b-cc83fdd4ea4c",
+                            Name = "Production",
+                            NormalizedName = "PRODUCTION"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
