@@ -15,7 +15,7 @@ using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Fakes;
 using ErrorCenter.Services.Errors;
 
-namespace ErrorCenter.Tests.Services {
+namespace ErrorCenter.Tests.UnitTests {
   public class AuthenticateUserServiceTest {
     private readonly IUsersRepository usersRepository;
     private readonly IPasswordHasher<User> passwordHasher;

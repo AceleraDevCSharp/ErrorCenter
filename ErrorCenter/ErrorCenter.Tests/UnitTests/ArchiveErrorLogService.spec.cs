@@ -8,7 +8,7 @@ using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.Services.Fakes;
 
-namespace ErrorCenter.Tests.Services {
+namespace ErrorCenter.Tests.UnitTests {
   public class ArchiveErrorLogServiceTest {
     private IUsersRepository usersRepository;
     private IErrorLogRepository<ErrorLog> errorLogsRepository;

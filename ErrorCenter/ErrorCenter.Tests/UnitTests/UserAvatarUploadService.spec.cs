@@ -13,7 +13,7 @@ using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.Providers.StorageProvider.Fakes;
 using ErrorCenter.Services.Providers.StorageProvider.Model;
 
-namespace ErrorCenter.Tests.Services {
+namespace ErrorCenter.Tests.UnitTests {
   public class UserAvatarUploadServiceTest {
     private readonly IUsersRepository usersRepository;
     private readonly IStorageProvider storageProvider;
@@ -63,7 +63,7 @@ namespace ErrorCenter.Tests.Services {
       );
 
       // Assert
-      Assert.Equal(true, Guid.TryParse(response, out Guid guid));
+      Assert.True(Guid.TryParse(response, out Guid guid));
     }
 
     [Fact]
@@ -121,7 +121,7 @@ namespace ErrorCenter.Tests.Services {
       );
 
       // Assert
-      Assert.Equal(true, Guid.TryParse(response, out Guid guid));
+      Assert.True(Guid.TryParse(response, out Guid guid));
     }
 
     [Fact]
