@@ -14,6 +14,7 @@ using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.Providers.HashProvider.Fakes;
 using ErrorCenter.Services.Errors;
+using ErrorCenter.Services.DTOs;
 
 namespace ErrorCenter.Tests.UnitTests {
   public class AuthenticateUserServiceTest {
@@ -61,11 +62,13 @@ namespace ErrorCenter.Tests.UnitTests {
         ValidateAudience = false
       };
 
+      var data = new SessionRequestDTO() {
+        Email = "johndoe@example.com",
+        Password = "password-123"
+      };
+
       // Act
-      var session = await authenticateUserService.Authenticate(
-        "johndoe@example.com",
-        "password-123"
-      );
+      var session = await authenticateUserService.Authenticate(data);
       
       handler.ValidateToken(session.Token, validationParameters, out var validToken);
 
@@ -86,29 +89,32 @@ namespace ErrorCenter.Tests.UnitTests {
       };
       await usersRepository.Create(user, "user-role");
 
+      var data = new SessionRequestDTO() {
+        Email = "invalid.user@example.com",
+        Password = "password-123"
+      };
+
       // Act
 
       // Assert
       await Assert.ThrowsAsync<AuthenticationException>(
-        () => authenticateUserService.Authenticate(
-          "invalid.user@example.com",
-          "password-123"
-        )
+        () => authenticateUserService.Authenticate(data)
       );
     }
 
     [Fact]
     public async void Should_Not_Be_Able_To_Authenticate_User_With_Incorrect_Password() {
       // Arrange
+      var data = new SessionRequestDTO() {
+        Email = "johndoe@example.com",
+        Password = "wrong-password"
+      };
 
       // Act
 
       // Assert
       await Assert.ThrowsAsync<AuthenticationException>(
-        () => authenticateUserService.Authenticate(
-          "johndoe@example.com",
-          "wrong-password"
-        )
+        () => authenticateUserService.Authenticate(data)
       );
     }
   }

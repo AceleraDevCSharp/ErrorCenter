@@ -30,8 +30,8 @@ namespace ErrorCenter.Services.Services {
       this.config = config;
     }
 
-    public async Task<SessionDTO> Authenticate(string email, string password) {
-      var user = await usersRepository.FindByEmail(email);
+    public async Task<SessionResponseDTO> Authenticate(SessionRequestDTO data) {
+      var user = await usersRepository.FindByEmail(data.Email);
 
       if (user == null) {
         throw new AuthenticationException(
@@ -41,7 +41,7 @@ namespace ErrorCenter.Services.Services {
       }
 
       var valid = passwordHasher
-        .VerifyHashedPassword(user, user.PasswordHash, password);
+        .VerifyHashedPassword(user, user.PasswordHash, data.Password);
 
       if (valid != PasswordVerificationResult.Success) {
         throw new AuthenticationException(
@@ -75,10 +75,10 @@ namespace ErrorCenter.Services.Services {
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
 
-      return new SessionDTO(
-        user.Email,
-        tokenHandler.WriteToken(token)
-      );
+      return new SessionResponseDTO() {
+        Email = user.Email,
+        Token = tokenHandler.WriteToken(token)
+      };
     }
   }
 }

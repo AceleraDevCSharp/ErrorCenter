@@ -1,24 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
-using System.Collections.Generic;
 
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using ErrorCenter.WebAPI;
 using ErrorCenter.Services.DTOs;
 using ErrorCenter.WebAPI.ViewModel;
-using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ErrorCenter.Tests.IntegrationTests {
   public class IntegrationTests<TStartup>
@@ -60,11 +54,11 @@ namespace ErrorCenter.Tests.IntegrationTests {
         new AuthenticationHeaderValue("bearer", response.Token);
     }
 
-    protected async Task<SessionDTO> GetJwtAsync() {
+    protected async Task<SessionResponseDTO> GetJwtAsync() {
       var response = await Client.PostAsync("/v1/sessions",
         new StringContent(
           JsonConvert.SerializeObject(
-            new LoginInfoViewModel() {
+            new SessionRequestDTO() {
               Email = "johntre@example.com",
               Password = "123456-Bb",
             }
@@ -76,17 +70,17 @@ namespace ErrorCenter.Tests.IntegrationTests {
         }
       );
 
-      return JsonConvert.DeserializeObject<SessionDTO>(
+      return JsonConvert.DeserializeObject<SessionResponseDTO>(
         await response.Content.ReadAsStringAsync()
       );
     }
 
-    protected async Task<UserViewModel> GetUser() {
+    protected async Task<UserViewModel> CreateTestUser() {
       var response = await Client.PostAsync("/v1/users",
         new StringContent(
           JsonConvert.SerializeObject(
             new UserDTO() {
-              Email = "johndoe@example.com",
+              Email = "johntest@example.com",
               Password = "123456-Bb",
               Environment = "Development"
             }

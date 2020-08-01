@@ -42,9 +42,6 @@ namespace ErrorCenter.Services.Services {
         UpdatedAt = DateTime.Now,
       };
 
-      Console.WriteLine(user == null);
-      Console.WriteLine(newUser.Password == null);
-
       user.PasswordHash = passwordHasher.HashPassword(user, newUser.Password);
 
       user = await usersRepository.Create(user, newUser.Environment);
