@@ -9,8 +9,8 @@ using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Services.Services {
   public class ErrorLogService : IErrorLogService {
-    private IUsersRepository usersRepository;
-    private IErrorLogRepository<ErrorLog> errorLogRepository;
+    private readonly IUsersRepository usersRepository;
+    private readonly IErrorLogRepository<ErrorLog> errorLogRepository;
 
     public ErrorLogService(
       IUsersRepository usersRepository,
