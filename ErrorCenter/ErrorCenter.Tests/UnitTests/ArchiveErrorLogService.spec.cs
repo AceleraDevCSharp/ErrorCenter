@@ -17,7 +17,7 @@ namespace ErrorCenter.Tests.UnitTests {
       usersRepository = new FakeUsersRepository();
       errorLogsRepository = new FakeErrorLogsRepository();
 
-      service = new ArchiveErrorLogService(
+      service = new ErrorLogService(
         usersRepository,
         errorLogsRepository
       );

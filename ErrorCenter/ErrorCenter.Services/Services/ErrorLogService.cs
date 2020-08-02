@@ -8,11 +8,11 @@ using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Services.Services {
-  public class ArchiveErrorLogService : IErrorLogService {
+  public class ErrorLogService : IErrorLogService {
     private IUsersRepository usersRepository;
     private IErrorLogRepository<ErrorLog> errorLogRepository;
 
-    public ArchiveErrorLogService(
+    public ErrorLogService(
       IUsersRepository usersRepository,
       IErrorLogRepository<ErrorLog> errorLogRepository
     ) {
@@ -20,11 +20,7 @@ namespace ErrorCenter.Services.Services {
       this.errorLogRepository = errorLogRepository;
     }
 
-    public async Task<ErrorLog> ArchiveErrorLog(
-      int id,
-      string user_email,
-      string user_role
-    ) {
+    public async Task<ErrorLog> ArchiveErrorLog(int id, string user_email, string user_role) {
       var user = await usersRepository
         .FindByEmail(user_email);
 
@@ -64,5 +60,51 @@ namespace ErrorCenter.Services.Services {
 
       return archivedError;
     }
-  }
+
+
+    public async Task<ErrorLog> DeleteErrorLog(int id, string user_email, string user_role)
+    {
+        var user = await usersRepository.FindByEmail(user_email);
+
+        if (user == null)
+        {
+            throw new UserException(
+                "Requesting user is no longer valid",
+                StatusCodes.Status401Unauthorized
+            );
+        }
+
+        var errorLog = await errorLogRepository.FindById(id);
+
+        if (errorLog == null)
+        {
+            throw new ErrorLogException(
+                "Error Log not found",
+                StatusCodes.Status404NotFound
+            );
+        }
+
+        if (!user_role.Equals(errorLog.Environment.Name))
+        {
+            throw new UserException(
+                "User can't delete an Error Log of a different environment",
+                StatusCodes.Status403Forbidden
+            );
+        }
+
+        if (errorLog.DeletedAt != null)
+        {
+            throw new ErrorLogException(
+                "Requested Error Log is already deleted",
+                StatusCodes.Status400BadRequest
+            );
+        }
+
+        errorLog.DeletedAt = DateTime.Now;
+
+        var archivedError = await errorLogRepository.UpdateErrorLog(errorLog);
+
+        return archivedError;
+    }
+    }
 }
