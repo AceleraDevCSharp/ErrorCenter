@@ -5,6 +5,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ErrorCenter.Services.Services
 {
@@ -41,11 +42,11 @@ namespace ErrorCenter.Services.Services
             {
                 builder.HtmlBody = string.Format(@"<p>Olá!</p>
                                                    <p>Para o Email {0}</p>
-                                                   <p>Senha: {1}</p>", user_mail, "user.Password");
+                                                   <p>Senha: {1}</p>", user_mail, user.PasswordHash);
             }
 
             message.Body = builder.ToMessageBody();
-
+             
             using(var client = new SmtpClient())
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
