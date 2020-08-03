@@ -8,7 +8,7 @@ using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.Services.Fakes;
 
-namespace ErrorCenter.Tests.Services {
+namespace ErrorCenter.Tests.UnitTests {
   public class ArchiveErrorLogServiceTest {
     private IUsersRepository usersRepository;
     private IErrorLogRepository<ErrorLog> errorLogsRepository;
@@ -43,7 +43,7 @@ namespace ErrorCenter.Tests.Services {
       };
 
       // Act
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "Development");
       await errorLogsRepository.Create(errorLog);
 
       var archived = await service.ArchiveErrorLog(1, user.Email, "Development");
@@ -78,7 +78,7 @@ namespace ErrorCenter.Tests.Services {
       };
 
       // Act
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "Development");
 
       // Assert
       await Assert.ThrowsAsync<ErrorLogException>(
@@ -106,7 +106,7 @@ namespace ErrorCenter.Tests.Services {
       };
 
       // Act
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "Development");
       await errorLogsRepository.Create(errorLog);
 
       // Assert
@@ -135,7 +135,7 @@ namespace ErrorCenter.Tests.Services {
       };
 
       // Act
-      await usersRepository.Create(user);
+      await usersRepository.Create(user, "Development");
       await errorLogsRepository.Create(errorLog);
 
       // Assert

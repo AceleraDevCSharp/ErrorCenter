@@ -9,14 +9,19 @@ namespace ErrorCenter.Services.Services.Fakes {
   public class FakeUsersRepository : IUsersRepository {
     private List<User> users = new List<User>();
 
-    public async Task<User> Create(User user) {
+    public async Task<User> Create(User user, string role) {
       users.Add(user);
-      await Task.Delay(10);
+      await Task.Delay(1);
+
       return user;
     }
 
     public async Task<User> Save(User user) {
-      throw new NotImplementedException();
+      var userIdx = users.FindIndex(savedUser => user.Id == user.Id);
+      users[userIdx] = user;
+      await Task.Delay(1);
+
+      return user;
     }
 
     public async Task<User> FindByEmail(string email) {

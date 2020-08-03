@@ -47,8 +47,11 @@ namespace ErrorCenter.Services.Services {
       return roles;
     }
 
-    public async Task<User> Create(User user) {
-      throw new NotImplementedException();
+    public async Task<User> Create(User user, string role) {
+      await Manager.CreateAsync(user);
+      await Manager.AddToRoleAsync(user, role);
+
+      return user;
     }
 
     public async Task<User> Save(User user) {
