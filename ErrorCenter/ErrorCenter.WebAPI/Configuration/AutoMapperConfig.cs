@@ -11,7 +11,8 @@ namespace ErrorCenter.WebAPI.Configuration
     {
         public AutoMapperConfig()
         {
-            CreateMap<ErrorLogViewModel, ErrorLog>();
+            CreateMap<ErrorLogViewModel, ErrorLog>().ReverseMap();
+            CreateMap<ErrorLogSimpleViewModel, ErrorLog>().ReverseMap();
             CreateMap<ErrorLog, ErrorLogViewModel>()
                 .ForMember(x => x.UserEmail, x => x.MapFrom( x => x.User.Email));
             CreateMap<User, UserViewModel>().ReverseMap();
