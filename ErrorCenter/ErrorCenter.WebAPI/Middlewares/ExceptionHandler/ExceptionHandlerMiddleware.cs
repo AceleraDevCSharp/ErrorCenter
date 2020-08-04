@@ -75,7 +75,7 @@ namespace ErrorCenter.WebAPI.Middlewares.ExceptionHandler {
 
       var json = JsonConvert.SerializeObject(new {
         statusCode,
-        message = "An error occurred whilst processing your request",
+        message = "An error occurred while processing your request",
         detailed = Env.IsDevelopment() ? exception : null,
       }, new JsonSerializerSettings() { 
         NullValueHandling = NullValueHandling.Ignore

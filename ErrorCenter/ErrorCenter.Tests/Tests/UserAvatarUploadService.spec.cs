@@ -54,7 +54,9 @@ namespace ErrorCenter.UnitTests {
         };
       };
 
-      var avatar = new UserAvatarDTO(file);
+      var avatar = new UserAvatarDTO() {
+        avatar = file
+      };
 
       // Act
       var response = await userAvatarUploadService.UploadUserAvatar(
@@ -106,8 +108,12 @@ namespace ErrorCenter.UnitTests {
         };
       };
 
-      var oldAvatar = new UserAvatarDTO(oldFile);
-      var newAvatar = new UserAvatarDTO(newFile);
+      var oldAvatar = new UserAvatarDTO() {
+        avatar = oldFile
+      };
+      var newAvatar = new UserAvatarDTO() {
+        avatar = newFile
+      };
 
       await userAvatarUploadService.UploadUserAvatar(
         "johndoe@example.com",
@@ -140,7 +146,9 @@ namespace ErrorCenter.UnitTests {
           ContentType = "image/png"
         };
       };
-      var avatar = new UserAvatarDTO(file);
+      var avatar = new UserAvatarDTO() {
+        avatar = file
+      };
 
       // Act
 

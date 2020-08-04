@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
-
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using ErrorCenter.Services.DTOs;
-using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Services.IServices;
+using ErrorCenter.Services.Errors;
+using System;
 
 namespace ErrorCenter.WebAPI.Controllers {
   [Route("v1/users/upload-avatar")]
@@ -24,8 +26,17 @@ namespace ErrorCenter.WebAPI.Controllers {
 
     [HttpPatch]
     public async Task<ActionResult<dynamic>> Update(
-      [FromForm] AvatarFileViewModel file
+      [FromForm] UserAvatarDTO file
     ) {
+      file.Validate();
+
+      if (file.Invalid) {
+        throw new FileUploadException(
+          "No file was uploaded",
+          400
+        );
+      }
+
       var user_email = HttpContext
         .User
         .Claims
@@ -36,9 +47,9 @@ namespace ErrorCenter.WebAPI.Controllers {
         .Value;
 
       var avatarUrl = await userAvatarUploadService
-        .UploadUserAvatar(user_email, new UserAvatarDTO(file.avatar));
+        .UploadUserAvatar(user_email, file);
 
-      return new { avatarUrl };
+      return JsonConvert.SerializeObject(avatarUrl);
     }
   }
 }

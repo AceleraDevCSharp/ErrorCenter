@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 using Xunit;
 using Newtonsoft.Json;
 
+using ErrorCenter.WebAPI;
 using ErrorCenter.Services.DTOs;
 using ErrorCenter.WebAPI.ViewModel;
-using ErrorCenter.Tests.IntegrationTests;
-using ErrorCenter.WebAPI;
 
-namespace ErrorCenter.IntegrationTests.Tests {
+namespace ErrorCenter.Tests.IntegrationTests {
   public class CreateUserTest : IClassFixture<CustomWebApplicationFactory<Startup>> {
     private readonly CustomWebApplicationFactory<Startup> _factory;
 

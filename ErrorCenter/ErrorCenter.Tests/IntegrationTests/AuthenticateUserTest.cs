@@ -1,19 +1,17 @@
-﻿using ErrorCenter.Services.DTOs;
-using ErrorCenter.Tests.IntegrationTests;
-using ErrorCenter.WebAPI;
-using ErrorCenter.WebAPI.ViewModel;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net;
 using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Xunit;
+using System.Net.Http.Headers;
 
-namespace ErrorCenter.IntegrationTests.Tests {
+using Xunit;
+using Newtonsoft.Json;
+
+using ErrorCenter.WebAPI;
+using ErrorCenter.Services.DTOs;
+using ErrorCenter.WebAPI.ViewModel;
+
+namespace ErrorCenter.Tests.IntegrationTests {
   public class AuthenticateUserTest : IClassFixture<CustomWebApplicationFactory<Startup>> {
     private readonly CustomWebApplicationFactory<Startup> _factory;
 

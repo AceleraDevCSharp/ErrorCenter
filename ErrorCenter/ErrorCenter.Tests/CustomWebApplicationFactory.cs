@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
 using ErrorCenter.Services.DTOs;
+using ErrorCenter.Tests.Utilities;
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Persistence.EF.Context;
 
@@ -43,7 +44,7 @@ namespace ErrorCenter.Tests.IntegrationTests {
           db.Database.EnsureCreated();
 
           try {
-            // seed?
+            SeedDatabase.InitializeDb(db);
           } catch (Exception ex) {
             logger.LogError(ex, "An error occurred seeding the " +
               "database with data. Error: {Message}", ex.Message);
@@ -52,19 +53,19 @@ namespace ErrorCenter.Tests.IntegrationTests {
       });
     }
 
-    protected async Task AuthenticateAsync(HttpClient client) {
+    public async Task AuthenticateAsync(HttpClient client) {
       var response = await GetJwtAsync(client);
 
       client.DefaultRequestHeaders.Authorization =
         new AuthenticationHeaderValue("bearer", response.Token);
     }
 
-    protected async Task<SessionResponseDTO> GetJwtAsync(HttpClient client) {
+    public async Task<SessionResponseDTO> GetJwtAsync(HttpClient client) {
       var response = await client.PostAsync("/v1/sessions",
         new StringContent(
           JsonConvert.SerializeObject(
             new SessionRequestDTO() {
-              Email = "johntre@example.com",
+              Email = "johntest@example.com",
               Password = "123456-Bb",
             }
           ), Encoding.UTF8
@@ -78,6 +79,10 @@ namespace ErrorCenter.Tests.IntegrationTests {
       return JsonConvert.DeserializeObject<SessionResponseDTO>(
         await response.Content.ReadAsStringAsync()
       );
+    }
+
+    public void Unauthenticate(HttpClient client) {
+      client.DefaultRequestHeaders.Authorization = null;
     }
 
     public async Task<UserViewModel> CreateTestUser(HttpClient client) {
