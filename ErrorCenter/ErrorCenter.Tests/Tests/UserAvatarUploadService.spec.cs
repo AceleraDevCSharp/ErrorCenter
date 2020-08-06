@@ -13,7 +13,7 @@ using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.Providers.StorageProvider.Fakes;
 using ErrorCenter.Services.Providers.StorageProvider.Model;
 
-namespace ErrorCenter.Tests.UnitTests {
+namespace ErrorCenter.UnitTests {
   public class UserAvatarUploadServiceTest {
     private readonly IUsersRepository usersRepository;
     private readonly IStorageProvider storageProvider;
@@ -54,7 +54,9 @@ namespace ErrorCenter.Tests.UnitTests {
         };
       };
 
-      var avatar = new UserAvatarDTO(file);
+      var avatar = new UserAvatarDTO() {
+        avatar = file
+      };
 
       // Act
       var response = await userAvatarUploadService.UploadUserAvatar(
@@ -106,8 +108,12 @@ namespace ErrorCenter.Tests.UnitTests {
         };
       };
 
-      var oldAvatar = new UserAvatarDTO(oldFile);
-      var newAvatar = new UserAvatarDTO(newFile);
+      var oldAvatar = new UserAvatarDTO() {
+        avatar = oldFile
+      };
+      var newAvatar = new UserAvatarDTO() {
+        avatar = newFile
+      };
 
       await userAvatarUploadService.UploadUserAvatar(
         "johndoe@example.com",
@@ -140,7 +146,9 @@ namespace ErrorCenter.Tests.UnitTests {
           ContentType = "image/png"
         };
       };
-      var avatar = new UserAvatarDTO(file);
+      var avatar = new UserAvatarDTO() {
+        avatar = file
+      };
 
       // Act
 

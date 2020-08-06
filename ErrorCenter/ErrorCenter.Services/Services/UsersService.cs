@@ -38,6 +38,7 @@ namespace ErrorCenter.Services.Services {
         Email = newUser.Email,
         UserName = newUser.Email,
         EmailConfirmed = true,
+        Avatar = "default.png",
         CreatedAt = DateTime.Now,
         UpdatedAt = DateTime.Now,
       };
