@@ -46,7 +46,7 @@ namespace ErrorCenter.WebAPI.Controllers {
 
       var session = _mapper.Map<SessionViewModel>(sessionData);
 
-      return session;
+      return Ok(session);
     }
 
     [HttpPost("mail")]

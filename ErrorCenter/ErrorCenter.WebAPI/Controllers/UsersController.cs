@@ -2,7 +2,6 @@
 
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
 using ErrorCenter.Services.DTOs;
@@ -17,20 +16,20 @@ namespace ErrorCenter.WebAPI.Controllers {
   public class UsersController : ControllerBase {
     private readonly IUsersService usersService;
     private readonly IMapper mapper;
-    RoleManager<Persistence.EF.Models.Environment> roleManager;
 
     public UsersController(
       IUsersService usersService,
-      IMapper mapper,
-      RoleManager<Persistence.EF.Models.Environment> roleManager
+      IMapper mapper
     ) {
       this.usersService = usersService;
       this.mapper = mapper;
-      this.roleManager = roleManager;
     }
 
     [HttpPost]
     [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
     public async Task<ActionResult<UserViewModel>> Create(
       [FromBody] UserDTO newUser
     ) {
@@ -48,7 +47,7 @@ namespace ErrorCenter.WebAPI.Controllers {
 
       var createdUser = mapper.Map<UserViewModel>(user);
 
-      return createdUser;
+      return Created(nameof(Create), createdUser);
     }
   }
 }

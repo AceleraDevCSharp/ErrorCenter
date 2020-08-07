@@ -74,9 +74,11 @@ namespace ErrorCenter.Tests.IntegrationTests {
       Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
+    [Fact]
     public async void Should_Not_Be_Able_To_Upload_If_No_Image_Was_Uploaded() {
       // Arrange
       var client = _factory.CreateClient();
+      await _factory.AuthenticateAsync(client);
 
       // Act
       var response = await ExecuteRequest(client, false);

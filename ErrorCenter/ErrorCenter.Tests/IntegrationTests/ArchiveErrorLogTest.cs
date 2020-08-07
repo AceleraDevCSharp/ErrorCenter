@@ -1,11 +1,10 @@
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+
 using Xunit;
 
 using ErrorCenter.WebAPI;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Net;
-using System.Net.Http.Headers;
-using System;
 
 namespace ErrorCenter.Tests.IntegrationTests {
   public class ArchiveErrorLogTest 
@@ -30,7 +29,7 @@ namespace ErrorCenter.Tests.IntegrationTests {
     public async void Should_Be_Able_To_Archive_Error_Log() {
       // Arrange
       var client = _factory.CreateClient();
-      var user = await _factory.CreateTestUser(client);
+      await _factory.CreateTestUser(client);
       await _factory.AuthenticateAsync(client);
 
       // Act
