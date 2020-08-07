@@ -32,7 +32,7 @@ namespace ErrorCenter.WebAPI.Controllers {
         .Find(claim => claim.Type == ClaimTypes.Role).Value;
 
       var errorLog = await _archiveService.ArchiveErrorLog(id, email, role);
-      return errorLog;
+      return Ok(errorLog);
     }
   }
 }

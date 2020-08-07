@@ -49,7 +49,7 @@ namespace ErrorCenter.WebAPI.Controllers {
       var avatarUrl = await userAvatarUploadService
         .UploadUserAvatar(user_email, file);
 
-      return JsonConvert.SerializeObject(avatarUrl);
+      return Ok(JsonConvert.SerializeObject(avatarUrl));
     }
   }
 }
