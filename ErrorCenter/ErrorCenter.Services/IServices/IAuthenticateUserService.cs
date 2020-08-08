@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 
-using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Services.DTOs;
 
 namespace ErrorCenter.Services.IServices
 {
-    public interface IAuthenticateUserService
-    {
-        public Task<Session> Execute(string email, string password);
+    public interface IAuthenticateUserService {
+        public Task<SessionResponseDTO> Authenticate(SessionRequestDTO data);
     }
 }

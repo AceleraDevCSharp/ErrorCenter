@@ -1,13 +1,23 @@
-using ErrorCenter.Services.Providers.HashProvider.Models;
+﻿using Microsoft.AspNetCore.Identity;
+
+using ErrorCenter.Persistence.EF.Models;
 
 namespace ErrorCenter.Services.Providers.HashProvider.Fakes {
-  public class FakeHashProvider : IHashProvider {
-    public string GenerateHash(string input) {
-      return input;
+  public class FakeHashProvider : IPasswordHasher<User> {
+    public string HashPassword(User user, string password) {
+      return password;
     }
 
-    public bool VerifyHash(string input, string hash) {
-      return input.Equals(hash);
+    public PasswordVerificationResult VerifyHashedPassword(
+      User user,
+      string hashedPassword,
+      string providedPassword
+    ) {
+      var verify = hashedPassword.Equals(providedPassword)
+        ? PasswordVerificationResult.Success
+        : PasswordVerificationResult.Failed;
+
+      return verify;
     }
   }
 }
