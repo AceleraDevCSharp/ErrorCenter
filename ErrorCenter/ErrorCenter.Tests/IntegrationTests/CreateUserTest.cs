@@ -51,15 +51,8 @@ namespace ErrorCenter.Tests.IntegrationTests {
       // Act
       var response = await ExecuteRequest(client, userData);
 
-      var createdUser = JsonConvert
-        .DeserializeObject<UserViewModel>(
-          await response.Content.ReadAsStringAsync()
-        );
-
       // Assert
-      Assert.True(Guid.TryParse(createdUser.Id, out Guid _));
-      Assert.Equal("johndoe@example.com", createdUser.Email);
-      Assert.Equal(DateTime.Now.Date, createdUser.CreatedAt.Date);
+      Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
     [Theory]

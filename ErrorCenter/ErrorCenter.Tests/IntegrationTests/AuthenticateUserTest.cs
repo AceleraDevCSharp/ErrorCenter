@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 
 using ErrorCenter.WebAPI;
 using ErrorCenter.Services.DTOs;
-using ErrorCenter.WebAPI.ViewModel;
 
 namespace ErrorCenter.Tests.IntegrationTests {
   public class AuthenticateUserTest : IClassFixture<CustomWebApplicationFactory<Startup>> {
@@ -51,14 +50,8 @@ namespace ErrorCenter.Tests.IntegrationTests {
       // Act
       var response = await ExecuteRequest(client, sessionData);
 
-      var createdSession = JsonConvert
-        .DeserializeObject<SessionViewModel>(
-          await response.Content.ReadAsStringAsync()
-        );
-
       // Assert
       Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-      Assert.Equal("johntest@example.com", createdSession.Email);
     }
 
     [Theory]
