@@ -19,16 +19,16 @@ namespace ErrorCenter.WebAPI.Controllers
     public class ErrorLogsController : MainController
     {
         private IErrorLogService _archiveService;
-        private readonly IErrorLogRepository<ErrorLog> _errorLogRepository;
         private readonly IMapper _mapper;
+        private readonly IDetailsErrorLogService _detailsErrorLogService;
 
-        public ErrorLogsController(IErrorLogService archiveSerivce, 
-            IErrorLogRepository<ErrorLog> errorLogRepository,
+        public ErrorLogsController(IErrorLogService archiveSerivce,
+            IDetailsErrorLogService detailsErrorLogService,
             IMapper mapper)
         {
             _archiveService = archiveSerivce;
-            _errorLogRepository = errorLogRepository;
             _mapper = mapper;
+            _detailsErrorLogService = detailsErrorLogService;
         }
 
         [HttpPatch("archive/{id:int}")]
@@ -50,7 +50,7 @@ namespace ErrorCenter.WebAPI.Controllers
         [HttpGet("error-details/{id:int}")]
         public async Task<ActionResult<ErrorLogViewModel>> GetErrorLog(int id)
         {
-            return _mapper.Map<ErrorLogViewModel>(await _errorLogRepository.FindById(id));
+            return _mapper.Map<ErrorLogViewModel>(await _detailsErrorLogService.FindErrorLog(id));
         }
     }
 }

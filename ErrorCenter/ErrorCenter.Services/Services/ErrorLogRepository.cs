@@ -335,7 +335,7 @@ namespace ErrorCenter.Services.Services
         {
             foreach (var error in _context.ErrorLogs.ToList())
             {
-                int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title) && x.Environment.Equals(error.Environment) && x.Level.Equals(error.Level));
+                int aux = _context.ErrorLogs.Count(x => x.Title.Equals(error.Title) && x.Level.Equals(error.Level) && x.EnvironmentID.Equals(error.EnvironmentID));
                 error.Quantity = aux;
                 aux = 0;
             }
