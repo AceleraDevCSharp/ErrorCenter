@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Microsoft.EntityFrameworkCore;
-
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Persistence.EF.Context;
@@ -20,6 +19,17 @@ namespace ErrorCenter.Services.Services
             UpdateQuantityEventsErrorLogs();
         }
 
+        public async Task<ErrorLog> FindById(int id)
+        {
+            var errorLog = await _context.ErrorLogs
+              .Include(x => x.Environment)
+              .Include(x => x.User)
+              .Where(x => x.Id == id)
+              .FirstOrDefaultAsync();
+
+            return errorLog;
+        }
+
         public async Task<IEnumerable<Environment>> Environments()
         {
             var environments = await _context.Roles.AsNoTracking().ToListAsync();
@@ -33,6 +43,7 @@ namespace ErrorCenter.Services.Services
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
+
         public async Task<IEnumerable<ErrorLog>> SelectArchived()
         {
             return await _context.ErrorLogs
@@ -330,16 +341,6 @@ namespace ErrorCenter.Services.Services
             }
 
             _context.SaveChanges();
-        }
-        public async Task<ErrorLog> FindById(int id)
-        {
-            var errorLog = await _context.ErrorLogs
-              .Include(x => x.Environment)
-              .Include(x => x.User)
-              .Where(x => x.Id == id)
-              .FirstOrDefaultAsync();
-
-            return errorLog;
         }
 
 
