@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
 using ErrorCenter.Services.DTOs;
-using ErrorCenter.Tests.Utilities;
+//using ErrorCenter.Tests.Utilities;
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Persistence.EF.Context;
 
@@ -44,7 +44,7 @@ namespace ErrorCenter.Tests.IntegrationTests {
           db.Database.EnsureCreated();
 
           try {
-            SeedDatabase.InitializeDb(db);
+            //SeedDatabase.InitializeDb(db);
           } catch (Exception ex) {
             logger.LogError(ex, "An error occurred seeding the " +
               "database with data. Error: {Message}", ex.Message);

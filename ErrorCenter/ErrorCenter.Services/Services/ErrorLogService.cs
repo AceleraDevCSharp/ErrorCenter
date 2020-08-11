@@ -10,13 +10,13 @@ using ErrorCenter.Services.DTOs;
 
 namespace ErrorCenter.Services.Services
 {
-    public class ArchiveErrorLogService : IErrorLogService
+    public class ErrorLogService : IErrorLogService
     {
         private readonly IUsersRepository usersRepository;
         private readonly IEnvironmentsRepository environmentsRepository;
         private readonly IErrorLogRepository<ErrorLog> errorLogRepository;
 
-        public ArchiveErrorLogService(
+        public ErrorLogService(
           IUsersRepository usersRepository,
           IEnvironmentsRepository environmentsRepository,
           IErrorLogRepository<ErrorLog> errorLogRepository
