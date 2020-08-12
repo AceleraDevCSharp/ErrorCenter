@@ -50,16 +50,19 @@ namespace ErrorCenter.UnitTests
 
             var user = new User()
             {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
+                Email = "john1@example.com",
+                UserName = "john1@example.com",
                 EmailConfirmed = true,
             };
-            var userResponse = await usersRepository.Create(user, errologDTO.Environment);
+            var userEnvironment = errologDTO.Environment;
 
-            var Created = await service.CreateNewErrorLog(errologDTO, user.Email);
+            await usersRepository.Create(user, errologDTO.Environment);
+
+            var Created = await service.CreateNewErrorLog(errologDTO, user.Email, userEnvironment);
 
             // Assert
             Assert.Equal(Created, errologDTO);
+            //Assert.Equals(Created, errologDTO);
         }
 
 
@@ -87,15 +90,16 @@ namespace ErrorCenter.UnitTests
 
             var user = new User()
             {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
+                Email = "john2@example.com",
+                UserName = "john2@example.com",
                 EmailConfirmed = true,
             };
             var userResponse = await usersRepository.Create(user, "OtherEnvironment");
+            var userEnvironment = "OtherEnvironment";
 
             // Assert
             await Assert.ThrowsAsync<UserException>(
-              () => service.CreateNewErrorLog(errologDTO, user.Email)
+              () => service.CreateNewErrorLog(errologDTO, user.Email, userEnvironment)
             );
         }
 

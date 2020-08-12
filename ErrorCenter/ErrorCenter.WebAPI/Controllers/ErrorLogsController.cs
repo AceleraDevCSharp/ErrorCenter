@@ -53,9 +53,9 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
 
-            //var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
+            var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
 
-            var errorLog = await _errorLogService.CreateNewErrorLog(newErrorLog, email);
+            var errorLog = await _errorLogService.CreateNewErrorLog(newErrorLog, email, role);
 
 
             var createdErrorLog = _mapper.Map<ErrorLogSimpleViewModel>(errorLog);

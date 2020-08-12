@@ -7,6 +7,8 @@ using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.DTOs;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ErrorCenter.Services.Services
 {
@@ -28,7 +30,7 @@ namespace ErrorCenter.Services.Services
             _mapper = mapper;
 
         }
-        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
+        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email, string userEnvironment)
         {
             var user = await usersRepository.FindByEmail(email);
 
@@ -37,8 +39,7 @@ namespace ErrorCenter.Services.Services
             if (user_role == null)
                 throw new EnvironmentException("Environment not found", 404);
 
-
-            if (!user_role.Contains(newErrorLog.Environment))
+            if (!(userEnvironment.Equals(newErrorLog.Environment)))
             {
                 throw new UserException(
                     "User can't create an Error Log of a different environment",
