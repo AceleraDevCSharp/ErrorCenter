@@ -22,20 +22,20 @@ namespace ErrorCenter.WebAPI.Controllers
     public class ErrorLogsController : MainController
     {
 
-        private IErrorLogService _archiveService;
+        private IErrorLogService _errorLogService;
         private readonly IErrorLogRepository<ErrorLog> _errorLogRepository;
         private readonly IMapper _mapper;
 
         public ErrorLogsController(IErrorLogService archiveService, IErrorLogRepository<ErrorLog> errorLogRepository,
                                    IMapper mapper) 
         {
-            _archiveService = archiveService;
+            _errorLogService = archiveService;
             _errorLogRepository = errorLogRepository;
             _mapper = mapper;
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ErrorLogViewModel>> Create([FromBody] ErrorLogDTO newErrorLog)
+        public async Task<ActionResult<ErrorLogDTO>> Create([FromBody] ErrorLogDTO newErrorLog)
         {
             newErrorLog.Validate();
 
@@ -53,12 +53,14 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
 
-            var errorLog = await _archiveService.CreateNewErrorLog(newErrorLog, email);
+            //var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
 
-            var createdErrorLog = _mapper.Map<ErrorLogViewModel>(errorLog);
-            createdErrorLog.UserEmail = email;
+            var errorLog = await _errorLogService.CreateNewErrorLog(newErrorLog, email);
 
-            return createdErrorLog;
+
+            var createdErrorLog = _mapper.Map<ErrorLogSimpleViewModel>(errorLog);
+
+            return Ok(newErrorLog);
 
         }
 
@@ -75,7 +77,7 @@ namespace ErrorCenter.WebAPI.Controllers
               .Find(claim => claim.Type == ClaimTypes.Role).Value;
 
 
-            var errorLog = _mapper.Map<ErrorLogViewModel>(await _archiveService.ArchiveErrorLog(id, email, role));
+            var errorLog = _mapper.Map<ErrorLogViewModel>(await _errorLogService.ArchiveErrorLog(id, email, role));
             return Ok(errorLog);
         }
 
@@ -96,8 +98,8 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
 
-            var errorLog =  _mapper.Map< ErrorLogViewModel >( await _archiveService.DeleteErrorLog(id, email, role));
-            return errorLog;
+            var errorLog =  _mapper.Map< ErrorLogViewModel >( await _errorLogService.DeleteErrorLog(id, email, role));
+            return Ok(errorLog);
 
         }
     }

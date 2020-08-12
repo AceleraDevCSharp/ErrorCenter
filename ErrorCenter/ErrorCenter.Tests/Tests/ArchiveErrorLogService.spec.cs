@@ -19,7 +19,7 @@ namespace ErrorCenter.UnitTests {
 
       service = new ErrorLogService(
         usersRepository, null,
-        errorLogsRepository
+        errorLogsRepository,null
       );
     }
 

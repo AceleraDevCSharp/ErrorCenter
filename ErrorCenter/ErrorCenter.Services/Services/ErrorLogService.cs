@@ -32,27 +32,11 @@ namespace ErrorCenter.Services.Services
         {
             var user = await usersRepository.FindByEmail(email);
 
-            if (user == null)
-            {
-                throw new UserException("Requesting user is no longer valid",
-                                        StatusCodes.Status401Unauthorized
-                );
-            }
-
             var user_role = await usersRepository.GetUserRoles(user);
 
             if (user_role == null)
-            {
                 throw new EnvironmentException("Environment not found", 404);
-            }
 
-            if (!user_role.Contains(newErrorLog.Environment))
-            {
-                throw new UserException(
-                  "User can't create an Error Log of a different environment",
-                  StatusCodes.Status403Forbidden
-                );
-            }
 
             if (!user_role.Contains(newErrorLog.Environment))
             {
@@ -66,23 +50,19 @@ namespace ErrorCenter.Services.Services
 
             var errorLog = new ErrorLog()
             {
-                Details = newErrorLog.Details,
-                Level = newErrorLog.Level,
-                Origin = newErrorLog.Origin,
-                Title = newErrorLog.Title,
-                User = user,
-                IdUser = user.Id,
-                Environment = environment,
-                EnvironmentID = environment.Id,
                 
+                Environment = environment,
+                Level = newErrorLog.Level,
+                Title = newErrorLog.Title,
+                Details = newErrorLog.Details,
+                Origin = newErrorLog.Origin,
+                IdUser = user.Id
             };
 
+            errorLog = await errorLogRepository.Create(errorLog);
 
-            await errorLogRepository.Create(errorLog);
+            return newErrorLog;
 
-            var errorLogDTO = _mapper.Map<ErrorLogDTO>(errorLog);
-
-            return errorLogDTO;
 
         }
         public async Task<ErrorLog> ArchiveErrorLog(int id, string user_email, string user_role)
