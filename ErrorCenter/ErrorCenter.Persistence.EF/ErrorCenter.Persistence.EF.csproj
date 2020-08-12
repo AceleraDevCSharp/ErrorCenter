@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20200708173120_IncludeQuantityAtributte.Designer.cs" />
     <Compile Remove="Migrations\20200711003652_UpdateRelations.cs" />
     <Compile Remove="Migrations\20200711003652_UpdateRelations.Designer.cs" />
+    <Compile Remove="Migrations\20200803045457_UpdateErrrLogMapping.cs" />
+    <Compile Remove="Migrations\20200803045457_UpdateErrrLogMapping.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,7 +14,8 @@ namespace ErrorCenter.Persistence.EF.Context {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.ApplyConfigurationsFromAssembly(typeof(ErrorCenterDbContext).Assembly);
-      modelBuilder.ApplyConfiguration(new UserMapping());
+      modelBuilder.ApplyConfiguration(new UserMapping()); 
+      modelBuilder.ApplyConfiguration(new ErrorLogMapping());
 
       base.OnModelCreating(modelBuilder);
 
