@@ -62,68 +62,42 @@ namespace ErrorCenter.UnitTests
             Assert.Equal(Created, errologDTO);
         }
 
-        //[Fact]
-        //public async void Should_Not_Be_Able_To_Delete_Error_If_User_Does_Not_Exist() {
-        //  // Arrange
 
-        //  // Act
+        [Fact]
+        public async void Should_Not_Able_To_Create_Error_If_Not_Same_Environment()
+        {
+            // Arrange
+            var environment = new Persistence.EF.Models.Environment()
+            {
+                Name = "Development",
+                NormalizedName = "DEVELOPMENT"
+            };
 
-        //  // Assert
-        //  await Assert.ThrowsAsync<UserException>(
-        //    () => service.DeleteErrorLog(
-        //      1,
-        //      "non.existing@example.com",
-        //      "AnyEnvironment"
-        //    )
-        //  );
-        //}
+            await environmentsRepository.Create(environment);
 
-        //[Fact]
-        //public async void Should_Not_Be_Able_To_Delete_Error_If_Does_Not_Exist() {
-        //  // Arrange
-        //  var user = new User() {
-        //    Email = "johndoe@example.com",
-        //    UserName = "johndoe@example.com",
-        //    EmailConfirmed = true,
-        //  };
+            var errologDTO = new ErrorLogDTO()
+            {
+                Environment = "Development",
+                Details = "Detalhes1",
+                Level = "Level1",
+                Origin = "Origem1",
+                Title = "Titulo1"
 
-        //  // Act
-        //  await usersRepository.Create(user, "Development");
+            };
 
-        //  // Assert
-        //  await Assert.ThrowsAsync<ErrorLogException>(
-        //    () => service.DeleteErrorLog(1, user.Email, "AnyRole")
-        //  );
-        //}
+            var user = new User()
+            {
+                Email = "johndoe@example.com",
+                UserName = "johndoe@example.com",
+                EmailConfirmed = true,
+            };
+            var userResponse = await usersRepository.Create(user, "OtherEnvironment");
 
-        //[Fact]
-        //public async void Should_Not_Able_To_Delete_Error_If_Not_Same_Environment() {
-        //  // Arrange
-        //  var user = new User() {
-        //    Email = "johndoe@example.com",
-        //    UserName = "johndoe@example.com",
-        //    EmailConfirmed = true,
-        //  };
-
-        //  var errorLog = new ErrorLog() {
-        //    Id = 1,
-        //    Environment = new Persistence.EF.Models.Environment() {
-        //      Name = "Development",
-        //      NormalizedName = "DEVELOPMENT"
-        //    },
-        //    CreatedAt = DateTime.Now,
-        //    DeletedAt = null,
-        //  };
-
-        //  // Act
-        //  await usersRepository.Create(user, "Development");
-        //  await errorLogsRepository.Create(errorLog);
-
-        //  // Assert
-        //  await Assert.ThrowsAsync<UserException>(
-        //    () => service.DeleteErrorLog(1, user.Email, "DifferentEnvironment")
-        //  );
-        //}
+            // Assert
+            await Assert.ThrowsAsync<UserException>(
+              () => service.CreateNewErrorLog(errologDTO, user.Email)
+            );
+        }
 
         //[Fact]
         //public async void Should_Not_Be_Able_To_Delete_Deleted_Error() {
