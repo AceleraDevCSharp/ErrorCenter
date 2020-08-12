@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 
 using ErrorCenter.Services.Errors;
@@ -12,29 +12,47 @@ namespace ErrorCenter.Services.Services
 {
     public class ErrorLogService : IErrorLogService
     {
-        private readonly IUsersRepository usersRepository;
-        private readonly IEnvironmentsRepository environmentsRepository;
-        private readonly IErrorLogRepository<ErrorLog> errorLogRepository;
-
+        private IUsersRepository usersRepository;
+        private IEnvironmentsRepository environmentsRepository;
+        private IErrorLogRepository<ErrorLog> errorLogRepository;
+        private IMapper _mapper;
         public ErrorLogService(
           IUsersRepository usersRepository,
           IEnvironmentsRepository environmentsRepository,
-          IErrorLogRepository<ErrorLog> errorLogRepository
-        )
+          IErrorLogRepository<ErrorLog> errorLogRepository,
+          IMapper mapper)
         {
             this.usersRepository = usersRepository;
             this.environmentsRepository = environmentsRepository;
             this.errorLogRepository = errorLogRepository;
+            _mapper = mapper;
 
         }
-        public async Task<ErrorLog> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
+        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
         {
             var user = await usersRepository.FindByEmail(email);
+
+            if (user == null)
+            {
+                throw new UserException("Requesting user is no longer valid",
+                                        StatusCodes.Status401Unauthorized
+                );
+            }
 
             var user_role = await usersRepository.GetUserRoles(user);
 
             if (user_role == null)
+            {
                 throw new EnvironmentException("Environment not found", 404);
+            }
+
+            if (!user_role.Contains(newErrorLog.Environment))
+            {
+                throw new UserException(
+                  "User can't create an Error Log of a different environment",
+                  StatusCodes.Status403Forbidden
+                );
+            }
 
             if (!user_role.Contains(newErrorLog.Environment))
             {
@@ -43,21 +61,28 @@ namespace ErrorCenter.Services.Services
                     StatusCodes.Status403Forbidden
                 );
             }
+
             var environment = await environmentsRepository.FindByName(newErrorLog.Environment);
 
             var errorLog = new ErrorLog()
             {
-                EnvironmentID = environment.Id,
-                Level = newErrorLog.Level,
-                Title = newErrorLog.Title,
                 Details = newErrorLog.Details,
+                Level = newErrorLog.Level,
                 Origin = newErrorLog.Origin,
-                IdUser = user.Id
+                Title = newErrorLog.Title,
+                User = user,
+                IdUser = user.Id,
+                Environment = environment,
+                EnvironmentID = environment.Id,
+                
             };
 
-            errorLog = await errorLogRepository.Create(errorLog);
 
-            return errorLog;
+            await errorLogRepository.Create(errorLog);
+
+            var errorLogDTO = _mapper.Map<ErrorLogDTO>(errorLog);
+
+            return errorLogDTO;
 
         }
         public async Task<ErrorLog> ArchiveErrorLog(int id, string user_email, string user_role)

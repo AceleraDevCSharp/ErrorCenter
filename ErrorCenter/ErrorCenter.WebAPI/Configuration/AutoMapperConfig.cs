@@ -13,8 +13,9 @@ namespace ErrorCenter.WebAPI.Configuration
         {
             CreateMap<ErrorLogViewModel, ErrorLog>().ReverseMap();
             CreateMap<ErrorLogSimpleViewModel, ErrorLog>().ReverseMap();
+            CreateMap<ErrorLog, ErrorLogDTO>().ReverseMap();
             CreateMap<ErrorLog, ErrorLogViewModel>()
-                .ForMember(x => x.UserEmail, x => x.MapFrom( x => x.User.Email));
+                .ForMember(x => x.UserEmail, x => x.MapFrom( x => x.User.Email)).ReverseMap();
             CreateMap<User, UserViewModel>().ReverseMap();
             CreateMap<SessionResponseDTO, SessionViewModel>().ReverseMap();
         }
