@@ -38,11 +38,15 @@ namespace ErrorCenter.Services.Services.Fakes {
       var roles = new List<string>() { "Development", "Homologation", "Production" };
 
       var rnd = new Random();
-      var userRoles = new List<string>() { roles[rnd.Next(3)] };
+      //var userRoles = new List<string>() { roles[rnd.Next(3)] };
 
       await Task.Delay(1);
+      if (user.Email == "johnOtherEnv@example.com")
+      {
+          return new List<string>() { "OtherEnvironment" };
+      }
 
-      return userRoles;
+      return roles;
     }
   }
 }

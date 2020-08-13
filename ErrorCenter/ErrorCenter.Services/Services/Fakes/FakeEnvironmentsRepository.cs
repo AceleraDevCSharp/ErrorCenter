@@ -18,14 +18,6 @@ namespace ErrorCenter.Services.Services.Fakes
             environments = new List<Persistence.EF.Models.Environment>();
         }
 
-        public async Task<Environment> Create(Environment environment)
-        {
-            environments.Add(environment);
-
-            await Task.Delay(1);
-
-            return environment;
-        }
 
         public async Task<Environment> FindByName(string name)
         {

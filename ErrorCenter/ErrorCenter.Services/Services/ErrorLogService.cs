@@ -30,7 +30,7 @@ namespace ErrorCenter.Services.Services
             _mapper = mapper;
 
         }
-        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email, string userEnvironment)
+        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
         {
             var user = await usersRepository.FindByEmail(email);
 
@@ -39,11 +39,11 @@ namespace ErrorCenter.Services.Services
             if (user_role == null)
                 throw new EnvironmentException("Environment not found", 404);
 
-            if (!(userEnvironment.Equals(newErrorLog.Environment)))
+            if (!user_role.Contains(newErrorLog.Environment))
             {
                 throw new UserException(
                     "User can't create an Error Log of a different environment",
-                    StatusCodes.Status403Forbidden
+                    StatusCodes.Status400BadRequest
                 );
             }
 
