@@ -30,7 +30,7 @@ namespace ErrorCenter.WebAPI.Configuration
 
             services.AddTransient<IUserAvatarUploadService, UserAvatarUploadService>();
 
-            return services;
-        }
+      return services;
     }
+  }
 }

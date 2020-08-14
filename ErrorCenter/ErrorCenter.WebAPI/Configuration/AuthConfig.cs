@@ -43,7 +43,7 @@ namespace ErrorCenter.WebAPI.Configuration
                 };
             });
 
-            return services;
-        }
+      return services;
     }
+  }
 }

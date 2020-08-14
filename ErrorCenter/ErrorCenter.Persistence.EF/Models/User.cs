@@ -14,6 +14,6 @@ namespace ErrorCenter.Persistence.EF.Models
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        public IEnumerable<ErrorLog> ErrorLogs { get; set; }
-    }
+    public IEnumerable<ErrorLog> ErrorLogs { get; set; }
+  }
 }
