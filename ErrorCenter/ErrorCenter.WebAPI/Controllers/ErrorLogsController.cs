@@ -27,15 +27,16 @@ namespace ErrorCenter.WebAPI.Controllers
     {
 
         private IErrorLogService _archiveService;
-        private readonly IErrorLogRepository<ErrorLog> _errorLogRepository;
         private readonly IMapper _mapper;
+        private readonly IDetailsErrorLogService _detailsErrorLogService;
 
-        public ErrorLogsController(IErrorLogService archiveService, IErrorLogRepository<ErrorLog> errorLogRepository,
-                                   IMapper mapper) 
+        public ErrorLogsController(IErrorLogService archiveSerivce,
+            IDetailsErrorLogService detailsErrorLogService,
+            IMapper mapper)
         {
-            _archiveService = archiveService;
-            _errorLogRepository = errorLogRepository;
+            _archiveService = archiveSerivce;
             _mapper = mapper;
+            _detailsErrorLogService = detailsErrorLogService;
         }
 
         [HttpPost("create")]
@@ -59,7 +60,7 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var errorLog = await _archiveService.CreateNewErrorLog(newErrorLog, email);
 
-            var createdErrorLog = mapper.Map<ErrorLogSimpleViewModel>(errorLog);
+            var createdErrorLog = _mapper.Map<ErrorLogSimpleViewModel>(errorLog);
 
             return createdErrorLog;
 
@@ -85,25 +86,7 @@ namespace ErrorCenter.WebAPI.Controllers
         [HttpGet("error-details/{id:int}")]
         public async Task<ActionResult<ErrorLogViewModel>> GetErrorLog(int id)
         {
-            return _mapper.Map<ErrorLogViewModel>(await _errorLogRepository.FindById(id));
-
-            var errorLog = await errorLogService.ArchiveErrorLog(id, email, role);
-            return errorLog;
-        }
-
-        [HttpPatch("delete/{id:int}")]
-        public async Task<ActionResult<ErrorLog>> Delete(int id)
-        {
-            var identity = User.Identity as ClaimsIdentity;
-            List<Claim> claims = identity.Claims.ToList();
-
-            var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
-
-            var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
-
-            var errorLog = await _archiveService.DeleteErrorLog(id, email, role);
-            return errorLog;
-
+            return _mapper.Map<ErrorLogViewModel>(await _detailsErrorLogService.FindErrorLog(id));
         }
     }
 }
