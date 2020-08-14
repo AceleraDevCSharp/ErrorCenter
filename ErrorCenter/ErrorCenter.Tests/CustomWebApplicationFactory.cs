@@ -50,8 +50,7 @@ namespace ErrorCenter.Tests.IntegrationTests
                     try
                     {
                         SeedDatabase.InitializeDb(db);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         logger.LogError(ex, "An error occurred seeding the " +
                           "database with data. Error: {Message}", ex.Message);

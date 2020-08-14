@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.IServices {
+namespace ErrorCenter.Services.IServices
+{
     public interface IUsersRepository
     {
         public Task<User> Create(User user, string role);

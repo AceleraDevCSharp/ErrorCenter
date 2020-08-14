@@ -21,7 +21,7 @@ namespace ErrorCenter.Tests.UnitTests
         private readonly Mock<IErrorLogRepository<ErrorLog>> _errorLogRepositoryMock;
         private readonly Mock<IErrorLogRepository<Persistence.EF.Models.Environment>> _enviromentMock;
         private readonly Mock<IMapper> _mapper;
-        
+
         public ErrorLogRepositoryTests()
         {
             _errorLogRepositoryMock = new Mock<IErrorLogRepository<ErrorLog>>();

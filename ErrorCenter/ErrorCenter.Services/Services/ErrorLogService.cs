@@ -51,7 +51,7 @@ namespace ErrorCenter.Services.Services
 
             var errorLog = new ErrorLog()
             {
-                
+
                 Environment = environment,
                 Level = newErrorLog.Level,
                 Title = newErrorLog.Title,

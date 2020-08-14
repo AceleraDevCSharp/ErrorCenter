@@ -97,7 +97,7 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
 
-            var errorLog =  _mapper.Map< ErrorLogViewModel >( await _errorLogService.DeleteErrorLog(id, email, role));
+            var errorLog = _mapper.Map<ErrorLogViewModel>(await _errorLogService.DeleteErrorLog(id, email, role));
             return Ok(errorLog);
 
         }

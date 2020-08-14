@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ErrorCenter.Persistence.EF.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace ErrorCenter.Persistence.EF.Mappings {
-  public class ErrorLogMapping : IEntityTypeConfiguration<ErrorLog> {
-    public void Configure(EntityTypeBuilder<ErrorLog> builder) {
+namespace ErrorCenter.Persistence.EF.Mappings
+{
+    public class ErrorLogMapping : IEntityTypeConfiguration<ErrorLog>
+    {
+        public void Configure(EntityTypeBuilder<ErrorLog> builder)
+        {
 
             builder.HasKey(e => e.Id);
 
@@ -39,5 +42,5 @@ namespace ErrorCenter.Persistence.EF.Mappings {
 
             builder.Property(e => e.DeletedAt);
         }
-  }
+    }
 }

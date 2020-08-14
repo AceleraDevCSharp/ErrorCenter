@@ -110,8 +110,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
+                    } else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -119,8 +118,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
+                    } else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -128,8 +126,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
-                    }
-                    else
+                    } else
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
@@ -148,8 +145,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
+                    } else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -157,8 +153,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
+                    } else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -166,8 +161,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
-                    }
-                    else
+                    } else
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
@@ -259,8 +253,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
+                    } else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -268,8 +261,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
+                    } else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -277,8 +269,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
-                    }
-                    else
+                    } else
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
@@ -297,8 +288,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
+                    } else if (whereSearch.ToLower().Equals("descricao") || whereSearch.ToLower().Equals("details"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -306,8 +296,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
-                    }
-                    else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
+                    } else if (whereSearch.ToLower().Equals("origem") || whereSearch.ToLower().Equals("origin"))
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
@@ -315,8 +304,7 @@ namespace ErrorCenter.Services.Services
                             .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
-                    }
-                    else
+                    } else
                     {
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)

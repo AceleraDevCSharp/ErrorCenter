@@ -66,7 +66,7 @@ namespace ErrorCenter.Tests.IntegrationTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        
+
         [Theory]
         [InlineData("", "level", "titulo", "detalhes", "origem")]
         [InlineData("Development", "", "titulo", "detalhes", "origem")]
