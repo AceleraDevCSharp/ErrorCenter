@@ -48,22 +48,22 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "40775f63-628b-4374-9e1a-808e3594c6bf",
-                            ConcurrencyStamp = "ff511b94-2b0f-4c29-894b-8b6c70e0e41c",
+                            Id = "78ee8980-d61e-4a6e-85fa-5ec98db7402a",
+                            ConcurrencyStamp = "c010fbea-457b-455a-abc3-de857b1abdaa",
                             Name = "Development",
                             NormalizedName = "DEVELOPMENT"
                         },
                         new
                         {
-                            Id = "33c0c677-9890-41b0-91ac-b94e254bbd75",
-                            ConcurrencyStamp = "18c99f9a-2ca5-4456-a4f9-90793ac8d5a6",
+                            Id = "1dafd835-56cc-495d-976c-efd32b3db932",
+                            ConcurrencyStamp = "95dbdf16-ae0f-49d0-95e7-1e0f2b52f700",
                             Name = "Homologation",
                             NormalizedName = "HOMOLOGATION"
                         },
                         new
                         {
-                            Id = "4b5be9e9-a6d8-4cd8-baf1-2ea239ac5638",
-                            ConcurrencyStamp = "d8fc2f21-4ea1-45d9-bd95-4adf3457788e",
+                            Id = "5bc37713-c0a7-4d72-84ae-8b4904944e5d",
+                            ConcurrencyStamp = "7562c5fc-19ca-46a9-8c1a-ff98e7f370b9",
                             Name = "Production",
                             NormalizedName = "PRODUCTION"
                         });
@@ -141,7 +141,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 8, 3, 1, 54, 56, 897, DateTimeKind.Local).AddTicks(5412));
+                        .HasDefaultValue(new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4274));
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -185,7 +185,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 8, 3, 1, 54, 56, 897, DateTimeKind.Local).AddTicks(5657));
+                        .HasDefaultValue(new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4492));
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")

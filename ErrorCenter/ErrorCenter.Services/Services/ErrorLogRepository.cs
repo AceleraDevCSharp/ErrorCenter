@@ -39,6 +39,7 @@ namespace ErrorCenter.Services.Services
         {
             return await _context.ErrorLogs
                 .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                .Include(x => x.Environment)
                 .Include(x => x.User)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
@@ -48,6 +49,7 @@ namespace ErrorCenter.Services.Services
         {
             return await _context.ErrorLogs
                 .Where(x => x.ArquivedAt != null)
+                .Include(x => x.Environment)
                 .Include(x => x.User)
                 .ToListAsync();
         }
@@ -55,6 +57,7 @@ namespace ErrorCenter.Services.Services
         {
             return await _context.ErrorLogs
                 .Where(x => x.DeletedAt != null)
+                .Include(x => x.Environment)
                 .Include(x => x.User)
                 .ToListAsync();
         }
@@ -62,6 +65,7 @@ namespace ErrorCenter.Services.Services
         {
             return await _context.ErrorLogs
                 .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.ArquivedAt == null && x.DeletedAt == null)
+                .Include(x => x.Environment)
                 .Include(x => x.User)
                 .ToListAsync();
         }
@@ -73,6 +77,7 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderByDescending(x => x.Level)
                         .ToListAsync();
                 case "frequencia":
@@ -80,12 +85,14 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderByDescending(x => x.Quantity)
                         .ToListAsync();
                 default:
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderByDescending(x => x.DeletedAt)
                         .ToListAsync();
             }
@@ -100,6 +107,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
                     }
@@ -108,6 +116,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
                     }
@@ -116,6 +125,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
                     }
@@ -124,6 +134,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderByDescending(x => x.CreatedAt)
                             .ToListAsync();
                     }
@@ -134,6 +145,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
                     }
@@ -142,6 +154,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
                     }
@@ -150,6 +163,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
                     }
@@ -158,6 +172,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderByDescending(x => x.CreatedAt)
                             .ToListAsync();
                     }
@@ -165,6 +180,7 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderByDescending(x => x.CreatedAt)
                         .ToListAsync();
             }
@@ -177,22 +193,26 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
                 case "descricao":
                 case "details":
                     return await _context.ErrorLogs
                         .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
                 case "origem":
                 case "origin":
                     return await _context.ErrorLogs
                         .Where(x => x.Environment.Name.ToLower().Equals(whereEnvironment.ToLower()) && x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
                 default:
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
+                        .Include(x => x.Environment)
                         .Include(x => x.User)
                         .OrderByDescending(x => x.CreatedAt)
                         .ToListAsync();
@@ -206,6 +226,7 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderBy(x => x.Level)
                         .ToListAsync();
                 case "frequencia":
@@ -213,12 +234,14 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderBy(x => x.Quantity)
                         .ToListAsync();
                 default:
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderByDescending(x => x.CreatedAt)
                         .ToListAsync();
             }
@@ -233,6 +256,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
                     }
@@ -241,6 +265,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
                     }
@@ -249,6 +274,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Level)
                             .ToListAsync();
                     }
@@ -258,6 +284,7 @@ namespace ErrorCenter.Services.Services
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                             .OrderByDescending(x => x.CreatedAt)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .ToListAsync();
                     }
                 case "frequencia":
@@ -267,6 +294,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
                     }
@@ -275,6 +303,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
                     }
@@ -283,6 +312,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderBy(x => x.Quantity)
                             .ToListAsync();
                     }
@@ -291,6 +321,7 @@ namespace ErrorCenter.Services.Services
                         return await _context.ErrorLogs
                             .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                             .Include(x => x.User)
+                            .Include(x => x.Environment)
                             .OrderByDescending(x => x.CreatedAt)
                             .ToListAsync();
                     }
@@ -298,6 +329,7 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .OrderByDescending(x => x.CreatedAt)
                         .ToListAsync();
             }
@@ -310,24 +342,28 @@ namespace ErrorCenter.Services.Services
                     return await _context.ErrorLogs
                         .Where(x => x.Level.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
                 case "descricao":
                 case "details":
                     return await _context.ErrorLogs
                         .Where(x => x.Details.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
                 case "origem":
                 case "origin":
                     return await _context.ErrorLogs
                         .Where(x => x.Origin.Contains(searchText) && x.ArquivedAt == null && x.DeletedAt == null)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
                 default:
                     return await _context.ErrorLogs
                         .Where(x => x.ArquivedAt == null && x.DeletedAt == null)
                         .OrderByDescending(x => x.CreatedAt)
                         .Include(x => x.User)
+                        .Include(x => x.Environment)
                         .ToListAsync();
             }
         }
@@ -342,7 +378,6 @@ namespace ErrorCenter.Services.Services
 
             _context.SaveChanges();
         }
-
 
         public async Task<ErrorLog> Create(ErrorLog errorLog)
         {

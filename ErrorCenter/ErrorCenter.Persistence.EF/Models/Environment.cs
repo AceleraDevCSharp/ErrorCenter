@@ -6,5 +6,10 @@ using System.Text;
 namespace ErrorCenter.Persistence.EF.Models {
   public class Environment : IdentityRole {
     public IEnumerable<ErrorLog> ErrorLogs { get; set; }
-  }
+
+        public void Add(Environment environment)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -10,13 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-
-using System;
-using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Services.Errors;
 using Microsoft.AspNetCore.Http;
 using ErrorCenter.Services.DTOs;
-using AutoMapper;
 
 
 namespace ErrorCenter.WebAPI.Controllers
@@ -25,22 +21,24 @@ namespace ErrorCenter.WebAPI.Controllers
     [Route("v1/error-logs")]
     public class ErrorLogsController : MainController
     {
-
-        private IErrorLogService _archiveService;
+        private IErrorLogService _errorLogService;
+        private readonly IErrorLogRepository<ErrorLog> _errorLogRepository;
         private readonly IMapper _mapper;
         private readonly IDetailsErrorLogService _detailsErrorLogService;
 
-        public ErrorLogsController(IErrorLogService archiveSerivce,
+        public ErrorLogsController(IErrorLogService errorLogService,
+            IErrorLogRepository<ErrorLog> errorLogRepository,
             IDetailsErrorLogService detailsErrorLogService,
             IMapper mapper)
         {
-            _archiveService = archiveSerivce;
+            _errorLogService = errorLogService;
+            _errorLogRepository = errorLogRepository;
             _mapper = mapper;
             _detailsErrorLogService = detailsErrorLogService;
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ErrorLogSimpleViewModel>> Create([FromBody] ErrorLogDTO newErrorLog)
+        public async Task<ActionResult<ErrorLogDTO>> Create([FromBody] ErrorLogDTO newErrorLog)
         {
             newErrorLog.Validate();
 
@@ -58,16 +56,16 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
 
-            var errorLog = await _archiveService.CreateNewErrorLog(newErrorLog, email);
+            var errorLog = await _errorLogService.CreateNewErrorLog(newErrorLog, email);
 
             var createdErrorLog = _mapper.Map<ErrorLogSimpleViewModel>(errorLog);
 
-            return createdErrorLog;
+            return Ok(newErrorLog);
 
         }
 
         [HttpPatch("archive/{id:int}")]
-        public async Task<ActionResult<ErrorLog>> Archive(int id)
+        public async Task<ActionResult<ErrorLogViewModel>> Archive(int id)
         {
             var identity = User.Identity as ClaimsIdentity;
             List<Claim> claims = identity.Claims.ToList();
@@ -79,7 +77,7 @@ namespace ErrorCenter.WebAPI.Controllers
               .Find(claim => claim.Type == ClaimTypes.Role).Value;
 
 
-            var errorLog = await _archiveService.ArchiveErrorLog(id, email, role);
+            var errorLog = _mapper.Map<ErrorLogViewModel>(await _errorLogService.ArchiveErrorLog(id, email, role));
             return Ok(errorLog);
         }
 
@@ -87,6 +85,21 @@ namespace ErrorCenter.WebAPI.Controllers
         public async Task<ActionResult<ErrorLogViewModel>> GetErrorLog(int id)
         {
             return _mapper.Map<ErrorLogViewModel>(await _detailsErrorLogService.FindErrorLog(id));
+        }
+
+        [HttpPatch("delete/{id:int}")]
+        public async Task<ActionResult<ErrorLogViewModel>> Delete(int id)
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            List<Claim> claims = identity.Claims.ToList();
+
+            var email = claims.Find(claim => claim.Type == ClaimTypes.Email).Value;
+
+            var role = claims.Find(claim => claim.Type == ClaimTypes.Role).Value;
+
+            var errorLog =  _mapper.Map< ErrorLogViewModel >( await _errorLogService.DeleteErrorLog(id, email, role));
+            return Ok(errorLog);
+
         }
     }
 }

@@ -1,33 +1,36 @@
 using System;
 using System.Threading.Tasks;
-
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.DTOs;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ErrorCenter.Services.Services
 {
-    public class ArchiveErrorLogService : IErrorLogService
+    public class ErrorLogService : IErrorLogService
     {
-        private readonly IUsersRepository usersRepository;
-        private readonly IEnvironmentsRepository environmentsRepository;
-        private readonly IErrorLogRepository<ErrorLog> errorLogRepository;
-
-        public ArchiveErrorLogService(
+        private IUsersRepository usersRepository;
+        private IEnvironmentsRepository environmentsRepository;
+        private IErrorLogRepository<ErrorLog> errorLogRepository;
+        private IMapper _mapper;
+        public ErrorLogService(
           IUsersRepository usersRepository,
           IEnvironmentsRepository environmentsRepository,
-          IErrorLogRepository<ErrorLog> errorLogRepository
-        )
+          IErrorLogRepository<ErrorLog> errorLogRepository,
+          IMapper mapper)
         {
             this.usersRepository = usersRepository;
             this.environmentsRepository = environmentsRepository;
             this.errorLogRepository = errorLogRepository;
+            _mapper = mapper;
 
         }
-        public async Task<ErrorLog> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
+        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
         {
             var user = await usersRepository.FindByEmail(email);
 
@@ -40,14 +43,16 @@ namespace ErrorCenter.Services.Services
             {
                 throw new UserException(
                     "User can't create an Error Log of a different environment",
-                    StatusCodes.Status403Forbidden
+                    StatusCodes.Status400BadRequest
                 );
             }
+
             var environment = await environmentsRepository.FindByName(newErrorLog.Environment);
 
             var errorLog = new ErrorLog()
             {
-                EnvironmentID = environment.Id,
+                
+                Environment = environment,
                 Level = newErrorLog.Level,
                 Title = newErrorLog.Title,
                 Details = newErrorLog.Details,
@@ -57,7 +62,8 @@ namespace ErrorCenter.Services.Services
 
             errorLog = await errorLogRepository.Create(errorLog);
 
-            return errorLog;
+            return newErrorLog;
+
 
         }
         public async Task<ErrorLog> ArchiveErrorLog(int id, string user_email, string user_role)

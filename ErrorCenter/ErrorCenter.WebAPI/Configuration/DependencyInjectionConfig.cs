@@ -23,7 +23,7 @@ namespace ErrorCenter.WebAPI.Configuration
             services.AddScoped<IStorageProvider, DiskStorageProvider>();
 
             services.AddTransient<IAuthenticateUserService, AuthenticateUserService>();
-            services.AddTransient<IErrorLogService, ArchiveErrorLogService>();
+            services.AddTransient<IErrorLogService, ErrorLogService>();
             services.AddTransient<IMailToUserService, MailToUserService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IDetailsErrorLogService, DetailsErrorLogService>();

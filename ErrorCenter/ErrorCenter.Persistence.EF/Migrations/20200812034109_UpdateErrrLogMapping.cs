@@ -77,7 +77,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                 name: "UpdatedAt",
                 table: "AspNetUsers",
                 nullable: false,
-                defaultValue: new DateTime(2020, 8, 3, 1, 54, 56, 897, DateTimeKind.Local).AddTicks(5657),
+                defaultValue: new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4492),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
                 oldDefaultValue: new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9549));
@@ -86,7 +86,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                 name: "CreatedAt",
                 table: "AspNetUsers",
                 nullable: false,
-                defaultValue: new DateTime(2020, 8, 3, 1, 54, 56, 897, DateTimeKind.Local).AddTicks(5412),
+                defaultValue: new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4274),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
                 oldDefaultValue: new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9303));
@@ -94,17 +94,17 @@ namespace ErrorCenter.Persistence.EF.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "40775f63-628b-4374-9e1a-808e3594c6bf", "ff511b94-2b0f-4c29-894b-8b6c70e0e41c", "Development", "DEVELOPMENT" });
+                values: new object[] { "78ee8980-d61e-4a6e-85fa-5ec98db7402a", "c010fbea-457b-455a-abc3-de857b1abdaa", "Development", "DEVELOPMENT" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "33c0c677-9890-41b0-91ac-b94e254bbd75", "18c99f9a-2ca5-4456-a4f9-90793ac8d5a6", "Homologation", "HOMOLOGATION" });
+                values: new object[] { "1dafd835-56cc-495d-976c-efd32b3db932", "95dbdf16-ae0f-49d0-95e7-1e0f2b52f700", "Homologation", "HOMOLOGATION" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4b5be9e9-a6d8-4cd8-baf1-2ea239ac5638", "d8fc2f21-4ea1-45d9-bd95-4adf3457788e", "Production", "PRODUCTION" });
+                values: new object[] { "5bc37713-c0a7-4d72-84ae-8b4904944e5d", "7562c5fc-19ca-46a9-8c1a-ff98e7f370b9", "Production", "PRODUCTION" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ErrorLogs_AspNetRoles_EnvironmentID",
@@ -124,17 +124,17 @@ namespace ErrorCenter.Persistence.EF.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "33c0c677-9890-41b0-91ac-b94e254bbd75");
+                keyValue: "1dafd835-56cc-495d-976c-efd32b3db932");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "40775f63-628b-4374-9e1a-808e3594c6bf");
+                keyValue: "5bc37713-c0a7-4d72-84ae-8b4904944e5d");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "4b5be9e9-a6d8-4cd8-baf1-2ea239ac5638");
+                keyValue: "78ee8980-d61e-4a6e-85fa-5ec98db7402a");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Title",
@@ -191,7 +191,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                 nullable: false,
                 defaultValue: new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9549),
                 oldClrType: typeof(DateTime),
-                oldDefaultValue: new DateTime(2020, 8, 3, 1, 54, 56, 897, DateTimeKind.Local).AddTicks(5657));
+                oldDefaultValue: new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4492));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedAt",
@@ -200,7 +200,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                 nullable: false,
                 defaultValue: new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9303),
                 oldClrType: typeof(DateTime),
-                oldDefaultValue: new DateTime(2020, 8, 3, 1, 54, 56, 897, DateTimeKind.Local).AddTicks(5412));
+                oldDefaultValue: new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4274));
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
