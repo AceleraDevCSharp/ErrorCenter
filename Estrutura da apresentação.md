@@ -36,8 +36,8 @@ A arquitetura do projeto é formada por:
 
 
 ##	Duas principais dificuldades que tiveram (pontos que hoje fariam diferente) e dois pontos em que foram assertivos;
-Dificuldades: Arquitetura, Testes
-Assertividades: 
+    * Dificuldades: Arquitetura, Testes
+    * Assertividades: 
 
 ##	Demonstração prática da aplicação
 
