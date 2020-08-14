@@ -17,96 +17,110 @@ using ErrorCenter.Tests.Utilities;
 using ErrorCenter.WebAPI.ViewModel;
 using ErrorCenter.Persistence.EF.Context;
 
-namespace ErrorCenter.Tests.IntegrationTests {
-  public class CustomWebApplicationFactory<TStartup>
-    : WebApplicationFactory<TStartup> where TStartup : class {
-    protected override void ConfigureWebHost(IWebHostBuilder builder) {
-      builder.ConfigureServices(services => {
-        var descriptor = services.SingleOrDefault(
-          d => d.ServiceType ==
-            typeof(DbContextOptions<ErrorCenterDbContext>)
-        );
+namespace ErrorCenter.Tests.IntegrationTests
+{
+    public class CustomWebApplicationFactory<TStartup>
+      : WebApplicationFactory<TStartup> where TStartup : class
+    {
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            builder.ConfigureServices(services => {
+                var descriptor = services.SingleOrDefault(
+                  d => d.ServiceType ==
+                    typeof(DbContextOptions<ErrorCenterDbContext>)
+                );
 
-        services.Remove(descriptor);
+                services.Remove(descriptor);
 
-        services.AddDbContext<ErrorCenterDbContext>(options => {
-          options.UseInMemoryDatabase("InMemoryDbForTesting");
-        });
+                services.AddDbContext<ErrorCenterDbContext>(options => {
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                });
 
-        var sp = services.BuildServiceProvider();
+                var sp = services.BuildServiceProvider();
 
-        using (var scope = sp.CreateScope()) {
-          var scopedServices = scope.ServiceProvider;
-          var db = scopedServices.GetRequiredService<ErrorCenterDbContext>();
-          var logger = scopedServices
-            .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                using (var scope = sp.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var db = scopedServices.GetRequiredService<ErrorCenterDbContext>();
+                    var logger = scopedServices
+                      .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-          db.Database.EnsureCreated();
+                    db.Database.EnsureCreated();
 
-          try {
-            SeedDatabase.InitializeDb(db);
-          } catch (Exception ex) {
-            logger.LogError(ex, "An error occurred seeding the " +
-              "database with data. Error: {Message}", ex.Message);
-          }
+                    try
+                    {
+                        SeedDatabase.InitializeDb(db);
+                    } catch (Exception ex)
+                    {
+                        logger.LogError(ex, "An error occurred seeding the " +
+                          "database with data. Error: {Message}", ex.Message);
+                    }
+                }
+            });
         }
-      });
-    }
 
-    public async Task AuthenticateAsync(HttpClient client) {
-      var response = await GetJwtAsync(client);
+        public async Task AuthenticateAsync(HttpClient client)
+        {
+            var response = await GetJwtAsync(client);
 
-      client.DefaultRequestHeaders.Authorization =
-        new AuthenticationHeaderValue("bearer", response.Token);
-    }
+            client.DefaultRequestHeaders.Authorization =
+              new AuthenticationHeaderValue("bearer", response.Token);
+        }
 
-    public async Task<SessionResponseDTO> GetJwtAsync(HttpClient client) {
-      var response = await client.PostAsync("/v1/sessions",
-        new StringContent(
-          JsonConvert.SerializeObject(
-            new SessionRequestDTO() {
-              Email = "johntest@example.com",
-              Password = "123456-Bb",
-            }
-          ), Encoding.UTF8
-        ) {
-          Headers = {
+        public async Task<SessionResponseDTO> GetJwtAsync(HttpClient client)
+        {
+            var response = await client.PostAsync("/v1/sessions",
+              new StringContent(
+                JsonConvert.SerializeObject(
+                  new SessionRequestDTO()
+                  {
+                      Email = "johntest@example.com",
+                      Password = "123456-Bb",
+                  }
+                ), Encoding.UTF8
+              )
+              {
+                  Headers = {
             ContentType = new MediaTypeHeaderValue("application/json")
-          }
+                }
+              }
+            );
+
+            return JsonConvert.DeserializeObject<SessionResponseDTO>(
+              await response.Content.ReadAsStringAsync()
+            );
         }
-      );
 
-      return JsonConvert.DeserializeObject<SessionResponseDTO>(
-        await response.Content.ReadAsStringAsync()
-      );
-    }
+        public void Unauthenticate(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Authorization = null;
+        }
 
-    public void Unauthenticate(HttpClient client) {
-      client.DefaultRequestHeaders.Authorization = null;
-    }
-
-    public async Task<UserViewModel> CreateTestUser(HttpClient client) {
-      var response = await client.PostAsync("/v1/users",
-        new StringContent(
-          JsonConvert.SerializeObject(
-            new UserDTO() {
-              Email = "johntest@example.com",
-              Password = "123456-Bb",
-              Environment = "Development"
-            }
-          )
-        ) {
-          Headers = {
+        public async Task<UserViewModel> CreateTestUser(HttpClient client)
+        {
+            var response = await client.PostAsync("/v1/users",
+              new StringContent(
+                JsonConvert.SerializeObject(
+                  new UserDTO()
+                  {
+                      Email = "johntest@example.com",
+                      Password = "123456-Bb",
+                      Environment = "Development"
+                  }
+                )
+              )
+              {
+                  Headers = {
             ContentType = new MediaTypeHeaderValue("application/json")
-          }
+                }
+              }
+            );
+
+            var user = JsonConvert.DeserializeObject<UserViewModel>(
+              await response.Content.ReadAsStringAsync()
+            );
+
+            return user;
         }
-      );
-
-      var user = JsonConvert.DeserializeObject<UserViewModel>(
-        await response.Content.ReadAsStringAsync()
-      );
-
-      return user;
     }
-  }
 }

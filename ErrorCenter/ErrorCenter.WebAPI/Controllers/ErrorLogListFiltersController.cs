@@ -32,7 +32,6 @@ namespace ErrorCenter.WebAPI.Controllers
             return Ok(errors);
         }
 
-        [AllowAnonymous]
         [HttpGet("environments")]
         public async Task<ActionResult<string>> GetEnvironments()
         {

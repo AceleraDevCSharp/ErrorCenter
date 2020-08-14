@@ -2,22 +2,26 @@
 
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.Providers.HashProvider.Fakes {
-  public class FakeHashProvider : IPasswordHasher<User> {
-    public string HashPassword(User user, string password) {
-      return password;
-    }
+namespace ErrorCenter.Services.Providers.HashProvider.Fakes
+{
+    public class FakeHashProvider : IPasswordHasher<User>
+    {
+        public string HashPassword(User user, string password)
+        {
+            return password;
+        }
 
-    public PasswordVerificationResult VerifyHashedPassword(
-      User user,
-      string hashedPassword,
-      string providedPassword
-    ) {
-      var verify = hashedPassword.Equals(providedPassword)
-        ? PasswordVerificationResult.Success
-        : PasswordVerificationResult.Failed;
+        public PasswordVerificationResult VerifyHashedPassword(
+          User user,
+          string hashedPassword,
+          string providedPassword
+        )
+        {
+            var verify = hashedPassword.Equals(providedPassword)
+              ? PasswordVerificationResult.Success
+              : PasswordVerificationResult.Failed;
 
-      return verify;
+            return verify;
+        }
     }
-  }
 }

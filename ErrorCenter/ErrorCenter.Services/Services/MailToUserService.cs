@@ -5,6 +5,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ErrorCenter.Services.Services
 {
@@ -36,20 +37,19 @@ namespace ErrorCenter.Services.Services
             {
                 builder.HtmlBody = string.Format(@"<p>Olá!</p>
                                                    <p>Para o email respectivo, não existe nenhum cadastro em nossa base de dados</p>");
-            }
-            else
+            } else
             {
                 builder.HtmlBody = string.Format(@"<p>Olá!</p>
                                                    <p>Para o Email {0}</p>
-                                                   <p>Senha: {1}</p>", user_mail, "user.Password");
+                                                   <p>Senha: {1}</p>", user_mail, user.PasswordHash);
             }
 
             message.Body = builder.ToMessageBody();
 
-            using(var client = new SmtpClient())
+            using (var client = new SmtpClient())
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                client.Connect("smtp.gmail.com",587);
+                client.Connect("smtp.gmail.com", 587);
                 client.Authenticate("groupone.wiz@gmail.com", "firstgroup!");
                 client.Send(message);
                 client.Disconnect(true);
@@ -76,12 +76,10 @@ namespace ErrorCenter.Services.Services
 
                     return match.Groups[1].Value + domainName;
                 }
-            }
-            catch (RegexMatchTimeoutException e)
+            } catch (RegexMatchTimeoutException)
             {
                 return false;
-            }
-            catch (ArgumentException e)
+            } catch (ArgumentException)
             {
                 return false;
             }
@@ -92,8 +90,7 @@ namespace ErrorCenter.Services.Services
                     @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                     @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
                     RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
-            }
-            catch (RegexMatchTimeoutException)
+            } catch (RegexMatchTimeoutException)
             {
                 return false;
             }

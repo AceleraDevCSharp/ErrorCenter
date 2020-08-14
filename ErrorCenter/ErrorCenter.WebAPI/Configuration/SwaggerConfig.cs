@@ -11,8 +11,7 @@ namespace ErrorCenter.WebAPI.Configuration
     {
         public static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
         {
-            services.AddSwaggerGen(options =>
-            {
+            services.AddSwaggerGen(options => {
                 options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "Error Center",
@@ -52,8 +51,7 @@ namespace ErrorCenter.WebAPI.Configuration
         {
             app.UseSwagger();
             app.UseSwaggerUI(
-                options =>
-                {
+                options => {
                     options.SwaggerEndpoint($"/swagger/v1/swagger.json", "Error Center Version 1.0");
                 });
             return app;

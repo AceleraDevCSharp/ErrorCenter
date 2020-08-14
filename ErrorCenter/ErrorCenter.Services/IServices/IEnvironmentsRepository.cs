@@ -2,8 +2,10 @@
 
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Services.IServices {
-  public interface IEnvironmentsRepository {
-    public Task<Environment> FindByName(string name);
-  }
+namespace ErrorCenter.Services.IServices
+{
+    public interface IEnvironmentsRepository
+    {
+        public Task<Environment> FindByName(string name);
+    }
 }

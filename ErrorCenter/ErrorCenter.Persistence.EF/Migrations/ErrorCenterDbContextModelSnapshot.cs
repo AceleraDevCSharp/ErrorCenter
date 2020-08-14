@@ -48,22 +48,22 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cf0c2f88-838b-4e6e-b74a-9507adfe0cff",
-                            ConcurrencyStamp = "b2952e00-5551-4f1c-93e5-d68749677fc1",
+                            Id = "78ee8980-d61e-4a6e-85fa-5ec98db7402a",
+                            ConcurrencyStamp = "c010fbea-457b-455a-abc3-de857b1abdaa",
                             Name = "Development",
                             NormalizedName = "DEVELOPMENT"
                         },
                         new
                         {
-                            Id = "ca31608a-20e2-4a7e-8d1a-b1fcc72da758",
-                            ConcurrencyStamp = "de813532-c636-4ea0-bb9a-fdf97a244bd1",
+                            Id = "1dafd835-56cc-495d-976c-efd32b3db932",
+                            ConcurrencyStamp = "95dbdf16-ae0f-49d0-95e7-1e0f2b52f700",
                             Name = "Homologation",
                             NormalizedName = "HOMOLOGATION"
                         },
                         new
                         {
-                            Id = "065928a7-eae2-4b21-88c7-734432b049af",
-                            ConcurrencyStamp = "ff4863d9-a2d1-486d-8c37-efa191c63cc1",
+                            Id = "5bc37713-c0a7-4d72-84ae-8b4904944e5d",
+                            ConcurrencyStamp = "7562c5fc-19ca-46a9-8c1a-ff98e7f370b9",
                             Name = "Production",
                             NormalizedName = "PRODUCTION"
                         });
@@ -80,17 +80,18 @@ namespace ErrorCenter.Persistence.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(1500)");
 
                     b.Property<string>("EnvironmentID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IdUser")
@@ -98,18 +99,18 @@ namespace ErrorCenter.Persistence.EF.Migrations
 
                     b.Property<string>("Level")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(30)");
 
                     b.Property<string>("Origin")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(500)");
 
                     b.HasKey("Id");
 
@@ -140,7 +141,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9303));
+                        .HasDefaultValue(new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4274));
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -184,7 +185,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 7, 27, 22, 8, 30, 644, DateTimeKind.Local).AddTicks(9549));
+                        .HasDefaultValue(new DateTime(2020, 8, 12, 0, 41, 9, 600, DateTimeKind.Local).AddTicks(4492));
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
@@ -311,9 +312,7 @@ namespace ErrorCenter.Persistence.EF.Migrations
                 {
                     b.HasOne("ErrorCenter.Persistence.EF.Models.Environment", "Environment")
                         .WithMany("ErrorLogs")
-                        .HasForeignKey("EnvironmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EnvironmentID");
 
                     b.HasOne("ErrorCenter.Persistence.EF.Models.User", "User")
                         .WithMany("ErrorLogs")
