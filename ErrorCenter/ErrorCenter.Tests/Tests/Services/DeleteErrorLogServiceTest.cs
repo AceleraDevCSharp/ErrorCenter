@@ -1,28 +1,34 @@
 using System;
 
+using Moq;
 using Xunit;
+using AutoMapper;
 
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Services.Services.Fakes;
 
-namespace ErrorCenter.Tests.UnitTests
+namespace ErrorCenter.Tests.UnitTests.Services
 {
     public class DeleteErrorLogServiceTest
     {
-        private IUsersRepository usersRepository;
-        private IErrorLogRepository<ErrorLog> errorLogsRepository;
+        private Mock<IUsersRepository> usersRepository;
+        private Mock<IEnvironmentsRepository> environmentsRepository;
+        private Mock<IErrorLogRepository<ErrorLog>> errorLogsRepository;
+        private Mock<IMapper> mapper;
         private IErrorLogService service;
+        
         public DeleteErrorLogServiceTest()
         {
-            usersRepository = new FakeUsersRepository();
-            errorLogsRepository = new FakeErrorLogsRepository();
+            usersRepository = new Mock<IUsersRepository>();
+            errorLogsRepository = new Mock<IErrorLogRepository<ErrorLog>>();
 
             service = new ErrorLogService(
-              usersRepository, null,
-              errorLogsRepository, null
+              usersRepository.Object,
+              environmentsRepository.Object,
+              errorLogsRepository.Object,
+              mapper.Object
             );
         }
 

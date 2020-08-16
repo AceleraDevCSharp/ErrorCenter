@@ -13,19 +13,17 @@ using m = ErrorCenter.Persistence.EF.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace ErrorCenter.Tests.UnitTests
+namespace ErrorCenter.Tests.UnitTests.Controllers
 {
 
-    public class ErrorLogRepositoryTests
+    public class ErrorLogListFiltersControllerTests
     {
         private readonly Mock<IErrorLogRepository<ErrorLog>> _errorLogRepositoryMock;
-        private readonly Mock<IErrorLogRepository<Persistence.EF.Models.Environment>> _enviromentMock;
         private readonly Mock<IMapper> _mapper;
 
-        public ErrorLogRepositoryTests()
+        public ErrorLogListFiltersControllerTests()
         {
             _errorLogRepositoryMock = new Mock<IErrorLogRepository<ErrorLog>>();
-            _enviromentMock = new Mock<IErrorLogRepository<Persistence.EF.Models.Environment>>();
             _mapper = new Mock<IMapper>();
         }
 

@@ -1,29 +1,37 @@
 using System;
 
+using Moq;
 using Xunit;
+using AutoMapper;
 
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.DTOs;
 
-namespace ErrorCenter.Tests.UnitTests
+namespace ErrorCenter.Tests.UnitTests.Services
 {
     public class CreateErrorLogServiceTest
     {
-        private IUsersRepository usersRepository;
-        private IErrorLogRepository<ErrorLog> errorLogsRepository;
+        private Mock<IUsersRepository> usersRepository;
+        private Mock<IErrorLogRepository<ErrorLog>> errorLogsRepository;
+        private Mock<IEnvironmentsRepository> environmentsRepository;
+        private Mock<IMapper> mapper;
         private IErrorLogService service;
-        private IEnvironmentsRepository environmentsRepository;
 
         public CreateErrorLogServiceTest()
         {
-            usersRepository = new FakeUsersRepository();
-            errorLogsRepository = new FakeErrorLogsRepository();
-            environmentsRepository = new FakeEnvironmentsRepository();
-            service = new ErrorLogService(usersRepository, environmentsRepository, errorLogsRepository, null);
+            usersRepository = new Mock<IUsersRepository>();
+            errorLogsRepository = new Mock<IErrorLogRepository<ErrorLog>>();
+            environmentsRepository = new Mock<IEnvironmentsRepository>();
+            mapper = new Mock<IMapper>();
+            service = new ErrorLogService(
+                usersRepository.Object,
+                environmentsRepository.Object,
+                errorLogsRepository.Object,
+                mapper.Object
+            );
         }
 
         [Fact]

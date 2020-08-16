@@ -1,24 +1,16 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
 
 using Moq;
 using Xunit;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
 
-using ErrorCenter.Services.DTOs;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using Models = ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Tests.UnitTests.Mocks;
 
-namespace ErrorCenter.Tests.UnitTests
+namespace ErrorCenter.Tests.UnitTests.Services
 {
     public class CreateUserServiceTest
     {

@@ -16,7 +16,7 @@ using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Tests.UnitTests.Mocks;
 
-namespace ErrorCenter.Tests.UnitTests
+namespace ErrorCenter.Tests.UnitTests.Services
 {
     public class AuthenticateUserServiceTest
     {
