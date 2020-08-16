@@ -26,10 +26,12 @@ namespace ErrorCenter.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IDetailsErrorLogService _detailsErrorLogService;
 
-        public ErrorLogsController(IErrorLogService errorLogService,
+        public ErrorLogsController(
+            IErrorLogService errorLogService,
             IErrorLogRepository<ErrorLog> errorLogRepository,
             IDetailsErrorLogService detailsErrorLogService,
-            IMapper mapper)
+            IMapper mapper
+        )
         {
             _errorLogService = errorLogService;
             _errorLogRepository = errorLogRepository;
