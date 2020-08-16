@@ -1,28 +1,38 @@
 using System;
 
+using Moq;
 using Xunit;
+using AutoMapper;
 
+using Models = ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Services.Services.Fakes;
+using ErrorCenter.Tests.UnitTests.Mocks;
 
 namespace ErrorCenter.UnitTests
 {
     public class ArchiveErrorLogServiceTest
     {
-        private IUsersRepository usersRepository;
-        private IErrorLogRepository<ErrorLog> errorLogsRepository;
+        private Mock<IUsersRepository> usersRepository;
+        private Mock<IErrorLogRepository<ErrorLog>> errorLogsRepository;
+        private Mock<IEnvironmentsRepository> environmentsRepository;
+        private Mock<IMapper> mapper;
         private IErrorLogService service;
+
         public ArchiveErrorLogServiceTest()
         {
-            usersRepository = new FakeUsersRepository();
-            errorLogsRepository = new FakeErrorLogsRepository();
+            usersRepository = new Mock<IUsersRepository>();
+            errorLogsRepository = new Mock<IErrorLogRepository<ErrorLog>>();
+            environmentsRepository = new Mock<IEnvironmentsRepository>();
+            mapper = new Mock<IMapper>();
 
             service = new ErrorLogService(
-              usersRepository, null,
-              errorLogsRepository, null
+              usersRepository.Object,
+              environmentsRepository.Object,
+              errorLogsRepository.Object,
+              mapper.Object
             );
         }
 
@@ -30,49 +40,46 @@ namespace ErrorCenter.UnitTests
         public async void Should_Be_Able_To_Archive_An_Error_Log()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = role;
 
-            var errorLog = new ErrorLog()
-            {
-                Id = 1,
-                Environment = new Persistence.EF.Models.Environment()
-                {
-                    Name = "Development",
-                    NormalizedName = "DEVELOPMENT"
-                },
-                CreatedAt = DateTime.Now,
-                ArquivedAt = null,
-            };
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                errorLog
+            );
+            errorLogsRepository.Setup(x => x.UpdateErrorLog(errorLog))
+                .ReturnsAsync(errorLog);
 
             // Act
-            await usersRepository.Create(user, "Development");
-            await errorLogsRepository.Create(errorLog);
-
-            var archived = await service.ArchiveErrorLog(1, user.Email, "Development");
+            var archived = await service.ArchiveErrorLog(id, email, role);
 
             // Assert
             Assert.NotNull(archived.ArquivedAt);
+            Console.WriteLine(archived.ArquivedAt);
         }
 
         [Fact]
         public async void Should_Not_Be_Able_To_Archive_Error_If_User_Does_Not_Exist()
         {
             // Arrange
+            var id = 1;
+            var email = "non.existing@example.com";
+            var role = "AnyEnvironment";
+            
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                (Models.User)null
+            );
 
             // Act
 
             // Assert
             await Assert.ThrowsAsync<UserException>(
-              () => service.ArchiveErrorLog(
-                1,
-                "non.existing@example.com",
-                "AnyEnvironment"
-              )
+              () => service.ArchiveErrorLog(id, email, role)
             );
         }
 
@@ -80,19 +87,24 @@ namespace ErrorCenter.UnitTests
         public async void Should_Not_Be_Able_To_Archive_Error_If_Does_Not_Exist()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = role;
+
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                (Models.ErrorLog)null
+            );
 
             // Act
-            await usersRepository.Create(user, "Development");
 
             // Assert
             await Assert.ThrowsAsync<ErrorLogException>(
-              () => service.ArchiveErrorLog(1, user.Email, "AnyRole")
+              () => service.ArchiveErrorLog(id, email, role)
             );
         }
 
@@ -100,32 +112,24 @@ namespace ErrorCenter.UnitTests
         public async void Should_Not_Able_To_Archive_Error_If_Not_Same_Environment()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = "DifferentRole";
 
-            var errorLog = new ErrorLog()
-            {
-                Id = 1,
-                Environment = new Persistence.EF.Models.Environment()
-                {
-                    Name = "Development",
-                    NormalizedName = "DEVELOPMENT"
-                },
-                CreatedAt = DateTime.Now,
-                ArquivedAt = null,
-            };
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                errorLog
+            );
 
             // Act
-            await usersRepository.Create(user, "Development");
-            await errorLogsRepository.Create(errorLog);
 
             // Assert
             await Assert.ThrowsAsync<UserException>(
-              () => service.ArchiveErrorLog(1, user.Email, "DifferentEnvironment")
+              () => service.ArchiveErrorLog(id, email, role)
             );
         }
 
@@ -133,32 +137,23 @@ namespace ErrorCenter.UnitTests
         public async void Should_Not_Be_Able_To_Archive_Archived_Error()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = role;
+            errorLog.ArquivedAt = DateTime.Now;
 
-            var errorLog = new ErrorLog()
-            {
-                Id = 1,
-                Environment = new Persistence.EF.Models.Environment()
-                {
-                    Name = "Development",
-                    NormalizedName = "DEVELOPMENT"
-                },
-                CreatedAt = DateTime.Now,
-                ArquivedAt = DateTime.Now,
-            };
-
-            // Act
-            await usersRepository.Create(user, "Development");
-            await errorLogsRepository.Create(errorLog);
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                errorLog
+            );
 
             // Assert
             await Assert.ThrowsAsync<ErrorLogException>(
-              () => service.ArchiveErrorLog(1, user.Email, "Development")
+              () => service.ArchiveErrorLog(id, email, role)
             );
         }
     }

@@ -66,7 +66,11 @@ namespace ErrorCenter.Services.Services
 
 
         }
-        public async Task<ErrorLog> ArchiveErrorLog(int id, string user_email, string user_role)
+        public async Task<ErrorLog> ArchiveErrorLog(
+            int id, 
+            string user_email,
+            string user_role
+        )
         {
             var user = await usersRepository
               .FindByEmail(user_email);
