@@ -3,26 +3,28 @@ using System;
 using Moq;
 using Xunit;
 using AutoMapper;
-
 using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Tests.UnitTests.Mocks;
 
 namespace ErrorCenter.Tests.UnitTests.Services
 {
     public class DeleteErrorLogServiceTest
     {
         private Mock<IUsersRepository> usersRepository;
-        private Mock<IEnvironmentsRepository> environmentsRepository;
         private Mock<IErrorLogRepository<ErrorLog>> errorLogsRepository;
+        private Mock<IEnvironmentsRepository> environmentsRepository;
         private Mock<IMapper> mapper;
         private IErrorLogService service;
-        
+
         public DeleteErrorLogServiceTest()
         {
             usersRepository = new Mock<IUsersRepository>();
             errorLogsRepository = new Mock<IErrorLogRepository<ErrorLog>>();
+            environmentsRepository = new Mock<IEnvironmentsRepository>();
+            mapper = new Mock<IMapper>();
 
             service = new ErrorLogService(
               usersRepository.Object,
@@ -36,49 +38,47 @@ namespace ErrorCenter.Tests.UnitTests.Services
         public async void Should_Be_Able_To_Delete_An_Error_Log()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = role;
 
-            var errorLog = new ErrorLog()
-            {
-                Id = 1,
-                Environment = new Persistence.EF.Models.Environment()
-                {
-                    Name = "Development",
-                    NormalizedName = "DEVELOPMENT"
-                },
-                CreatedAt = DateTime.Now,
-                ArquivedAt = null,
-            };
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                errorLog
+            );
+            errorLogsRepository.Setup(x => x.UpdateErrorLog(errorLog))
+                .ReturnsAsync(errorLog);
 
             // Act
-            await usersRepository.Create(user, "Development");
-            await errorLogsRepository.Create(errorLog);
+            var deleted = await service.DeleteErrorLog(id, email, role);
 
-            var Deleted = await service.DeleteErrorLog(1, user.Email, "Development");
 
             // Assert
-            Assert.NotNull(Deleted.DeletedAt);
+            Assert.NotNull(deleted.DeletedAt);
+
         }
 
         [Fact]
         public async void Should_Not_Be_Able_To_Delete_Error_If_User_Does_Not_Exist()
         {
             // Arrange
+            var id = 1;
+            var email = "non.existing@example.com";
+            var role = "AnyEnvironment";
+
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                (Persistence.EF.Models.User)null
+            );
 
             // Act
 
             // Assert
             await Assert.ThrowsAsync<UserException>(
-              () => service.DeleteErrorLog(
-                1,
-                "non.existing@example.com",
-                "AnyEnvironment"
-              )
+              () => service.DeleteErrorLog(id, email, role)
             );
         }
 
@@ -86,19 +86,24 @@ namespace ErrorCenter.Tests.UnitTests.Services
         public async void Should_Not_Be_Able_To_Delete_Error_If_Does_Not_Exist()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = role;
+
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                (Persistence.EF.Models.ErrorLog)null
+            );
 
             // Act
-            await usersRepository.Create(user, "Development");
 
             // Assert
             await Assert.ThrowsAsync<ErrorLogException>(
-              () => service.DeleteErrorLog(1, user.Email, "AnyRole")
+              () => service.DeleteErrorLog(id, email, role)
             );
         }
 
@@ -106,66 +111,49 @@ namespace ErrorCenter.Tests.UnitTests.Services
         public async void Should_Not_Able_To_Delete_Error_If_Not_Same_Environment()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = "DifferentRole";
 
-            var errorLog = new ErrorLog()
-            {
-                Id = 1,
-                Environment = new Persistence.EF.Models.Environment()
-                {
-                    Name = "Development",
-                    NormalizedName = "DEVELOPMENT"
-                },
-                CreatedAt = DateTime.Now,
-                ArquivedAt = null,
-            };
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                errorLog
+            );
 
             // Act
-            await usersRepository.Create(user, "Development");
-            await errorLogsRepository.Create(errorLog);
 
             // Assert
             await Assert.ThrowsAsync<UserException>(
-              () => service.DeleteErrorLog(1, user.Email, "DifferentEnvironment")
+              () => service.DeleteErrorLog(id, email, role)
             );
         }
 
         [Fact]
-        public async void Should_Not_Be_Able_To_Delete_Deleted_Error()
+        public async void Should_Not_Be_Able_To_Delete_Deleted_Error() 
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-            };
+            var id = 1;
+            var email = "johndoe@example.com";
+            var role = "SomeRole";
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+            errorLog.Environment.Name = role;
+            errorLog.DeletedAt = DateTime.Now;
 
-            var errorLog = new ErrorLog()
-            {
-                Id = 1,
-                Environment = new Persistence.EF.Models.Environment()
-                {
-                    Name = "Development",
-                    NormalizedName = "DEVELOPMENT"
-                },
-                CreatedAt = DateTime.Now,
-                DeletedAt = DateTime.Now,
-            };
-
-            // Act
-            await usersRepository.Create(user, "Development");
-            await errorLogsRepository.Create(errorLog);
+            usersRepository.Setup(x => x.FindByEmail(email)).ReturnsAsync(
+                UserMock.UserFaker()
+            );
+            errorLogsRepository.Setup(x => x.FindById(id)).ReturnsAsync(
+                errorLog
+            );
 
             // Assert
             await Assert.ThrowsAsync<ErrorLogException>(
-              () => service.DeleteErrorLog(1, user.Email, "Development")
+              () => service.DeleteErrorLog(id, email, role)
             );
         }
-    }
 }
+    }
