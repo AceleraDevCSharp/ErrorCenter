@@ -13,7 +13,7 @@ using ErrorCenter.WebAPI.Controllers;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Tests.Tests
+namespace ErrorCenter.Tests.UnitTests
 {
     public class UsersControllerTest
     {

@@ -9,7 +9,7 @@ using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.DTOs;
 
-namespace ErrorCenter.UnitTests
+namespace ErrorCenter.Tests.UnitTests
 {
     public class CreateErrorLogServiceTest
     {

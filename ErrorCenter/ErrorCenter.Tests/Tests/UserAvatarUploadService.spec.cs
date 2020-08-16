@@ -13,7 +13,7 @@ using ErrorCenter.Services.Services.Fakes;
 using ErrorCenter.Services.Providers.StorageProvider.Fakes;
 using ErrorCenter.Services.Providers.StorageProvider.Model;
 
-namespace ErrorCenter.UnitTests
+namespace ErrorCenter.Tests.UnitTests
 {
     public class UserAvatarUploadServiceTest
     {

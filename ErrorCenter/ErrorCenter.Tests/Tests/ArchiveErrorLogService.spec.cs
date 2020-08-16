@@ -11,7 +11,7 @@ using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Tests.UnitTests.Mocks;
 
-namespace ErrorCenter.UnitTests
+namespace ErrorCenter.Tests.UnitTests
 {
     public class ArchiveErrorLogServiceTest
     {
@@ -60,7 +60,6 @@ namespace ErrorCenter.UnitTests
 
             // Assert
             Assert.NotNull(archived.ArquivedAt);
-            Console.WriteLine(archived.ArquivedAt);
         }
 
         [Fact]
