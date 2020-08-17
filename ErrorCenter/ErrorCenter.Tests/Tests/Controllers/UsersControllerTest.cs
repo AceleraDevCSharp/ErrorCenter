@@ -1,5 +1,4 @@
-﻿/*
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 using Moq;
@@ -14,28 +13,29 @@ using ErrorCenter.WebAPI.Controllers;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
 
-namespace ErrorCenter.Tests.Tests
+namespace ErrorCenter.Tests.UnitTests.Controllers
 {
-    public class ErrorLogControllerTest
+    public class UsersControllerTest
     {
-        private readonly Mock<IErrorLogService> errorLogService;
+        private readonly Mock<IUsersService> usersService;
         private readonly Mock<IMapper> mapper;
 
-        public ErrorLogControllerTest()
+        public UsersControllerTest()
         {
-            errorLogService = new Mock<IErrorLogService>();
+            usersService = new Mock<IUsersService>();
             mapper = new Mock<IMapper>();
         }
 
         [Fact]
-        public async Task Should_Return_200_Status_Code_When_ErrorLog_Created()
+        public async Task Should_Return_200_Status_Code_When_User_Created()
         {
-           // Arrange
-           var newUser = new ErrorLogDTO()
-           {
-               Environment = "Development",
-
-           };
+            // Arrange
+            var newUser = new UserDTO()
+            {
+                Email = "johndoe@example.com",
+                Password = "123456",
+                Environment = "Development"
+            };
 
             var user = new User()
             {
@@ -53,18 +53,18 @@ namespace ErrorCenter.Tests.Tests
                 CreatedAt = user.CreatedAt
             };
 
-            errorLogService.Setup(x => x.CreateNewUser(newUser)).ReturnsAsync(user);
+            usersService.Setup(x => x.CreateNewUser(newUser)).ReturnsAsync(user);
             mapper.Setup(x => x.Map<UserViewModel>(user)).Returns(createdUser);
             var usersController = new UsersController(
-              errorLogService.Object,
+              usersService.Object,
               mapper.Object
             );
 
-           // Act
-           var response = await usersController.Create(newUser);
+            // Act
+            var response = await usersController.Create(newUser);
 
-           // Assert
-          Assert.IsType<CreatedResult>(response.Result);
+            // Assert
+            Assert.IsType<CreatedResult>(response.Result);
         }
 
         [Theory]
@@ -85,26 +85,25 @@ namespace ErrorCenter.Tests.Tests
           string environment
         )
         {
-           // Arrange
-           var newUser = new UserDTO()
-           {
-               Email = email,
-               Password = password,
-               Environment = environment
-           };
+            // Arrange
+            var newUser = new UserDTO()
+            {
+                Email = email,
+                Password = password,
+                Environment = environment
+            };
 
             var usersController = new UsersController(
               usersService.Object,
               mapper.Object
             );
 
-           // Act
+            // Act
 
-           // Assert
-          await Assert.ThrowsAsync<ViewModelException>(
-        () => usersController.Create(newUser)
-      );
+            // Assert
+            await Assert.ThrowsAsync<ViewModelException>(
+              () => usersController.Create(newUser)
+            );
         }
     }
 }
-*/

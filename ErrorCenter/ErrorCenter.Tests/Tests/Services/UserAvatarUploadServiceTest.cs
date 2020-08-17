@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 
+using Moq;
 using Xunit;
 using Microsoft.AspNetCore.Http;
 
@@ -9,25 +10,24 @@ using ErrorCenter.Services.Errors;
 using ErrorCenter.Services.Services;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Persistence.EF.Models;
-using ErrorCenter.Services.Services.Fakes;
-using ErrorCenter.Services.Providers.StorageProvider.Fakes;
+using ErrorCenter.Tests.UnitTests.Mocks;
 using ErrorCenter.Services.Providers.StorageProvider.Model;
 
-namespace ErrorCenter.UnitTests
+namespace ErrorCenter.Tests.UnitTests.Services
 {
     public class UserAvatarUploadServiceTest
     {
-        private readonly IUsersRepository usersRepository;
-        private readonly IStorageProvider storageProvider;
+        private readonly Mock<IUsersRepository> usersRepository;
+        private readonly Mock<IStorageProvider> storageProvider;
         private readonly IUserAvatarUploadService userAvatarUploadService;
 
         public UserAvatarUploadServiceTest()
         {
-            usersRepository = new FakeUsersRepository();
-            storageProvider = new FakeStorageProvider();
+            usersRepository = new Mock<IUsersRepository>();
+            storageProvider = new Mock<IStorageProvider>();
             userAvatarUploadService = new UserAvatarUploadService(
-              usersRepository,
-              storageProvider
+              usersRepository.Object,
+              storageProvider.Object
             );
         }
 
@@ -35,15 +35,7 @@ namespace ErrorCenter.UnitTests
         public async void Should_Be_Able_To_Upload_Users_Avatar()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-                PasswordHash = "password-123",
-                Avatar = "default.png"
-            };
-            await usersRepository.Create(user, "some-role");
+            var user = UserMock.UserFaker();
 
             FormFile file;
             using (var stream = File.OpenRead("avatar-placeholder.png"))
@@ -60,96 +52,28 @@ namespace ErrorCenter.UnitTests
                     ContentType = "image/png"
                 };
             };
+            var avatar = new UserAvatarDTO() { avatar = file };
 
-            var avatar = new UserAvatarDTO()
-            {
-                avatar = file
-            };
+            usersRepository.Setup(x => x.FindByEmailTracking(user.Email)).ReturnsAsync(user);
+            storageProvider.Setup(x => x.SaveFile(avatar.avatar)).Returns("saved-avatar.png");
 
             // Act
             var response = await userAvatarUploadService.UploadUserAvatar(
-              "johndoe@example.com",
+              user.Email,
               avatar
             );
 
             // Assert
-            Assert.True(Guid.TryParse(response, out Guid guid));
+            Assert.Equal("saved-avatar.png", response);
         }
 
         [Fact]
         public async void Should_Be_Able_To_Update_User_Avatar()
         {
             // Arrange
-            var user = new User()
-            {
-                Email = "johndoe@example.com",
-                UserName = "johndoe@example.com",
-                EmailConfirmed = true,
-                PasswordHash = "password-123",
-                Avatar = "default.png"
-            };
-            await usersRepository.Create(user, "some-role");
+            var user = UserMock.UserFaker();
+            user.Avatar = "old-avatar.png";
 
-            FormFile oldFile;
-            using (var stream = File.OpenRead("avatar-placeholder.png"))
-            {
-                oldFile = new FormFile(
-                  stream,
-                  0,
-                  stream.Length,
-                  null,
-                  Path.GetFileName(stream.Name)
-                )
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "image/png"
-                };
-            };
-
-            FormFile newFile;
-            using (var stream = File.OpenRead("avatar-placeholder.png"))
-            {
-                newFile = new FormFile(
-                  stream,
-                  0,
-                  stream.Length,
-                  null,
-                  Path.GetFileName(stream.Name)
-                )
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "image/png"
-                };
-            };
-
-            var oldAvatar = new UserAvatarDTO()
-            {
-                avatar = oldFile
-            };
-            var newAvatar = new UserAvatarDTO()
-            {
-                avatar = newFile
-            };
-
-            await userAvatarUploadService.UploadUserAvatar(
-              "johndoe@example.com",
-              oldAvatar
-            );
-
-            // Act
-            var response = await userAvatarUploadService.UploadUserAvatar(
-              "johndoe@example.com",
-              newAvatar
-            );
-
-            // Assert
-            Assert.True(Guid.TryParse(response, out Guid guid));
-        }
-
-        [Fact]
-        public async void Should_Not_Be_Able_To_Upload_Avatar_If_User_Not_Exists()
-        {
-            // Arrange
             FormFile file;
             using (var stream = File.OpenRead("avatar-placeholder.png"))
             {
@@ -165,17 +89,53 @@ namespace ErrorCenter.UnitTests
                     ContentType = "image/png"
                 };
             };
-            var avatar = new UserAvatarDTO()
+            var avatar = new UserAvatarDTO() { avatar = file };
+
+            usersRepository.Setup(x => x.FindByEmailTracking(user.Email)).ReturnsAsync(user);
+            storageProvider.Setup(x => x.DeleteFile(user.Avatar));
+            storageProvider.Setup(x => x.SaveFile(avatar.avatar)).Returns("new-avatar.png");
+
+            // Act
+            var response = await userAvatarUploadService.UploadUserAvatar(
+              user.Email,
+              avatar
+            );
+
+            // Assert
+            Assert.Equal("new-avatar.png", response);
+        }
+
+        [Fact]
+        public async void Should_Not_Be_Able_To_Upload_Avatar_If_User_Not_Exists()
+        {
+            // Arrange
+            var email = "invalid.user@example.com";
+
+            FormFile file;
+            using (var stream = File.OpenRead("avatar-placeholder.png"))
             {
-                avatar = file
+                file = new FormFile(
+                  stream,
+                  0,
+                  stream.Length,
+                  null,
+                  Path.GetFileName(stream.Name)
+                )
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/png"
+                };
             };
+            var avatar = new UserAvatarDTO() { avatar = file };
+
+            usersRepository.Setup(x => x.FindByEmailTracking(email)).ReturnsAsync((User)null);
 
             // Act
 
             // Assert
             await Assert.ThrowsAsync<UserException>(
               () => userAvatarUploadService.UploadUserAvatar(
-                "invalid.user@example.com",
+                email,
                 avatar
               )
             );

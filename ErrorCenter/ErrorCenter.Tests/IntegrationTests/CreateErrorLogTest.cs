@@ -46,7 +46,6 @@ namespace ErrorCenter.Tests.IntegrationTests
         public async void Should_Be_Able_To_Create_Error_Log()
         {
             // Arrange
-            // Arrange
             var errorLog = new ErrorLogDTO()
             {
                 Environment = "Development",
@@ -128,17 +127,25 @@ namespace ErrorCenter.Tests.IntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-        //[Fact]
-        //public async void Should_Not_Be_Able_To_Archive_Error_Log_If_Not_Authenticated()
-        //{
-        //    // Arrange
-        //    var client = _factory.CreateClient();
+        [Fact]
+        public async void Should_Not_Be_Able_To_Create_Error_Log_If_Not_Authenticated()
+        {
+            // Arrange
+            var errorLog = new ErrorLogDTO()
+            {
+                Environment = "Development",
+                Level = "level1",
+                Title = "titulo1",
+                Details = "detalhes1",
+                Origin = "origen1"
+            };
+            var client = _factory.CreateClient();
 
-        //    // Act
-        //    var response = await ExecuteRequest(client, );
+            // Act
+            var response = await ExecuteRequest(client, errorLog);
 
-        //    // Assert
-        //    Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        //}
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }

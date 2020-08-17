@@ -30,7 +30,7 @@ namespace ErrorCenter.Services.Services
             _mapper = mapper;
 
         }
-        public async Task<ErrorLogDTO> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
+        public async Task<ErrorLog> CreateNewErrorLog(ErrorLogDTO newErrorLog, string email)
         {
             var user = await usersRepository.FindByEmail(email);
 
@@ -60,13 +60,17 @@ namespace ErrorCenter.Services.Services
                 IdUser = user.Id
             };
 
-            errorLog = await errorLogRepository.Create(errorLog);
+            var errorLogCreated = await errorLogRepository.Create(errorLog);
 
-            return newErrorLog;
+            return errorLogCreated;
 
 
         }
-        public async Task<ErrorLog> ArchiveErrorLog(int id, string user_email, string user_role)
+        public async Task<ErrorLog> ArchiveErrorLog(
+            int id, 
+            string user_email,
+            string user_role
+        )
         {
             var user = await usersRepository
               .FindByEmail(user_email);

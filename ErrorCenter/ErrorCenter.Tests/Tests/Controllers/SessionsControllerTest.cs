@@ -11,7 +11,7 @@ using ErrorCenter.WebAPI.Controllers;
 using ErrorCenter.Services.IServices;
 using ErrorCenter.Services.Errors;
 
-namespace ErrorCenter.Tests.Tests
+namespace ErrorCenter.Tests.UnitTests.Controllers
 {
     public class SessionsControllerTest
     {

@@ -18,6 +18,8 @@ namespace ErrorCenter.Services.DTOs
         {
             AddNotifications(new Contract()
 
+            .IsNotNullOrEmpty(Environment, "Environment", "Environment is required")
+
             .HasMaxLen(Level, 30, "Level", "Level should have no more than 30 characters")
             .IsNotNullOrEmpty(Level, "Level", "Level is required")
             .HasMinLen(Level, 3, "Level", "Level should have more than 3 characters")

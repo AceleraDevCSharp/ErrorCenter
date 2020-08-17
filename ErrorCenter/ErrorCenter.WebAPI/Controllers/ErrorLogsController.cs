@@ -26,10 +26,12 @@ namespace ErrorCenter.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IDetailsErrorLogService _detailsErrorLogService;
 
-        public ErrorLogsController(IErrorLogService errorLogService,
+        public ErrorLogsController(
+            IErrorLogService errorLogService,
             IErrorLogRepository<ErrorLog> errorLogRepository,
             IDetailsErrorLogService detailsErrorLogService,
-            IMapper mapper)
+            IMapper mapper
+        )
         {
             _errorLogService = errorLogService;
             _errorLogRepository = errorLogRepository;
@@ -38,7 +40,7 @@ namespace ErrorCenter.WebAPI.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ErrorLogDTO>> Create([FromBody] ErrorLogDTO newErrorLog)
+        public async Task<ActionResult<ErrorLogViewModel>> Create([FromBody] ErrorLogDTO newErrorLog)
         {
             newErrorLog.Validate();
 
@@ -58,9 +60,9 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var errorLog = await _errorLogService.CreateNewErrorLog(newErrorLog, email);
 
-            var createdErrorLog = _mapper.Map<ErrorLogSimpleViewModel>(errorLog);
+            var createdErrorLog = _mapper.Map<ErrorLogViewModel>(errorLog);
 
-            return Ok(newErrorLog);
+            return Ok(createdErrorLog);
 
         }
 
