@@ -89,7 +89,7 @@ namespace ErrorCenter.WebAPI.Controllers
             return _mapper.Map<ErrorLogViewModel>(await _detailsErrorLogService.FindErrorLog(id));
         }
 
-        [HttpPatch("delete/{id:int}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult<ErrorLogViewModel>> Delete(int id)
         {
             var identity = User.Identity as ClaimsIdentity;
