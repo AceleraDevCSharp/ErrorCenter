@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 using Bogus;
 
 using Models = ErrorCenter.Persistence.EF.Models;
@@ -14,5 +14,13 @@ namespace ErrorCenter.Tests.UnitTests.Mocks
 
             return environments.Generate();
         }
+
+
+        public static List<string> GetFakeEnvironment(string environment) { 
+        
+            return new List<string> { environment };
+        }
+
+
     }
 }

@@ -1,97 +1,128 @@
-//using System;
 
-//using Moq;
-//using Xunit;
-//using AutoMapper;
+using Moq;
+using Xunit;
+using AutoMapper;
 
-//using ErrorCenter.Services.Errors;
-//using ErrorCenter.Services.Services;
-//using ErrorCenter.Services.IServices;
-//using ErrorCenter.Persistence.EF.Models;
-//using ErrorCenter.Services.DTOs;
+using ErrorCenter.Services.Errors;
+using ErrorCenter.Services.Services;
+using ErrorCenter.Services.IServices;
+using ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Tests.UnitTests.Mocks;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
-//namespace ErrorCenter.Tests.UnitTests.Services
-//{
-//    public class CreateErrorLogServiceTest
-//    {
-//        private Mock<IUsersRepository> usersRepository;
-//        private Mock<IErrorLogRepository<ErrorLog>> errorLogsRepository;
-//        private Mock<IEnvironmentsRepository> environmentsRepository;
-//        private Mock<IMapper> mapper;
-//        private IErrorLogService service;
+namespace ErrorCenter.Tests.UnitTests.Services
+{
+    public class CreateErrorLogServiceTest
+    {
+        private Mock<IUsersRepository> usersRepository;
+        private Mock<IErrorLogRepository<ErrorLog>> errorLogsRepository;
+        private Mock<IEnvironmentsRepository> environmentsRepository;
+        private readonly Mock<IPasswordHasher<User>> passwordHasher;
+        private Mock<IMapper> mapper;
+        private IErrorLogService erroService;
 
-//        public CreateErrorLogServiceTest()
-//        {
-//            usersRepository = new Mock<IUsersRepository>();
-//            errorLogsRepository = new Mock<IErrorLogRepository<ErrorLog>>();
-//            environmentsRepository = new Mock<IEnvironmentsRepository>();
-//            mapper = new Mock<IMapper>();
+        public CreateErrorLogServiceTest()
+        {
+            usersRepository = new Mock<IUsersRepository>();
+            errorLogsRepository = new Mock<IErrorLogRepository<ErrorLog>>();
+            environmentsRepository = new Mock<IEnvironmentsRepository>();
+            mapper = new Mock<IMapper>();
+            passwordHasher = new Mock<IPasswordHasher<Persistence.EF.Models.User>>();
 
-//            service = new ErrorLogService(
-//              usersRepository.Object,
-//              environmentsRepository.Object,
-//              errorLogsRepository.Object,
-//              mapper.Object
-//            );
-//        }
+            erroService = new ErrorLogService(
+              usersRepository.Object,
+              environmentsRepository.Object,
+              errorLogsRepository.Object,
+              mapper.Object
+            );
 
-//        [Fact]
-//        public async void Should_Create_An_Error_Log()
-//        {
+        }
 
-//            var errologDTO = new ErrorLogDTO()
-//            {
-//                Environment = "Development",
-//                Details = "Detalhes1",
-//                Level = "Level1",
-//                Origin = "Origem1",
-//                Title = "Titulo1"
+        [Fact]
+        public async void Should_Create_An_Error_Log()
+        {
 
-//            };
+            // Arrange
+            var environment = EnvironmentMock.EnvironmentFaker();
+            var user = UserMock.UserFaker();
+            var errolog = ErrorLogMock.SingleErrorLogModelFaker();
+            errolog.Environment = environment;
 
-//            var user = new User()
-//            {
-//                Email = "john1@example.com",
-//                UserName = "john1@example.com",
-//                EmailConfirmed = true,
-//            };
-//            var userEnvironment = errologDTO.Environment;
+            var errologDTO = ErrorLogMock.SingleErrorLogModelDTO(errolog);
 
-//            await usersRepository.Create(user, errologDTO.Environment);
+            environmentsRepository.Setup(x => x.FindByName(environment.Name)).ReturnsAsync(
+                environment);
 
-//            var Created = await service.CreateNewErrorLog(errologDTO, user.Email);
+            usersRepository.Setup(x => x.FindByEmail(user.Email)).ReturnsAsync(
+                user);
 
-//            Assert.Equal(Created, errologDTO);
+            usersRepository.Setup(x => x.GetUserRoles(user)).ReturnsAsync(
+                EnvironmentMock.GetFakeEnvironment(environment.Name));
 
-//        }
-
-//        [Fact]
-//        public async void Should_Not_Create_Error_Log_If_Environment_Not_Exist()
-//        {
-//            // Arramge
-//            var errologDTO = new ErrorLogDTO()
-//            {
-//                Environment = "Development",
-//                Details = "Detalhes1",
-//                Level = "Level1",
-//                Origin = "Origem1",
-//                Title = "Titulo1"
-
-//            };
-
-//            var user = new User()
-//            {
-//                Email = "johnOtherEnv@example.com",
-//                UserName = "johnOtherEnv@example.com",
-//                EmailConfirmed = true,
-//            };
-//            var userResponse = await usersRepository.Create(user, "OtherEnvironment");
+            errorLogsRepository.Setup(x => x.Create(It.IsAny<ErrorLog>())).ReturnsAsync(
+                errolog);
 
 
-//            // Assert
-//            await Assert.ThrowsAsync<UserException>(
-//              () => service.CreateNewErrorLog(errologDTO, user.Email)
-//            );
-//        }
-//    }
-//}
+            // Act
+            var response = await erroService.CreateNewErrorLog(errologDTO, user.Email);
+
+            // Assert
+            Assert.NotNull(response);
+            Assert.Equal(errolog, response);
+
+        }
+
+        [Fact]
+        public async void Should_Not_Create_Error_Log_If_Environment_Not_Exist()
+        {
+            //Arrange
+            var environment = EnvironmentMock.EnvironmentFaker();
+            var user = UserMock.UserFaker();
+            var errolog = ErrorLogMock.SingleErrorLogModelFaker();
+            errolog.Environment = environment;
+
+            var errologDTO = ErrorLogMock.SingleErrorLogModelDTO(errolog);
+
+            usersRepository.Setup(x => x.FindByEmail(user.Email)).ReturnsAsync(
+              (Persistence.EF.Models.User)null);
+
+            environmentsRepository.Setup(x => x.FindByName(errologDTO.Environment)).ReturnsAsync(
+                (Persistence.EF.Models.Environment)null);
+
+            usersRepository.Setup(x => x.GetUserRoles(user)).ReturnsAsync(
+                (IList<string>)null);
+
+            // Assert
+            await Assert.ThrowsAsync<EnvironmentException>(
+              () => erroService.CreateNewErrorLog(errologDTO, user.Email)
+            );
+        }
+
+        [Fact]
+        public async void Should_Not_Create_Error_Log_If_Not_Same_Environmentt()
+        {
+            //Arrange
+            var environment = EnvironmentMock.EnvironmentFaker();
+            var user = UserMock.UserFaker();
+            var errolog = ErrorLogMock.SingleErrorLogModelFaker();
+            errolog.Environment.Name = "DifferentRole";
+
+            var errologDTO = ErrorLogMock.SingleErrorLogModelDTO(errolog);
+
+            usersRepository.Setup(x => x.FindByEmail(user.Email)).ReturnsAsync(
+              (Persistence.EF.Models.User)null);
+
+            environmentsRepository.Setup(x => x.FindByName(errologDTO.Environment)).ReturnsAsync(
+                (Persistence.EF.Models.Environment)null);
+
+            usersRepository.Setup(x => x.GetUserRoles(user)).ReturnsAsync(
+                (IList<string>)null);
+
+            // Assert
+            await Assert.ThrowsAsync<EnvironmentException>(
+              () => erroService.CreateNewErrorLog(errologDTO, user.Email)
+            );
+        }
+    }
+}

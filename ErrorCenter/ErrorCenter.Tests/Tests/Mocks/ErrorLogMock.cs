@@ -6,6 +6,7 @@ using AutoBogus;
 
 using ErrorCenter.WebAPI.ViewModel;
 using Models = ErrorCenter.Persistence.EF.Models;
+using ErrorCenter.Services.DTOs;
 
 namespace ErrorCenter.Tests.UnitTests.Mocks
 {
@@ -29,7 +30,20 @@ namespace ErrorCenter.Tests.UnitTests.Mocks
                 });
 
             return errorLog.Generate();
-        } 
+        }
+
+        public static ErrorLogDTO SingleErrorLogModelDTO(Models.ErrorLog errorlog)
+        {
+            var errorLog = new Faker<ErrorLogDTO>()
+                .RuleFor(x => x.Level, (f) => errorlog.Level)
+                .RuleFor(x => x.Title, (f) => errorlog.Title)
+                .RuleFor(x => x.Details, (f) => errorlog.Details)
+                .RuleFor(x => x.Origin, (f) => errorlog.Origin)
+                .RuleFor(x => x.Environment, (u) => errorlog.Environment.Name);
+
+            return errorLog.Generate();
+        }
+
         public static IEnumerable<Models.ErrorLog> ErrorLogModelFaker =>
             AutoFaker.Generate<Models.ErrorLog>(3);
 

@@ -58,84 +58,114 @@ namespace ErrorCenter.Tests.UnitTests.Controllers
             return controller;
         }
 
-        // [Fact]
-        // public async Task Should_Return_200_Status_Code_When_ErrorLog_Created()
-        // {
-        //    // Arrange
-        //    var newUser = new ErrorLogDTO()
-        //    {
-        //        Environment = "Development",
+        [Fact]
+        public async Task Should_Return_200_Status_Code_When_ErrorLog_Created()
+        {
+            // Arrange
+            var controller = FakeIdentitySetup();
+            var environment = EnvironmentMock.EnvironmentFaker();
+            var user = UserMock.UserFaker();
 
-        //    };
+            var newErrorLogDTO = new ErrorLogDTO()
+            {
+                Environment = "Development",
+                Details = "detalhes",
+                Level = "level",
+                Origin = "origem",
+                Title = "titulo"
 
-        //     var user = new User()
-        //     {
-        //         Id = Guid.NewGuid().ToString(),
-        //         Email = "johndoe@example.com",
-        //         Avatar = "default.png",
-        //         CreatedAt = DateTime.Now,
-        //     };
+            };
 
-        //     var createdUser = new UserViewModel()
-        //     {
-        //         Id = user.Id,
-        //         Email = user.Email,
-        //         Avatar = user.Avatar,
-        //         CreatedAt = user.CreatedAt
-        //     };
+            var newErrorLog = new ErrorLog()
+            {
+                Environment = environment,
+                Details = newErrorLogDTO.Details,
+                Level = newErrorLogDTO.Level,
+                Origin = newErrorLogDTO.Origin,
+                Title = newErrorLogDTO.Title,
+                User = user
+            };
 
-        //     errorLogService.Setup(x => x.CreateNewUser(newUser)).ReturnsAsync(user);
-        //     mapper.Setup(x => x.Map<UserViewModel>(user)).Returns(createdUser);
-        //     var usersController = new UsersController(
-        //       errorLogService.Object,
-        //       mapper.Object
-        //     );
+            var newErrorLogView = new ErrorLogViewModel()
+            {
+                Id = newErrorLog.Id,
+                Environment = environment.Name,
+                Details = newErrorLog.Details,
+                Level = newErrorLog.Level,
+                Origin = newErrorLog.Origin,
+                Title = newErrorLog.Title,
+                Email = user.Email,
+                Quantity = newErrorLog.Quantity
 
-        //    // Act
-        //    var response = await usersController.Create(newUser);
+            };
 
-        //    // Assert
-        //   Assert.IsType<CreatedResult>(response.Result);
-        // }
+            errorLogService.Setup(x => x.CreateNewErrorLog(newErrorLogDTO, user.Email)).
+                ReturnsAsync(newErrorLog);
 
-        // [Theory]
-        // [InlineData("", "password", "SomeEnvironment")]
-        // [InlineData("invalid email", "password", "SomeEnvironment")]
-        // [InlineData(
-        //   "A8BedcDwfjuAy3Pqm6xZ9yyTOTKc3xEoN8JQWng11JFX5ljymz76Bv32RZmLBdOHYnXPIxIY2kpVS7BbBZuoujePjnBUbBZhkMX1G",
-        //   "password",
-        //   "SomeEnvironment"
-        // )]
-        // [InlineData("johntre@example.com", "", "SomeEnvironment")]
-        // [InlineData("johntre@example.com", "12345", "SomeEnvironment")]
-        // [InlineData("johntre@example.com", "123456789abcd", "SomeEnvironment")]
-        // [InlineData("johntre@example.com", "123456", "")]
-        // public async Task Should_Throw_Exception_If_DTO_Invalid(
-        //   string email,
-        //   string password,
-        //   string environment
-        // )
-        // {
-        //     // Arrange
-        //     var newUser = new UserDTO()
-        //     {
-        //         Email = email,
-        //         Password = password,
-        //         Environment = environment
-        //     };
+            mapper.Setup(x => x.Map<ErrorLogViewModel>(newErrorLog)).Returns(newErrorLogView);
+            // Act
+            var response = await controller.Create(newErrorLogDTO);
+            // Assert
+            Assert.IsType<OkObjectResult>(response.Result);
+        }
 
-        //       var usersController = new UsersController(
-        //         usersService.Object,
-        //         mapper.Object
-        //       );
+        [Theory]
+        [InlineData("", "detalhes", "level", "origem", "titulo")]
+        [InlineData("Development", "", "level", "origem", "titulo")]
+        [InlineData("Development", "detalhes", "", "origem", "titulo")]
+        [InlineData("Development", "detalhes", "level", "", "titulo")]
+        [InlineData("Development", "detalhes", "level", "origem", "")]
+        public async Task Should_Throw_Exception_If_Error_Log_DTO_Invalid(
+          string environmentName, string details, string level, string origin, string title)
+        {
+            // Arrange
+            var controller = FakeIdentitySetup();
+            var environment = EnvironmentMock.EnvironmentFaker();
+            var user = UserMock.UserFaker();
 
-        //     // Act
+            var newErrorLogDTO = new ErrorLogDTO()
+            {
+                Environment = environmentName,
+                Details = details,
+                Level = level,
+                Origin = origin,
+                Title = title
 
-        //     // Assert
-        //     await Assert.ThrowsAsync<ViewModelException>(
-        //       () => usersController.Create(newUser)
-        //     );
-        // }
+            };
+
+            var newErrorLog = new ErrorLog()
+            {
+                Environment = environment,
+                Details = newErrorLogDTO.Details,
+                Level = newErrorLogDTO.Level,
+                Origin = newErrorLogDTO.Origin,
+                Title = newErrorLogDTO.Title,
+                User = user
+            };
+
+            var newErrorLogView = new ErrorLogViewModel()
+            {
+                Id = newErrorLog.Id,
+                Environment = environment.Name,
+                Details = newErrorLog.Details,
+                Level = newErrorLog.Level,
+                Origin = newErrorLog.Origin,
+                Title = newErrorLog.Title,
+                Email = user.Email,
+                Quantity = newErrorLog.Quantity
+
+            };
+
+            // Act
+            errorLogService.Setup(x => x.CreateNewErrorLog(newErrorLogDTO, user.Email)).
+                ReturnsAsync(newErrorLog);
+
+            mapper.Setup(x => x.Map<ErrorLogViewModel>(newErrorLog)).Returns(newErrorLogView);
+            // Assert
+            await Assert.ThrowsAsync<ViewModelException>(
+              () => controller.Create(newErrorLogDTO)
+            );
+        }
 
         [Fact]
         public async Task Should_Return_200_Status_Code_When_ErrorLog_Archived() {
@@ -158,6 +188,29 @@ namespace ErrorCenter.Tests.UnitTests.Controllers
 
           // Assert
           Assert.IsType<OkObjectResult>(response.Result);
+        }
+
+        [Fact]
+        public async Task Should_Return_200_Status_Code_When_ErrorLog_Deleted()
+        {
+            // Arrange
+            var controller = FakeIdentitySetup();
+
+            var errorLog = ErrorLogMock.SingleErrorLogModelFaker();
+
+            errorLogService.Setup(x => x.DeleteErrorLog(
+                errorLog.Id,
+                "johndoe@example.com",
+                "SomeRole"
+            )).ReturnsAsync(errorLog);
+            mapper.Setup(x => x.Map<ErrorLogViewModel>(errorLog))
+              .Returns(new ErrorLogViewModel());
+
+            // Act
+            var response = await controller.Delete(errorLog.Id);
+
+            // Assert
+            Assert.IsType<OkObjectResult>(response.Result);
         }
     }
 }

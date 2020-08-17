@@ -40,7 +40,7 @@ namespace ErrorCenter.WebAPI.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<ErrorLogDTO>> Create([FromBody] ErrorLogDTO newErrorLog)
+        public async Task<ActionResult<ErrorLogViewModel>> Create([FromBody] ErrorLogDTO newErrorLog)
         {
             newErrorLog.Validate();
 
@@ -60,9 +60,9 @@ namespace ErrorCenter.WebAPI.Controllers
 
             var errorLog = await _errorLogService.CreateNewErrorLog(newErrorLog, email);
 
-            var createdErrorLog = _mapper.Map<ErrorLogSimpleViewModel>(errorLog);
+            var createdErrorLog = _mapper.Map<ErrorLogViewModel>(errorLog);
 
-            return Ok(newErrorLog);
+            return Ok(createdErrorLog);
 
         }
 
