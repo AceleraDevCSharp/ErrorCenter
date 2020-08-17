@@ -23,11 +23,5 @@ namespace ErrorCenter.Services.Services
             return environment;
         }
 
-        public async Task<Environment> Create(Environment environment)
-        {
-            var environmentCreated = await roleManager.CreateAsync(environment);
-
-            return environment;
-        }
     }
 }
