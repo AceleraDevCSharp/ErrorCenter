@@ -9,6 +9,7 @@ using ErrorCenter.Persistence.EF.Models;
 using ErrorCenter.Services.DTOs;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace ErrorCenter.Services.Services
 {
@@ -66,6 +67,7 @@ namespace ErrorCenter.Services.Services
 
 
         }
+
         public async Task<ErrorLog> ArchiveErrorLog(
             int id, 
             string user_email,
