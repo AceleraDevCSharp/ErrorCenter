@@ -35,6 +35,7 @@ namespace ErrorCenter.Services.Services
             var environments = await _context.Roles.AsNoTracking().ToListAsync();
             return environments;
         }
+
         public async Task<IEnumerable<ErrorLog>> SelectAll()
         {
             return await _context.ErrorLogs

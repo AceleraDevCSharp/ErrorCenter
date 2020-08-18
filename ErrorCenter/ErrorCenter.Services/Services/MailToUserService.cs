@@ -6,6 +6,7 @@ using MimeKit;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ErrorCenter.Services.Services
 {
@@ -58,6 +59,7 @@ namespace ErrorCenter.Services.Services
             return await Task.FromResult("Mail sended!");
         }
 
+        [ExcludeFromCodeCoverage]
         private static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
