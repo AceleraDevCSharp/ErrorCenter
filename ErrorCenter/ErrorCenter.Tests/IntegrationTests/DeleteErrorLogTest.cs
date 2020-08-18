@@ -23,9 +23,8 @@ namespace ErrorCenter.Tests.IntegrationTests
           int errorLogId
         )
         {
-            return await client.PatchAsync(
-              "/v1/error-logs/delete/" + errorLogId,
-              null
+            return await client.DeleteAsync(
+              "/v1/error-logs/delete/" + errorLogId
             );
         }
 
