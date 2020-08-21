@@ -22,10 +22,6 @@ namespace ErrorCenter.WebAPI.Configuration
         )
         {
             services.AddDbContext<ErrorCenterDbContext>(options => {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            });
-
-            services.AddDbContext<ErrorCenterDbContext>(options => {
                 options.UseSqlServer(configuration["DATABASE_URL"]);
             });
 
