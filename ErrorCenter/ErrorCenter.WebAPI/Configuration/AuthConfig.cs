@@ -9,16 +9,24 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using ErrorCenter.Persistence.EF.Context;
 using ErrorCenter.Persistence.EF.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace ErrorCenter.WebAPI.Configuration
 {
     public static class AuthConfig
     {
-        public static IServiceCollection AddAuthenticationConfig(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationConfig(
+            this IServiceCollection services,
+            IConfiguration configuration
+        )
         {
             services.AddDbContext<ErrorCenterDbContext>(options => {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddDbContext<ErrorCenterDbContext>(options => {
+                options.UseSqlServer(configuration["DATABASE_URL"]);
             });
 
             services.AddIdentity<User, Environment>()

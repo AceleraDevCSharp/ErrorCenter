@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 
 using ErrorCenter.WebAPI.Configuration;
-using ErrorCenter.Persistence.EF.Context;
 
 namespace ErrorCenter.WebAPI
 {
@@ -24,10 +23,6 @@ namespace ErrorCenter.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ErrorCenterDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-
             services.AddCors();
 
             services.AddControllers().AddNewtonsoftJson(options =>
